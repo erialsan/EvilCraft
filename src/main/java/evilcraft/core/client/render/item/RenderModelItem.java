@@ -1,27 +1,31 @@
 package evilcraft.core.client.render.item;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 /**
  * General item renderer for blocks/items with models.
+ * 
  * @author rubensworks
  *
  */
 public class RenderModelItem implements IItemRenderer {
-	
-	private final ModelBase model;
-	private final ResourceLocation texture;
-	
-	protected ItemStack currentItemStack;
 
-	/**
+    private final ModelBase model;
+    private final ResourceLocation texture;
+
+    protected ItemStack currentItemStack;
+
+    /**
      * Make a new instance.
-     * @param model The model to render.
+     * 
+     * @param model   The model to render.
      * @param texture The texture to render the model with.
      */
     public RenderModelItem(ModelBase model, ResourceLocation texture) {
@@ -35,22 +39,22 @@ public class RenderModelItem implements IItemRenderer {
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-            ItemRendererHelper helper) {
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
         return true;
     }
-    
+
     /**
      * Get the texture.
+     * 
      * @return The texture.
      */
     public ResourceLocation getTexture() {
-		return texture;
-	}
+        return texture;
+    }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-    	this.currentItemStack = item;
+        this.currentItemStack = item;
         switch (type) {
             case ENTITY: {
                 renderModel(type, 0.5F, 0.5F, 0.5F);
@@ -72,35 +76,37 @@ public class RenderModelItem implements IItemRenderer {
                 break;
         }
     }
-    
+
     protected void preRenderModel(ItemRenderType type, float x, float y, float z) {
-    	
+
     }
-    
+
     protected void postRenderModel(ItemRenderType type, float x, float y, float z) {
-    	
+
     }
-    
+
     private void renderModel(ItemRenderType type, float x, float y, float z) {
         preRenderModel(type, x, y, z);
-        
-        if(getTexture() != null) FMLClientHandler.instance().getClient().renderEngine.bindTexture(getTexture());
+
+        if (getTexture() != null) FMLClientHandler.instance()
+            .getClient().renderEngine.bindTexture(getTexture());
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, z);
         GL11.glRotatef(180, 1, 0, 0);
         GL11.glRotatef(-90, 0, 1, 0);
         renderModel(model);
         GL11.glPopMatrix();
-        
+
         postRenderModel(type, x, y, z);
     }
-    
+
     /**
      * Render the actual model, override this to change the way the model should be rendered.
+     * 
      * @param model The base model.
      */
     protected void renderModel(ModelBase model) {
-    	model.render(null, 0, 0, 0, 0, 0, 0);
+        model.render(null, 0, 0, 0, 0, 0, 0);
     }
-    
+
 }

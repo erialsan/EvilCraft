@@ -1,27 +1,30 @@
 package evilcraft.core.tileentity;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import evilcraft.core.tileentity.upgrade.IUpgradable;
-import evilcraft.core.tileentity.upgrade.IUpgradeBehaviour;
-import evilcraft.core.tileentity.upgrade.Upgrades;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import evilcraft.core.tileentity.upgrade.IUpgradable;
+import evilcraft.core.tileentity.upgrade.IUpgradeBehaviour;
+import evilcraft.core.tileentity.upgrade.Upgrades;
+
 /**
  * A TileEntity with that processes items with inventory and tank.
+ * 
  * @author rubensworks
  * @param <T> The subclass of {@link TankInventoryTileEntity}, will be in
- * most cases just the extension class.
+ *            most cases just the extension class.
  * @param <O> The type of upgrade behaviour object.
  * @see TickingTankInventoryTileEntity
  */
 public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> extends TickingTankInventoryTileEntity<T>
-        implements IUpgradable<T, O> {
+    implements IUpgradable<T, O> {
 
     /**
      * Size of the upgrades inventory.
@@ -38,91 +41,102 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
     private Map<Upgrades.Upgrade, Integer> levels = null;
     protected Map<Upgrades.Upgrade, IUpgradeBehaviour<T, O>> upgradeBehaviour = Maps.newHashMap();
 
-	/**
+    /**
      * Make a new instance.
+     * 
      * @param inventorySize Amount of slots in the inventory.
      * @param inventoryName Internal name of the inventory.
-     * @param tankSize Size (mB) of the tank.
-     * @param tankName Internal name of the tank.
+     * @param tankSize      Size (mB) of the tank.
+     * @param tankName      Internal name of the tank.
      * @param acceptedFluid Type of Fluid to accept.
      */
-	public WorkingTileEntity(int inventorySize, String inventoryName,
-			int tankSize, String tankName, Fluid acceptedFluid) {
-		super(inventorySize + INVENTORY_SIZE_UPGRADES, inventoryName, tankSize, tankName, acceptedFluid);
+    public WorkingTileEntity(int inventorySize, String inventoryName, int tankSize, String tankName,
+        Fluid acceptedFluid) {
+        super(inventorySize + INVENTORY_SIZE_UPGRADES, inventoryName, tankSize, tankName, acceptedFluid);
         this.basicInventorySize = inventorySize;
-	}
-	
-	 /**
+    }
+
+    /**
      * Check if the given item can be infused.
+     * 
      * @param itemStack The item to check.
      * @return If it can be infused.
      */
     public abstract boolean canConsume(ItemStack itemStack);
-    
+
     /**
      * Check if this tile is valid and can start working.
      * Mostly defined by environmental parameters.
+     * 
      * @return If it is valid and can work.
      */
     public abstract boolean canWork();
-    
+
     /**
      * If this tile is working.
+     * 
      * @return If it is abstract.
      */
     public boolean isWorking() {
-    	return getWorkTick() > 0;
+        return getWorkTick() > 0;
     }
-    
+
     /**
      * If the furnace should visually (block icon) show it is working, should only be
      * called client-side.
+     * 
      * @return If the state is working.
      */
     public boolean isVisuallyWorking() {
         return getCurrentState() == 1 && canWork();
     }
-    
+
     /**
      * Get the work progress scaled, to be used in GUI's.
+     * 
      * @param scale The scale this progress should be applied to.
      * @return The scaled working progress.
      */
     public int getWorkTickScaled(int scale) {
-        return (int) Math.ceil((float)(getWorkTick() + 1) / (float)getRequiredWorkTicks() * (float)scale);
+        return (int) Math.ceil((float) (getWorkTick() + 1) / (float) getRequiredWorkTicks() * (float) scale);
     }
-    
+
     protected abstract int getWorkTicker();
-    
+
     protected int getWorkTick() {
-        return getTickers().get(getWorkTicker()).getTick();
+        return getTickers().get(getWorkTicker())
+            .getTick();
     }
-    
+
     protected float getRequiredWorkTicks() {
-        return getTickers().get(getWorkTicker()).getRequiredTicks();
+        return getTickers().get(getWorkTicker())
+            .getRequiredTicks();
     }
-    
+
     /**
      * Resets the ticks of the work.
      */
     public void resetWork() {
         resetWork(true);
     }
-    
+
     /**
      * Resets the ticks of the work.
+     * 
      * @param hardReset If the tick and required tick should also be set to zero.
      */
     public void resetWork(boolean hardReset) {
-        if(hardReset) {
-            getTickers().get(getWorkTicker()).setTick(0);
-	        getTickers().get(getWorkTicker()).setRequiredTicks(0);
-    	}
+        if (hardReset) {
+            getTickers().get(getWorkTicker())
+                .setTick(0);
+            getTickers().get(getWorkTicker())
+                .setRequiredTicks(0);
+        }
     }
 
     @Override
     public int getNewState() {
-        return this.isWorking()?1:0;
+        return this.isWorking() ? 1 : 0;
     }
 
     @Override
@@ -132,9 +146,9 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
 
     protected List<ItemStack> getUpgradeItems() {
         List<ItemStack> itemStacks = Lists.newLinkedList();
-        for(int i = getBasicInventorySize(); i < getBasicInventorySize() + INVENTORY_SIZE_UPGRADES; i++) {
+        for (int i = getBasicInventorySize(); i < getBasicInventorySize() + INVENTORY_SIZE_UPGRADES; i++) {
             ItemStack itemStack = getStackInSlot(i);
-            if(itemStack != null) {
+            if (itemStack != null) {
                 itemStacks.add(itemStack);
             }
         }
@@ -143,6 +157,7 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
 
     /**
      * Get the type of upgrade corresponding to the given itemstack.
+     * 
      * @param itemStack The itemstack. Not null.
      * @return The upgrade type.
      */
@@ -150,6 +165,7 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
 
     /**
      * Get the level of upgrade corresponding to the given itemstack.
+     * 
      * @param itemStack The itemstack. Not null.
      * @return The upgrade level.
      */
@@ -164,7 +180,7 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
     }
 
     public boolean onUpgradeSlotChanged(int slotId, ItemStack oldItemStack, ItemStack itemStack) {
-        if(!ItemStack.areItemStacksEqual(oldItemStack, itemStack)) {
+        if (!ItemStack.areItemStacksEqual(oldItemStack, itemStack)) {
             resetUpgradeLevels();
             resetWork();
             return true;
@@ -175,7 +191,7 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
     @Override
     public ItemStack decrStackSize(int slotId, int count) {
         ItemStack itemStack = super.decrStackSize(slotId, count);
-        if(isUpgradeSlot(slotId)) {
+        if (isUpgradeSlot(slotId)) {
             ItemStack oldItemStack = itemStack.copy();
             oldItemStack.stackSize += count;
             onUpgradeSlotChanged(slotId, oldItemStack, itemStack);
@@ -186,15 +202,15 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
     @Override
     public void setInventorySlotContents(int slotId, ItemStack itemStack) {
         ItemStack oldItemStack = getStackInSlot(slotId);
-        if(oldItemStack != null) oldItemStack = oldItemStack.copy();
+        if (oldItemStack != null) oldItemStack = oldItemStack.copy();
         super.setInventorySlotContents(slotId, itemStack);
-        if(isUpgradeSlot(slotId)) {
+        if (isUpgradeSlot(slotId)) {
             onUpgradeSlotChanged(slotId, oldItemStack, itemStack);
         }
     }
 
     public Map<Upgrades.Upgrade, Integer> getUpgradeLevels() {
-        if(levels == null) {
+        if (levels == null) {
             levels = Maps.newHashMap();
             for (ItemStack itemStack : getUpgradeItems()) {
                 Upgrades.Upgrade upgrade = getUpgradeType(itemStack);
@@ -214,7 +230,9 @@ public abstract class WorkingTileEntity<T extends TankInventoryTileEntity, O> ex
     }
 
     public Set<Upgrades.Upgrade> getUpgrades() {
-        return this.getBlock().getConfig().getUpgrades();
+        return this.getBlock()
+            .getConfig()
+            .getUpgrades();
     }
 
     /**

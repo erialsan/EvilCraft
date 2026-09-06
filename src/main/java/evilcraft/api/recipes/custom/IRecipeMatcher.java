@@ -17,24 +17,27 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public interface IRecipeMatcher<M extends IMachine, R extends IRecipe> {
 
-	/**
-	 * If the given recipe can be created in the given machine.
-	 * @param machine The machine.
-	 * @param recipeToMatch The recipe to match.
-	 * @return If it is valid for this machine.
-	 */
-	public boolean matches(M machine, R recipeToMatch);
+    /**
+     * If the given recipe can be created in the given machine.
+     * 
+     * @param machine       The machine.
+     * @param recipeToMatch The recipe to match.
+     * @return If it is valid for this machine.
+     */
+    public boolean matches(M machine, R recipeToMatch);
 
-	/**
-	 * Find the recipe.
-	 * @return The recipe match.
-	 */
+    /**
+     * Find the recipe.
+     * 
+     * @return The recipe match.
+     */
     public IRecipeMatch<M, R> findRecipe();
 
     /**
      * Find all the recipes.
+     * 
      * @return All the matches.
      */
     public List<IRecipeMatch<M, R>> findRecipes();
-	
+
 }

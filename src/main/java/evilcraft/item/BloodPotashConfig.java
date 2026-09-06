@@ -4,6 +4,7 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the {@link evilcraft.item.BloodPotash}.
+ * 
  * @author rubensworks
  *
  */
@@ -18,12 +19,7 @@ public class BloodPotashConfig extends ItemConfig {
      * Make a new instance.
      */
     public BloodPotashConfig() {
-        super(
-        	true,
-            "bloodPotash",
-            null,
-            BloodPotash.class
-        );
+        super(true, "bloodPotash", null, BloodPotash.class);
     }
-    
+
 }

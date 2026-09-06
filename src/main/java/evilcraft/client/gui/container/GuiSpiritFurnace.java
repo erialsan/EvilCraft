@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.InventoryPlayer;
+
 import evilcraft.block.SpiritFurnace;
 import evilcraft.core.algorithm.Size;
 import evilcraft.core.client.gui.container.GuiWorking;
@@ -13,11 +14,12 @@ import evilcraft.tileentity.TileSpiritFurnace;
 
 /**
  * GUI for the {@link SpiritFurnace}.
+ * 
  * @author rubensworks
  *
  */
 public class GuiSpiritFurnace extends GuiWorking<TileSpiritFurnace> {
-    
+
     /**
      * Texture width.
      */
@@ -76,7 +78,7 @@ public class GuiSpiritFurnace extends GuiWorking<TileSpiritFurnace> {
      * Progress target Y.
      */
     public static final int PROGRESSTARGETY = 36;
-    
+
     /**
      * Progress target X.
      */
@@ -85,49 +87,60 @@ public class GuiSpiritFurnace extends GuiWorking<TileSpiritFurnace> {
      * Progress target Y.
      */
     public static final int PROGRESS_INVALIDY = 18;
-    
+
     /**
      * Make a new instance.
+     * 
      * @param inventory The inventory of the player.
-     * @param tile The tile entity that calls the GUI.
+     * @param tile      The tile entity that calls the GUI.
      */
     public GuiSpiritFurnace(InventoryPlayer inventory, TileSpiritFurnace tile) {
         super(new ContainerSpiritFurnace(inventory, tile), tile);
         this.setTank(TANKWIDTH, TANKHEIGHT, TANKX, TANKY, TANKTARGETX, TANKTARGETY);
         this.setProgress(PROGRESSWIDTH, PROGRESSHEIGHT, PROGRESSX, PROGRESSY, PROGRESSTARGETX, PROGRESSTARGETY);
     }
-    
+
     private String prettyPrintSize(Size size) {
-    	int[] c = size.getCoordinates();
-    	return c[0] + "x" + c[1] + "x" + c[2];
+        int[] c = size.getCoordinates();
+        return c[0] + "x" + c[1] + "x" + c[2];
     }
-    
+
     @Override
-	protected void drawAdditionalForeground(int mouseX, int mouseY) {
-    	String prefix = SpiritFurnace.getInstance().getUnlocalizedName() + ".help.invalid";
-    	List<String> lines = new ArrayList<String>();
-    	lines.add(L10NHelpers.localize(prefix));
-        if(tile.getEntity() == null) {
-        	lines.add(L10NHelpers.localize(prefix + ".noEntity"));
-        } else if(!tile.isSizeValidForEntity()) {
-        	lines.add(L10NHelpers.localize(prefix + ".contentSize", prettyPrintSize(tile.getInnerSize())));
-        	lines.add(L10NHelpers.localize(prefix + ".requiredSize", prettyPrintSize(tile.getEntitySize())));
-        } else if(tile.isForceHalt()) {
-        	lines.add(L10NHelpers.localize(prefix + ".forceHalt"));
+    protected void drawAdditionalForeground(int mouseX, int mouseY) {
+        String prefix = SpiritFurnace.getInstance()
+            .getUnlocalizedName() + ".help.invalid";
+        List<String> lines = new ArrayList<String>();
+        lines.add(L10NHelpers.localize(prefix));
+        if (tile.getEntity() == null) {
+            lines.add(L10NHelpers.localize(prefix + ".noEntity"));
+        } else if (!tile.isSizeValidForEntity()) {
+            lines.add(L10NHelpers.localize(prefix + ".contentSize", prettyPrintSize(tile.getInnerSize())));
+            lines.add(L10NHelpers.localize(prefix + ".requiredSize", prettyPrintSize(tile.getEntitySize())));
+        } else if (tile.isForceHalt()) {
+            lines.add(L10NHelpers.localize(prefix + ".forceHalt"));
+        } else if (tile.isCaughtError()) {
+            lines.add(L10NHelpers.localize(prefix + ".caughtError"));
         }
-        else if(tile.isCaughtError()) {
-        	lines.add(L10NHelpers.localize(prefix + ".caughtError"));
-        }
-        if(lines.size() > 1) {
-        	this.drawTexturedModalRect(PROGRESSTARGETX + offsetX, PROGRESSTARGETY + offsetY, PROGRESS_INVALIDX,
-            		PROGRESS_INVALIDY, PROGRESSWIDTH, PROGRESSHEIGHT);
-            if(isPointInRegion(PROGRESSTARGETX + offsetX, PROGRESSTARGETY + offsetY, PROGRESSWIDTH, PROGRESSHEIGHT,
-                    mouseX, mouseY)) {
-	    		mouseX -= guiLeft;
-	        	mouseY -= guiTop;
-	            drawTooltip(lines, mouseX, mouseY);
-	        }
+        if (lines.size() > 1) {
+            this.drawTexturedModalRect(
+                PROGRESSTARGETX + offsetX,
+                PROGRESSTARGETY + offsetY,
+                PROGRESS_INVALIDX,
+                PROGRESS_INVALIDY,
+                PROGRESSWIDTH,
+                PROGRESSHEIGHT);
+            if (isPointInRegion(
+                PROGRESSTARGETX + offsetX,
+                PROGRESSTARGETY + offsetY,
+                PROGRESSWIDTH,
+                PROGRESSHEIGHT,
+                mouseX,
+                mouseY)) {
+                mouseX -= guiLeft;
+                mouseY -= guiTop;
+                drawTooltip(lines, mouseX, mouseY);
+            }
         }
     }
-    
+
 }

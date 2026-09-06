@@ -15,16 +15,17 @@ import evilcraft.api.recipes.custom.ISuperRecipeRegistry;
  * and those that do not. You do this by implementing the matches() method, which should return true when
  * the criteria of the given recipe are met, or false otherwise.
  */
-public abstract class RecipeMatcher<M extends IMachine, R extends IRecipe> 
-	implements IRecipeMatcher<M, R> {
+public abstract class RecipeMatcher<M extends IMachine, R extends IRecipe> implements IRecipeMatcher<M, R> {
 
     @Override
-	public IRecipeMatch<M, R> findRecipe() {
-        return RegistryManager.getRegistry(ISuperRecipeRegistry.class).findRecipe(this);
+    public IRecipeMatch<M, R> findRecipe() {
+        return RegistryManager.getRegistry(ISuperRecipeRegistry.class)
+            .findRecipe(this);
     }
 
     @Override
-	public List<IRecipeMatch<M, R>> findRecipes() {
-        return (RegistryManager.getRegistry(ISuperRecipeRegistry.class).findRecipes(this));
+    public List<IRecipeMatch<M, R>> findRecipes() {
+        return (RegistryManager.getRegistry(ISuperRecipeRegistry.class)
+            .findRecipes(this));
     }
 }

@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class Recipe<I extends IRecipeInput, O extends IRecipeOutput, P extends IRecipeProperties> implements IRecipe<I, O, P> {
+public class Recipe<I extends IRecipeInput, O extends IRecipeOutput, P extends IRecipeProperties>
+    implements IRecipe<I, O, P> {
+
     @Getter
     private final String namedId;
     @Getter
@@ -44,19 +46,22 @@ public class Recipe<I extends IRecipeInput, O extends IRecipeOutput, P extends I
 
     /**
      * Generates a default named id.
+     * 
      * @return A unique default named id.
      */
     private String generateNamedId() {
-        String namedId = input.getClass().getName() + "_"  + output.getClass().getName() + "_";
+        String namedId = input.getClass()
+            .getName() + "_"
+            + output.getClass()
+                .getName()
+            + "_";
 
-        if (properties != null)
-            namedId += properties.getClass().getName() + "_";
+        if (properties != null) namedId += properties.getClass()
+            .getName() + "_";
 
-        namedId += Integer.toString(input.hashCode())
-                +  Integer.toString(output.hashCode());
+        namedId += Integer.toString(input.hashCode()) + Integer.toString(output.hashCode());
 
-        if (properties != null)
-            namedId += Integer.toString(properties.hashCode());
+        if (properties != null) namedId += Integer.toString(properties.hashCode());
 
         return namedId;
     }

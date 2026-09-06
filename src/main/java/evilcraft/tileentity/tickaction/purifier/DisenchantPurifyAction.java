@@ -1,9 +1,8 @@
 package evilcraft.tileentity.tickaction.purifier;
 
-import evilcraft.api.tileentity.purifier.IPurifierAction;
-import evilcraft.core.helper.EnchantmentHelpers;
-import evilcraft.item.BlookConfig;
-import evilcraft.tileentity.TilePurifier;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -11,11 +10,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
+import evilcraft.api.tileentity.purifier.IPurifierAction;
+import evilcraft.core.helper.EnchantmentHelpers;
+import evilcraft.item.BlookConfig;
+import evilcraft.tileentity.TilePurifier;
 
 /**
  * Purifier action to remove enchantments from tools.
+ * 
  * @author Ruben Taelman
  */
 public class DisenchantPurifyAction implements IPurifierAction {
@@ -23,7 +25,8 @@ public class DisenchantPurifyAction implements IPurifierAction {
     /**
      * The allowed book instance.
      */
-    public static final Item ALLOWED_BOOK = BlookConfig._instance.downCast().getItemInstance();
+    public static final Item ALLOWED_BOOK = BlookConfig._instance.downCast()
+        .getItemInstance();
 
     private static final int PURIFY_DURATION = 60;
 
@@ -39,9 +42,12 @@ public class DisenchantPurifyAction implements IPurifierAction {
 
     @Override
     public boolean canWork(TilePurifier tile) {
-        if(tile.getBucketsFloored() == tile.getMaxBuckets() && tile.getPurifyItem() != null &&
-                tile.getAdditionalItem() != null && tile.getAdditionalItem().getItem() == ALLOWED_BOOK) {
-            NBTTagList enchantmentList = tile.getPurifyItem().getEnchantmentTagList();
+        if (tile.getBucketsFloored() == tile.getMaxBuckets() && tile.getPurifyItem() != null
+            && tile.getAdditionalItem() != null
+            && tile.getAdditionalItem()
+                .getItem() == ALLOWED_BOOK) {
+            NBTTagList enchantmentList = tile.getPurifyItem()
+                .getEnchantmentTagList();
             return enchantmentList != null && enchantmentList.tagCount() > 0;
         }
         return false;

@@ -1,15 +1,17 @@
 package evilcraft.infobook.pageelement;
 
-import evilcraft.client.gui.container.GuiOriginsOfDarkness;
-import evilcraft.infobook.AdvancedButton;
-import evilcraft.infobook.InfoSection;
+import java.util.Map;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-import java.util.Map;
+import evilcraft.client.gui.container.GuiOriginsOfDarkness;
+import evilcraft.infobook.AdvancedButton;
+import evilcraft.infobook.InfoSection;
 
 /**
  * Blood Infuser recipes.
+ * 
  * @author rubensworks
  */
 public class FurnaceRecipeAppendix extends RecipeAppendix<Map.Entry<ItemStack, ItemStack>> {
@@ -48,7 +50,8 @@ public class FurnaceRecipeAppendix extends RecipeAppendix<Map.Entry<ItemStack, I
     }
 
     @Override
-    public void drawElementInner(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx, int my) {
+    public void drawElementInner(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx,
+        int my) {
         int middle = (width - SLOT_SIZE) / 2;
         gui.drawArrowRight(x + middle - 3, y + SLOT_OFFSET_Y + 2);
 

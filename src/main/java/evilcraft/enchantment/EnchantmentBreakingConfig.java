@@ -5,11 +5,12 @@ import evilcraft.core.config.extendedconfig.EnchantmentConfig;
 
 /**
  * Config for {@link EnchantmentBreaking}.
+ * 
  * @author rubensworks
  *
  */
 public class EnchantmentBreakingConfig extends EnchantmentConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -19,12 +20,7 @@ public class EnchantmentBreakingConfig extends EnchantmentConfig {
      * Make a new instance.
      */
     public EnchantmentBreakingConfig() {
-        super(
-            Reference.ENCHANTMENT_BREAKING,
-            "breaking",
-            null,
-            EnchantmentBreaking.class
-        );
+        super(Reference.ENCHANTMENT_BREAKING, "breaking", null, EnchantmentBreaking.class);
     }
-    
+
 }

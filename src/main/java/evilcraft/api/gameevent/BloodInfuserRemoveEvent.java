@@ -1,11 +1,13 @@
 package evilcraft.api.gameevent;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import cpw.mods.fml.common.eventhandler.Event;
+
 /**
  * Event when a player removes a crafted item from a slot.
+ * 
  * @author rubensworks
  */
 public class BloodInfuserRemoveEvent extends Event {
@@ -15,6 +17,7 @@ public class BloodInfuserRemoveEvent extends Event {
 
     /**
      * Make a new instance.
+     * 
      * @param player The player removing the item.
      * @param output The item that was picked up from the output slot.
      */

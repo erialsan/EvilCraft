@@ -17,22 +17,21 @@ import evilcraft.block.EnvironmentalAccumulator;
 import evilcraft.core.helper.DirectionHelpers;
 import evilcraft.core.helper.RenderHelpers;
 
-
 /**
  * Renderer purifier.
+ * 
  * @author rubensworks
  *
  */
 public class RenderEnvironmentalAccumulator implements ISimpleBlockRenderingHandler {
-    
+
     /**
      * The ID for this renderer.
      */
     public static final int ID = RenderingRegistry.getNextAvailableRenderId();
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelID,
-            RenderBlocks renderer) {
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
         renderInventoryBlock(renderer, block, metadata);
@@ -43,34 +42,27 @@ public class RenderEnvironmentalAccumulator implements ISimpleBlockRenderingHand
         Tessellator tessellator = Tessellator.instance;
         block.setBlockBoundsForItemRender();
         renderer.setRenderBoundsFromBlock(block);
-        
+
         // Start GL11
         GL11.glPushMatrix();
         GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-        
+
         // Loop over sides and render them relative to the given direction.
-        for(ForgeDirection renderDirection : DirectionHelpers.DIRECTIONS) {
+        for (ForgeDirection renderDirection : DirectionHelpers.DIRECTIONS) {
             tessellator.startDrawingQuads();
-            tessellator.setNormal(
-                    renderDirection.offsetX,
-                    renderDirection.offsetY,
-                    renderDirection.offsetZ
-                    );
+            tessellator.setNormal(renderDirection.offsetX, renderDirection.offsetY, renderDirection.offsetZ);
             RenderHelpers.renderFaceDirection(
-                    renderDirection,
-                    renderer,
-                    block,
-                    0.0D, 0.0D, 0.0D,
-                    renderer.getBlockIconFromSideAndMetadata(
-                            block,
-                            renderDirection.ordinal(),
-                            metadata
-                            )
-                    );
+                renderDirection,
+                renderer,
+                block,
+                0.0D,
+                0.0D,
+                0.0D,
+                renderer.getBlockIconFromSideAndMetadata(block, renderDirection.ordinal(), metadata));
             tessellator.draw();
         }
-        
+
         // The rendering of the inside
         IIcon icon = block.getBlockTextureFromSide(ForgeDirection.DOWN.ordinal());
         float f4 = 0.300F;
@@ -79,46 +71,47 @@ public class RenderEnvironmentalAccumulator implements ISimpleBlockRenderingHand
         double z = 0;
         tessellator.startDrawingQuads();
         tessellator.setNormal(-1, 0, 0);
-        renderer.renderFaceXPos(block, (double)((float)x - 1.0F + f4), (double)y, (double)z, icon);
+        renderer.renderFaceXPos(block, (double) ((float) x - 1.0F + f4), (double) y, (double) z, icon);
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(1, 0, 0);
-        renderer.renderFaceXNeg(block, (double)((float)x + 1.0F - f4), (double)y, (double)z, icon);
+        renderer.renderFaceXNeg(block, (double) ((float) x + 1.0F - f4), (double) y, (double) z, icon);
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0, 0, -1);
-        renderer.renderFaceZPos(block, (double)x, (double)y, (double)((float)z - 1.0F + f4), icon);
+        renderer.renderFaceZPos(block, (double) x, (double) y, (double) ((float) z - 1.0F + f4), icon);
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0, 0, 1);
-        renderer.renderFaceZNeg(block, (double)x, (double)y, (double)((float)z + 1.0F - f4), icon);
+        renderer.renderFaceZNeg(block, (double) x, (double) y, (double) ((float) z + 1.0F - f4), icon);
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0, -1, 0);
-        renderer.renderFaceYPos(block, (double)x, (double)((float)y - 1.0F + 0.55F), (double)z, icon);
+        renderer.renderFaceYPos(block, (double) x, (double) ((float) y - 1.0F + 0.55F), (double) z, icon);
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0, 1, 0);
-        renderer.renderFaceYNeg(block, (double)x, (double)((float)y + 1.0F - 0.45F), (double)z, icon);
+        renderer.renderFaceYNeg(block, (double) x, (double) ((float) y + 1.0F - 0.45F), (double) z, icon);
         tessellator.draw();
         GL11.glPopMatrix();
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-            Block block, int modelId, RenderBlocks renderer) {
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
+        RenderBlocks renderer) {
         return renderEnvironmentalAccumulator((EnvironmentalAccumulator) block, world, x, y, z, renderer);
     }
-    
-    private boolean renderEnvironmentalAccumulator(EnvironmentalAccumulator envirAcc, IBlockAccess blockAccess, int x, int y, int z, RenderBlocks renderer) {
+
+    private boolean renderEnvironmentalAccumulator(EnvironmentalAccumulator envirAcc, IBlockAccess blockAccess, int x,
+        int y, int z, RenderBlocks renderer) {
         renderer.renderStandardBlock(envirAcc, x, y, z);
         Tessellator tessellator = Tessellator.instance;
         tessellator.setBrightness(envirAcc.getMixedBrightnessForBlock(blockAccess, x, y, z));
         float f = 1.0F;
         int l = envirAcc.colorMultiplier(blockAccess, x, y, z);
-        float f1 = (float)(l >> 16 & 255) / 255.0F;
-        float f2 = (float)(l >> 8 & 255) / 255.0F;
-        float f3 = (float)(l & 255) / 255.0F;
+        float f1 = (float) (l >> 16 & 255) / 255.0F;
+        float f2 = (float) (l >> 8 & 255) / 255.0F;
+        float f3 = (float) (l & 255) / 255.0F;
         float f4;
 
         if (EntityRenderer.anaglyphEnable) {
@@ -133,23 +126,23 @@ public class RenderEnvironmentalAccumulator implements ISimpleBlockRenderingHand
         tessellator.setColorOpaque_F(f * f1, f * f2, f * f3);
         IIcon icon = envirAcc.getBlockTextureFromSide(ForgeDirection.DOWN.ordinal());
         f4 = 0.300F;
-        renderer.renderFaceXPos(envirAcc, (double)((float)x - 1.0F + f4), (double)y, (double)z, icon);
-        renderer.renderFaceXNeg(envirAcc, (double)((float)x + 1.0F - f4), (double)y, (double)z, icon);
-        renderer.renderFaceZPos(envirAcc, (double)x, (double)y, (double)((float)z - 1.0F + f4), icon);
-        renderer.renderFaceZNeg(envirAcc, (double)x, (double)y, (double)((float)z + 1.0F - f4), icon);
-        renderer.renderFaceYPos(envirAcc, (double)x, (double)((float)y - 1.0F + 0.55F), (double)z, icon);
-        renderer.renderFaceYNeg(envirAcc, (double)x, (double)((float)y + 1.0F - 0.45F), (double)z, icon);
+        renderer.renderFaceXPos(envirAcc, (double) ((float) x - 1.0F + f4), (double) y, (double) z, icon);
+        renderer.renderFaceXNeg(envirAcc, (double) ((float) x + 1.0F - f4), (double) y, (double) z, icon);
+        renderer.renderFaceZPos(envirAcc, (double) x, (double) y, (double) ((float) z - 1.0F + f4), icon);
+        renderer.renderFaceZNeg(envirAcc, (double) x, (double) y, (double) ((float) z + 1.0F - f4), icon);
+        renderer.renderFaceYPos(envirAcc, (double) x, (double) ((float) y - 1.0F + 0.55F), (double) z, icon);
+        renderer.renderFaceYNeg(envirAcc, (double) x, (double) ((float) y + 1.0F - 0.45F), (double) z, icon);
         return true;
     }
-    
+
     @Override
-	public boolean shouldRender3DInInventory(int modelId) {
-		return true;
-	}
+    public boolean shouldRender3DInInventory(int modelId) {
+        return true;
+    }
 
     @Override
     public int getRenderId() {
         return ID;
     }
-    
+
 }

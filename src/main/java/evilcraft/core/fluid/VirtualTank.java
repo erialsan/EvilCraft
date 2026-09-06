@@ -1,16 +1,18 @@
 package evilcraft.core.fluid;
 
-import evilcraft.core.helper.Helpers;
+import javax.annotation.Nullable;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 
-import javax.annotation.Nullable;
+import evilcraft.core.helper.Helpers;
 
 /**
  * A tank that acts as a proxy to a collection of other tanks.
+ * 
  * @author Ruben Taelman
  */
 public class VirtualTank implements IFluidTank {
@@ -22,6 +24,7 @@ public class VirtualTank implements IFluidTank {
 
     /**
      * Make a new tank instance.
+     * 
      * @param tankProvider The dynamic provider of tanks.
      * @param spreadEvenly If the filling and draining should happen evenly across all tanks.
      */
@@ -32,7 +35,7 @@ public class VirtualTank implements IFluidTank {
 
     protected IFluidHandler[] getTanks() {
         IFluidHandler[] tanks = tankProvider.getVirtualTankChildren();
-        if(tanks == null) {
+        if (tanks == null) {
             tanks = new IFluidHandler[0];
         }
         return tanks;
@@ -40,14 +43,14 @@ public class VirtualTank implements IFluidTank {
 
     @Override
     public FluidStack getFluid() {
-        if(isSpreadEvenly()) {
+        if (isSpreadEvenly()) {
             FluidStack minFluid = null;
             int min = Integer.MAX_VALUE;
             for (IFluidHandler tank : getTanks()) {
                 for (FluidTankInfo info : tank.getTankInfo(TARGETSIDE)) {
                     FluidStack tankFluid = info.fluid;
                     if (tankFluid != null) {
-                        if(tankFluid.amount < min) {
+                        if (tankFluid.amount < min) {
                             min = tankFluid.amount;
                             minFluid = tankFluid;
                         }

@@ -5,17 +5,20 @@ import java.lang.reflect.InvocationTargetException;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+
 import evilcraft.core.client.render.model.RenderModel;
 
 /**
  * Config for Entities with a custom Model.
+ * 
  * @author rubensworks
  * @see ExtendedConfig
  */
-public abstract class ModelEntityConfig extends EntityConfig{
+public abstract class ModelEntityConfig extends EntityConfig {
 
     /**
      * Make a new instance.
+     * 
      * @param enabled If this should is enabled.
      * @param namedId The unique name ID for the configurable.
      * @param comment The comment to add in the config file for this configurable.
@@ -24,7 +27,7 @@ public abstract class ModelEntityConfig extends EntityConfig{
     public ModelEntityConfig(boolean enabled, String namedId, String comment, Class<? extends Entity> element) {
         super(enabled, namedId, comment, element);
     }
-    
+
     @Override
     protected Render getRender() {
         Constructor<? extends Render> constructor;
@@ -47,9 +50,10 @@ public abstract class ModelEntityConfig extends EntityConfig{
         }
         return render;
     }
-    
+
     /**
      * Get the {@link RenderModel} class for the configurable.
+     * 
      * @return The class for the model of the configurable.
      */
     public abstract Class<? extends RenderModel<?>> getRenderClass();

@@ -1,6 +1,5 @@
 package evilcraft.api.recipes.custom;
 
-
 /**
  * Interface for machines that can be registered with {@link ISuperRecipeRegistry}.
  *
@@ -11,6 +10,7 @@ package evilcraft.api.recipes.custom;
  * @param <P> The type of the recipe properties of all recipes associated with the machine.
  */
 public interface IMachine<M extends IMachine<M, I, O, P>, I extends IRecipeInput, O extends IRecipeOutput, P extends IRecipeProperties> {
+
     /**
      * @return Returns the recipe registry responsible for registring recipes for the current machine.
      */

@@ -5,6 +5,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Input component with tier.
+ * 
  * @author rubensworks
  */
 public class ItemFluidStackAndTierRecipeComponent extends ItemAndFluidStackRecipeComponent {

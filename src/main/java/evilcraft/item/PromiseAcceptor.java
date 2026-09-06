@@ -1,19 +1,21 @@
 package evilcraft.item;
 
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
 import com.google.common.collect.Maps;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.core.config.configurable.ConfigurableItem;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import evilcraft.core.config.extendedconfig.ItemConfig;
 import evilcraft.core.helper.RenderHelpers;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Blood reactant.
@@ -35,17 +37,17 @@ public class PromiseAcceptor extends ConfigurableItem {
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<ItemConfig> eConfig) {
-        if(_instance == null)
-            _instance = new PromiseAcceptor(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new PromiseAcceptor(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static PromiseAcceptor getInstance() {
@@ -69,12 +71,12 @@ public class PromiseAcceptor extends ConfigurableItem {
     public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
         return COLORS.get(itemStack.getItemDamage());
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
-        for(int i = 0; i < COLORS.size(); i++) {
+        for (int i = 0; i < COLORS.size(); i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }

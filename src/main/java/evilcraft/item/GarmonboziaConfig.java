@@ -1,16 +1,18 @@
 package evilcraft.item;
 
-import evilcraft.core.config.configurable.ConfigurableItem;
-import evilcraft.core.config.configurable.IConfigurable;
-import evilcraft.core.config.extendedconfig.ItemConfig;
-import evilcraft.core.helper.MinecraftHelpers;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
+import evilcraft.core.config.configurable.ConfigurableItem;
+import evilcraft.core.config.configurable.IConfigurable;
+import evilcraft.core.config.extendedconfig.ItemConfig;
+import evilcraft.core.helper.MinecraftHelpers;
+
 /**
  * Config for the Garmonbozia.
+ * 
  * @author rubensworks
  *
  */
@@ -25,17 +27,13 @@ public class GarmonboziaConfig extends ItemConfig {
      * Make a new instance.
      */
     public GarmonboziaConfig() {
-        super(
-            true,
-            "garmonbozia",
-            null,
-            null
-        );
+        super(true, "garmonbozia", null, null);
     }
 
     @Override
     protected IConfigurable initSubInstance() {
         return new ConfigurableItem(this) {
+
             @Override
             public EnumRarity getRarity(ItemStack itemStack) {
                 return EnumRarity.epic;
@@ -51,10 +49,10 @@ public class GarmonboziaConfig extends ItemConfig {
     @Override
     public void onRegistered() {
         super.onRegistered();
-        for(String chestCategory : MinecraftHelpers.CHESTGENCATEGORIES) {
-            ChestGenHooks.getInfo(chestCategory).addItem(new WeightedRandomChestContent(
-                    getItemInstance(), 0, 1, 3, 2));
+        for (String chestCategory : MinecraftHelpers.CHESTGENCATEGORIES) {
+            ChestGenHooks.getInfo(chestCategory)
+                .addItem(new WeightedRandomChestContent(getItemInstance(), 0, 1, 3, 2));
         }
     }
-    
+
 }

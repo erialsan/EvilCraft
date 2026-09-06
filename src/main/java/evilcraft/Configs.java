@@ -1,5 +1,16 @@
 package evilcraft;
 
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import evilcraft.block.*;
 import evilcraft.core.config.ConfigHandler;
 import evilcraft.core.config.configurable.IConfigurable;
@@ -20,45 +31,37 @@ import evilcraft.fluid.PoisonConfig;
 import evilcraft.item.*;
 import evilcraft.potion.PotionPalingConfig;
 import evilcraft.world.biome.BiomeDegradedConfig;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 /**
  * This class holds a set of all the configs that need to be registered.
+ * 
  * @author rubensworks
  *
  */
 public class Configs {
-    
+
     private static Configs _instance;
-    
+
     /**
      * The set of configs.
      */
     @SuppressWarnings("rawtypes")
     public Set<ExtendedConfig> configs = ConfigHandler.getInstance(); // Order is necessary for some registrations
-    
+
     /**
      * Get the unique instance.
+     * 
      * @return Unique instance.
      */
     public static Configs getInstance() {
-        if(_instance == null)
-            _instance = new Configs();
+        if (_instance == null) _instance = new Configs();
         return _instance;
     }
-    
+
     private Configs() {
-        
+
     }
-    
+
     /**
      * Register the general configs. They won't be checked with the config debugger.
      */
@@ -66,7 +69,7 @@ public class Configs {
         // General
         configs.add(new GeneralConfig());
     }
-    
+
     /**
      * Register ore dictionary keys for vanilla items/blocks.
      */
@@ -74,14 +77,16 @@ public class Configs {
         OreDictionary.registerOre(Reference.DICT_BLOCKGLASS, new ItemStack(Blocks.glass));
         OreDictionary.registerOre(Reference.DICT_MATERIALPOISONOUS, new ItemStack(Items.poisonous_potato));
         OreDictionary.registerOre(Reference.DICT_MATERIALBONE, new ItemStack(Items.bone));
-        OreDictionary.registerOre(Reference.DICT_ITEMSKULL, new ItemStack(Items.skull, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre(Reference.DICT_FLESH, new ItemStack(Items.rotten_flesh, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary
+            .registerOre(Reference.DICT_ITEMSKULL, new ItemStack(Items.skull, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary
+            .registerOre(Reference.DICT_FLESH, new ItemStack(Items.rotten_flesh, 1, OreDictionary.WILDCARD_VALUE));
     }
-    
+
     /**
      * Register all the configs.
      */
-	public void registerConfigs() {
+    public void registerConfigs() {
 
         // Potion Effects
         configs.add(new PotionPalingConfig());
@@ -89,7 +94,7 @@ public class Configs {
         // Fluids
         configs.add(new BloodConfig());
         configs.add(new PoisonConfig());
-        
+
         // Blocks
         configs.add(new EvilBlockConfig());
         configs.add(new FluidBlockBloodConfig());
@@ -130,7 +135,7 @@ public class Configs {
         configs.add(new ColossalBloodChestConfig());
         configs.add(new ReinforcedUndeadPlankConfig());
         configs.add(new SanguinaryEnvironmentalAccumulatorConfig());
-        
+
         // Items
         configs.add(new WerewolfBoneConfig());
         configs.add(new WerewolfFleshConfig());
@@ -141,7 +146,7 @@ public class Configs {
         configs.add(new DarkGemConfig());
         configs.add(new DarkStickConfig());
         configs.add(new LargeDoorItemConfig());
-        configs.add(new WeatherContainerConfig());        
+        configs.add(new WeatherContainerConfig());
         configs.add(new BloodPearlOfTeleportationConfig());
         configs.add(new BroomConfig());
         configs.add(new HardenedBloodShardConfig());
@@ -191,7 +196,7 @@ public class Configs {
         configs.add(new MaceOfDestructionConfig());
         configs.add(new GarmonboziaConfig());
         configs.add(new PoisonBottleConfig());
-        
+
         // Entities
         // Item
         configs.add(new EntityLightningGrenadeConfig());
@@ -217,16 +222,16 @@ public class Configs {
         // Other
         configs.add(new EntityAntiVengeanceBeamConfig());
         configs.add(new EntityNecromancersHeadConfig());
-        
+
         // Enchantments
         configs.add(new EnchantmentUnusingConfig());
         configs.add(new EnchantmentBreakingConfig());
         configs.add(new EnchantmentLifeStealingConfig());
         configs.add(new EnchantmentPoisonTipConfig());
-        
+
         // Biomes
         configs.add(new BiomeDegradedConfig());
-        
+
         // Degradation Effects
         configs.add(new BiomeDegradationConfig());
         configs.add(new KnockbackDistortDegradationConfig());
@@ -240,13 +245,15 @@ public class Configs {
 
     /**
      * A safe way to check if a {@link IConfigurable} is enabled. @see ExtendedConfig#isEnabled()
+     * 
      * @param config The config to check.
      * @return If the given config is enabled.
      */
     @SuppressWarnings("rawtypes")
     public static boolean isEnabled(Class<? extends ExtendedConfig> config) {
         try {
-            return ((ExtendedConfig)config.getField("_instance").get(null)).isEnabled();
+            return ((ExtendedConfig) config.getField("_instance")
+                .get(null)).isEnabled();
         } catch (NullPointerException e1) {
             return false;
         } catch (IllegalArgumentException e2) {
@@ -263,20 +270,21 @@ public class Configs {
     /**
      * Get the config from a given item.
      * It will internally also try to get the block from the item if it exists to get the config from.
+     * 
      * @param item The item, possibly IConfigurable.
      * @return The config or null.
      */
     public static @Nullable ExtendedConfig<?> getConfigFromItem(Item item) {
-        if(item instanceof IConfigurable) {
+        if (item instanceof IConfigurable) {
             return ((IConfigurable) item).getConfig();
         } else {
             Block block = Block.getBlockFromItem(item);
-            if(block != Blocks.air && block instanceof IConfigurable) {
+            if (block != Blocks.air && block instanceof IConfigurable) {
                 return ((IConfigurable) block).getConfig();
             } else {
                 return null;
             }
         }
     }
-    
+
 }

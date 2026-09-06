@@ -1,18 +1,20 @@
 package evilcraft.tileentity.tickaction.bloodchest;
 
-import evilcraft.api.RegistryManager;
-import evilcraft.api.tileentity.bloodchest.IBloodChestRepairAction;
-import evilcraft.api.tileentity.bloodchest.IBloodChestRepairActionRegistry;
-import evilcraft.core.config.IChangedCallback;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import evilcraft.api.RegistryManager;
+import evilcraft.api.tileentity.bloodchest.IBloodChestRepairAction;
+import evilcraft.api.tileentity.bloodchest.IBloodChestRepairActionRegistry;
+import evilcraft.core.config.IChangedCallback;
+
 /**
  * Registry for {@link IBloodChestRepairAction} instances.
+ * 
  * @author rubensworks
  *
  */
@@ -20,17 +22,16 @@ public class BloodChestRepairActionRegistry implements IBloodChestRepairActionRe
 
     private String[] itemBlacklist = new String[0];
 
-    private final List<IBloodChestRepairAction> repairActions =
-            new LinkedList<IBloodChestRepairAction>();
-    
+    private final List<IBloodChestRepairAction> repairActions = new LinkedList<IBloodChestRepairAction>();
+
     /**
      * Make a new instance.
      */
     public BloodChestRepairActionRegistry() {
-    	register(new DamageableItemRepairAction());
+        register(new DamageableItemRepairAction());
         register(new AnvilRepairAction());
     }
-    
+
     @Override
     public void register(IBloodChestRepairAction repairAction) {
         repairActions.add(repairAction);
@@ -38,7 +39,7 @@ public class BloodChestRepairActionRegistry implements IBloodChestRepairActionRe
 
     @Override
     public boolean isItemValidForSlot(ItemStack itemStack) {
-        if(isNotBlacklisted(itemStack)) {
+        if (isNotBlacklisted(itemStack)) {
             for (IBloodChestRepairAction action : repairActions) {
                 if (action.isItemValidForSlot(itemStack)) {
                     return true;
@@ -50,8 +51,9 @@ public class BloodChestRepairActionRegistry implements IBloodChestRepairActionRe
 
     @Override
     public int canRepair(ItemStack itemStack, int tick) {
-        for(int i = 0; i < repairActions.size(); i++) {
-            if(repairActions.get(i).canRepair(itemStack, tick)) {
+        for (int i = 0; i < repairActions.size(); i++) {
+            if (repairActions.get(i)
+                .canRepair(itemStack, tick)) {
                 return i;
             }
         }
@@ -60,13 +62,15 @@ public class BloodChestRepairActionRegistry implements IBloodChestRepairActionRe
 
     @Override
     public float repair(ItemStack itemStack, Random random, int actionID, boolean doAction, boolean isBulk) {
-        return repairActions.get(actionID).repair(itemStack, random, doAction, isBulk);
+        return repairActions.get(actionID)
+            .repair(itemStack, random, doAction, isBulk);
     }
 
     protected boolean isNotBlacklisted(ItemStack itemStack) {
-        if(itemStack == null) return false;
-        for(String name : itemBlacklist) {
-            if(Item.itemRegistry.getNameForObject(itemStack.getItem()).equals(name)) {
+        if (itemStack == null) return false;
+        for (String name : itemBlacklist) {
+            if (Item.itemRegistry.getNameForObject(itemStack.getItem())
+                .equals(name)) {
                 return false;
             }
         }
@@ -80,6 +84,7 @@ public class BloodChestRepairActionRegistry implements IBloodChestRepairActionRe
 
     /**
      * The changed callback for the item blacklist.
+     * 
      * @author rubensworks
      *
      */
@@ -89,8 +94,9 @@ public class BloodChestRepairActionRegistry implements IBloodChestRepairActionRe
 
         @Override
         public void onChanged(Object value) {
-            if(calledOnce) {
-                RegistryManager.getRegistry(IBloodChestRepairActionRegistry.class).setBlacklist((String[]) value);
+            if (calledOnce) {
+                RegistryManager.getRegistry(IBloodChestRepairActionRegistry.class)
+                    .setBlacklist((String[]) value);
             }
             calledOnce = true;
         }
@@ -101,5 +107,5 @@ public class BloodChestRepairActionRegistry implements IBloodChestRepairActionRe
         }
 
     }
-    
+
 }

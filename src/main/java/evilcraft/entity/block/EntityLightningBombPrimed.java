@@ -1,51 +1,55 @@
 package evilcraft.entity.block;
 
-import evilcraft.block.LightningBomb;
-import evilcraft.core.config.configurable.IConfigurable;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import java.util.Random;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import evilcraft.block.LightningBomb;
+import evilcraft.core.config.configurable.IConfigurable;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
 
 /**
  * Entity for primed {@link LightningBomb}.
+ * 
  * @author rubensworks
  *
  */
-public class EntityLightningBombPrimed extends EntityTNTPrimed implements IConfigurable{
-    
+public class EntityLightningBombPrimed extends EntityTNTPrimed implements IConfigurable {
+
     private static final float EXPLOSION_STRENGTH = 1.0f;
 
     /**
      * Make a new instance in the given world.
+     * 
      * @param world The world to make it in.
      */
     public EntityLightningBombPrimed(World world) {
         super(world);
         setFuse();
     }
-    
+
     /**
      * Make a new instance at the given location in a world by a placer {@link EntityLivingBase}.
-     * @param world The world.
-     * @param x X coordinate.
-     * @param y Y coordinate.
-     * @param z Z coordinate.
+     * 
+     * @param world  The world.
+     * @param x      X coordinate.
+     * @param y      Y coordinate.
+     * @param z      Z coordinate.
      * @param placer The {@link EntityLivingBase} that placed this {@link Entity}.
      */
     public EntityLightningBombPrimed(World world, double x, double y, double z, EntityLivingBase placer) {
         super(world, x, y, z, placer);
         setFuse();
     }
-    
+
     protected void setFuse() {
         this.fuse = EntityLightningBombPrimedConfig.fuse;
     }
-    
+
     @Override
     public void onUpdate() {
         this.prevPosX = this.posX;
@@ -77,7 +81,14 @@ public class EntityLightningBombPrimed extends EntityTNTPrimed implements IConfi
     private void explode(World world, double x, double y, double z) {
         Random rand = new Random();
         for (int i = 0; i < 32; ++i) {
-            world.spawnParticle("magicCrit", x, y + rand.nextDouble() * 2.0D, z, rand.nextGaussian(), 0.0D, rand.nextGaussian());
+            world.spawnParticle(
+                "magicCrit",
+                x,
+                y + rand.nextDouble() * 2.0D,
+                z,
+                rand.nextGaussian(),
+                0.0D,
+                rand.nextGaussian());
         }
 
         if (!world.isRemote) {

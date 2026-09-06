@@ -1,12 +1,7 @@
 package evilcraft.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.core.config.configurable.ConfigurableItem;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.core.config.extendedconfig.ItemConfig;
-import evilcraft.core.helper.L10NHelpers;
-import evilcraft.core.helper.RenderHelpers;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,10 +9,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.core.config.configurable.ConfigurableItem;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.core.config.extendedconfig.ItemConfig;
+import evilcraft.core.helper.L10NHelpers;
+import evilcraft.core.helper.RenderHelpers;
 
 /**
  * A bowl of promises.
+ * 
  * @author rubensworks
  *
  */
@@ -33,17 +35,17 @@ public class BowlOfPromises extends ConfigurableItem {
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<ItemConfig> eConfig) {
-        if(_instance == null)
-            _instance = new BowlOfPromises(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new BowlOfPromises(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static BowlOfPromises getInstance() {
@@ -58,7 +60,7 @@ public class BowlOfPromises extends ConfigurableItem {
 
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-        if(itemStack.getItemDamage() >= ACTIVE_META) {
+        if (itemStack.getItemDamage() >= ACTIVE_META) {
             return new ItemStack(this, 1, 1);
         }
         return super.getContainerItem(itemStack);
@@ -97,17 +99,17 @@ public class BowlOfPromises extends ConfigurableItem {
 
     @Override
     public IIcon getIconFromDamageForRenderPass(int meta, int renderpass) {
-        if(meta == 0) return dusted;
-        if(meta == 1) return empty;
+        if (meta == 0) return dusted;
+        if (meta == 1) return empty;
         return renderpass == 0 ? active_overlay : active;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
-        if(itemStack.getItemDamage() > 1 && renderPass == 0) {
-            float division = (((float) ((((BowlOfPromisesConfig) eConfig).getTiers() -
-                    (itemStack.getItemDamage() - 2)) - 1) / 3) + 1);
+        if (itemStack.getItemDamage() > 1 && renderPass == 0) {
+            float division = (((float) ((((BowlOfPromisesConfig) eConfig).getTiers() - (itemStack.getItemDamage() - 2))
+                - 1) / 3) + 1);
             int channel = (int) (255 / division);
             return RenderHelpers.RGBToInt(channel, channel, channel);
         }
@@ -118,7 +120,7 @@ public class BowlOfPromises extends ConfigurableItem {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
-        for(int i = 0; i < ACTIVE_META + ((BowlOfPromisesConfig) eConfig).getTiers(); i++) {
+        for (int i = 0; i < ACTIVE_META + ((BowlOfPromisesConfig) eConfig).getTiers(); i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }
@@ -126,8 +128,8 @@ public class BowlOfPromises extends ConfigurableItem {
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
         String suffix = "active";
-        if(itemStack.getItemDamage() == 0) suffix = "dusted";
-        if(itemStack.getItemDamage() == 1) suffix = "empty";
+        if (itemStack.getItemDamage() == 0) suffix = "dusted";
+        if (itemStack.getItemDamage() == 1) suffix = "empty";
         return super.getUnlocalizedName(itemStack) + "." + suffix;
     }
 
@@ -136,10 +138,11 @@ public class BowlOfPromises extends ConfigurableItem {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
         super.addInformation(itemStack, entityPlayer, list, par4);
-        if(itemStack.getItemDamage() >= ACTIVE_META) {
+        if (itemStack.getItemDamage() >= ACTIVE_META) {
             int tier = itemStack.getItemDamage() - ACTIVE_META;
-            list.add(L10NHelpers.localize(super.getUnlocalizedName(itemStack) + ".strength") + " " +
-                    (tier == 0 ? 0 : L10NHelpers.localize("enchantment.level." + tier)));
+            list.add(
+                L10NHelpers.localize(super.getUnlocalizedName(itemStack) + ".strength") + " "
+                    + (tier == 0 ? 0 : L10NHelpers.localize("enchantment.level." + tier)));
         }
     }
 

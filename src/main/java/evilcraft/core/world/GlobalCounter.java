@@ -1,14 +1,16 @@
 package evilcraft.core.world;
 
-import com.google.common.collect.Maps;
+import java.util.Map;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSavedData;
 
-import java.util.Map;
+import com.google.common.collect.Maps;
 
 /**
  * Global counter that is shared over all dimensions, persisted, and consistent over server and clients.
+ * 
  * @author rubensworks
  */
 public class GlobalCounter {
@@ -25,7 +27,7 @@ public class GlobalCounter {
      * @return The unique instance.
      */
     public static GlobalCounter getInstance() {
-        if(_instance == null) {
+        if (_instance == null) {
             _instance = new GlobalCounter();
         }
         return _instance;
@@ -33,10 +35,11 @@ public class GlobalCounter {
 
     /**
      * Read the counters.
+     * 
      * @param tag The tag to read from.
      */
     public void readFromNBT(NBTTagCompound tag) {
-        if(tag != null) {
+        if (tag != null) {
             NBTTagList list = tag.getTagList("counters", 10);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound subTag = list.getCompoundTagAt(i);
@@ -47,11 +50,12 @@ public class GlobalCounter {
 
     /**
      * Write the counters.
+     * 
      * @param tag The tag to write to.
      */
     public void writeToNBT(NBTTagCompound tag) {
         NBTTagList list = new NBTTagList();
-        for(Map.Entry<String, Integer> entry : counters.entrySet()) {
+        for (Map.Entry<String, Integer> entry : counters.entrySet()) {
             NBTTagCompound subTag = new NBTTagCompound();
             subTag.setString("key", entry.getKey());
             subTag.setInteger("value", entry.getValue());
@@ -62,12 +66,13 @@ public class GlobalCounter {
 
     /**
      * Get the next counter value for the given key.
+     * 
      * @param key the key for the counter.
      * @return The next counter value.
      */
     public int getNext(String key) {
         int next = 0;
-        if(counters.containsKey(key)) {
+        if (counters.containsKey(key)) {
             next = counters.get(key);
         }
         counters.put(key, next + 1);
@@ -92,6 +97,7 @@ public class GlobalCounter {
 
         /**
          * Make a new instance.
+         * 
          * @param key The key for the global counter data.
          */
         public GlobalCounterData(String key) {

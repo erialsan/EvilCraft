@@ -1,5 +1,15 @@
 package evilcraft.block;
 
+import java.util.Random;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.api.RegistryManager;
@@ -19,25 +29,18 @@ import evilcraft.core.recipe.custom.ItemStackRecipeComponent;
 import evilcraft.core.tileentity.WorkingTileEntity;
 import evilcraft.inventory.container.ContainerBloodInfuser;
 import evilcraft.tileentity.TileBloodInfuser;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Random;
 
 /**
  * A machine that can infuse stuff with blood.
+ * 
  * @author rubensworks
  *
  */
-public class BloodInfuser extends ConfigurableBlockContainerGuiTankInfo implements IMachine<BloodInfuser, ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> {
-    
+public class BloodInfuser extends ConfigurableBlockContainerGuiTankInfo implements
+    IMachine<BloodInfuser, ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> {
+
     private static BloodInfuser _instance = null;
-    
+
     @SideOnly(Side.CLIENT)
     private IIcon sideIcon;
     @SideOnly(Side.CLIENT)
@@ -46,20 +49,20 @@ public class BloodInfuser extends ConfigurableBlockContainerGuiTankInfo implemen
     private IIcon frontIconOn;
     @SideOnly(Side.CLIENT)
     private IIcon frontIconOff;
-    
+
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<BlockConfig> eConfig) {
-        if(_instance == null)
-            _instance = new BloodInfuser(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new BloodInfuser(eConfig);
+        else eConfig.showDoubleInitError();
     }
-    
+
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static BloodInfuser getInstance() {
@@ -70,12 +73,11 @@ public class BloodInfuser extends ConfigurableBlockContainerGuiTankInfo implemen
         super(eConfig, Material.rock, TileBloodInfuser.class);
         this.setStepSound(soundTypeStone);
         this.setRotatable(true);
-        
-        if (MinecraftHelpers.isClientSide())
-            setGUI(GuiBloodInfuser.class);
+
+        if (MinecraftHelpers.isClientSide()) setGUI(GuiBloodInfuser.class);
         setContainer(ContainerBloodInfuser.class);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
@@ -84,22 +86,23 @@ public class BloodInfuser extends ConfigurableBlockContainerGuiTankInfo implemen
         frontIconOn = iconRegister.registerIcon(getTextureName() + "_" + ForgeDirection.NORTH.name() + "_on");
         frontIconOff = iconRegister.registerIcon(getTextureName() + "_" + ForgeDirection.NORTH.name() + "_off");
     }
-    
+
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
         TileBloodInfuser tile = (TileBloodInfuser) world.getTileEntity(x, y, z);
-        ForgeDirection rotatedDirection = DirectionHelpers.TEXTURESIDE_ORIENTATION[tile.getRotation().ordinal()][side];
-        return getIcon(rotatedDirection.ordinal(), tile.isVisuallyWorking()?1:0);
+        ForgeDirection rotatedDirection = DirectionHelpers.TEXTURESIDE_ORIENTATION[tile.getRotation()
+            .ordinal()][side];
+        return getIcon(rotatedDirection.ordinal(), tile.isVisuallyWorking() ? 1 : 0);
     }
-    
+
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int meta) {
-        if(side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
+        if (side == ForgeDirection.UP.ordinal() || side == ForgeDirection.DOWN.ordinal()) {
             return topIcon;
         } else if (side == ForgeDirection.SOUTH.ordinal()) {
-            if(meta == 1) {
+            if (meta == 1) {
                 return frontIconOn;
             } else {
                 return frontIconOff;
@@ -108,7 +111,7 @@ public class BloodInfuser extends ConfigurableBlockContainerGuiTankInfo implemen
             return sideIcon;
         }
     }
-    
+
     @Override
     public Item getItemDropped(int par1, Random random, int zero) {
         return Item.getItemFromBlock(this);
@@ -126,7 +129,8 @@ public class BloodInfuser extends ConfigurableBlockContainerGuiTankInfo implemen
 
     @Override
     public IRecipeRegistry<BloodInfuser, ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> getRecipeRegistry() {
-        return RegistryManager.getRegistry(ISuperRecipeRegistry.class).getRecipeRegistry(this);
+        return RegistryManager.getRegistry(ISuperRecipeRegistry.class)
+            .getRecipeRegistry(this);
     }
 
     @Override

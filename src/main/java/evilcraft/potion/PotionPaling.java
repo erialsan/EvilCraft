@@ -1,14 +1,16 @@
 package evilcraft.potion;
 
+import net.minecraft.entity.EntityLivingBase;
+
 import evilcraft.ExtendedDamageSource;
 import evilcraft.core.config.configurable.ConfigurablePotion;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import evilcraft.core.config.extendedconfig.PotionConfig;
 import evilcraft.core.helper.RenderHelpers;
-import net.minecraft.entity.EntityLivingBase;
 
 /**
  * Potion effect for letting entities fade away and leaving a portal behind in their place.
+ * 
  * @author rubensworks
  *
  */
@@ -18,17 +20,17 @@ public class PotionPaling extends ConfigurablePotion {
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<PotionConfig> eConfig) {
-        if(_instance == null)
-            _instance = new PotionPaling(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new PotionPaling(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static PotionPaling getInstance() {

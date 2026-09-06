@@ -15,6 +15,7 @@ import evilcraft.api.recipes.custom.ISuperRecipeRegistry;
 
 /**
  * Default implementation of {@link IRecipeRegistry}.
+ * 
  * @author immortaleeb
  *
  * @param <M> The type of the machine.
@@ -23,12 +24,13 @@ import evilcraft.api.recipes.custom.ISuperRecipeRegistry;
  * @param <P> The type of the recipe properties of all recipes associated with the machine.
  */
 public class RecipeRegistry<M extends IMachine<M, I, O, P>, I extends IRecipeInput, O extends IRecipeOutput, P extends IRecipeProperties>
-	implements IRecipeRegistry<M, I, O, P> {
-	
+    implements IRecipeRegistry<M, I, O, P> {
+
     private final M machine;
 
     /**
      * Make a new instance.
+     * 
      * @param machine The machine this registry is for.
      */
     public RecipeRegistry(M machine) {
@@ -36,8 +38,10 @@ public class RecipeRegistry<M extends IMachine<M, I, O, P>, I extends IRecipeInp
     }
 
     @Override
-	public void registerRecipe(IRecipe<I, O, P> recipe) {
-        RegistryManager.getRegistry(ISuperRecipeRegistry.class).getRecipes(machine).add(recipe);
+    public void registerRecipe(IRecipe<I, O, P> recipe) {
+        RegistryManager.getRegistry(ISuperRecipeRegistry.class)
+            .getRecipes(machine)
+            .add(recipe);
     }
 
     @Override
@@ -53,6 +57,7 @@ public class RecipeRegistry<M extends IMachine<M, I, O, P>, I extends IRecipeInp
     @Override
     public IRecipe<I, O, P> findRecipeByNamedId(String namedId) {
         return findRecipe(new RecipePropertyMatcher<M, IRecipe<I, O, P>, String>(namedId) {
+
             @Override
             public String getProperty(M machine, IRecipe<I, O, P> recipe) {
                 return recipe.getNamedId();
@@ -107,10 +112,10 @@ public class RecipeRegistry<M extends IMachine<M, I, O, P>, I extends IRecipeInp
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public IRecipe<I, O, P> findRecipe(IRecipeMatcher<M, IRecipe<I, O, P>> recipeMatcher) {
-        for (IRecipe r : RegistryManager.getRegistry(ISuperRecipeRegistry.class).getRecipes(machine)) {
-            IRecipe<I, O, P> recipe = (IRecipe<I, O, P>)r;
-            if (recipeMatcher.matches(machine, recipe))
-                return recipe;
+        for (IRecipe r : RegistryManager.getRegistry(ISuperRecipeRegistry.class)
+            .getRecipes(machine)) {
+            IRecipe<I, O, P> recipe = (IRecipe<I, O, P>) r;
+            if (recipeMatcher.matches(machine, recipe)) return recipe;
         }
 
         return null;
@@ -121,10 +126,10 @@ public class RecipeRegistry<M extends IMachine<M, I, O, P>, I extends IRecipeInp
     public List<IRecipe<I, O, P>> findRecipes(IRecipeMatcher<M, IRecipe<I, O, P>> recipeMatcher) {
         List<IRecipe<I, O, P>> results = new ArrayList<IRecipe<I, O, P>>();
 
-        for (IRecipe r : RegistryManager.getRegistry(ISuperRecipeRegistry.class).getRecipes(machine)) {
-            IRecipe<I, O, P> recipe = (IRecipe<I, O, P>)r;
-            if (recipeMatcher.matches(machine, recipe))
-                results.add(recipe);
+        for (IRecipe r : RegistryManager.getRegistry(ISuperRecipeRegistry.class)
+            .getRecipes(machine)) {
+            IRecipe<I, O, P> recipe = (IRecipe<I, O, P>) r;
+            if (recipeMatcher.matches(machine, recipe)) results.add(recipe);
         }
 
         return results;
@@ -132,9 +137,10 @@ public class RecipeRegistry<M extends IMachine<M, I, O, P>, I extends IRecipeInp
 
     @Override
     public List<IRecipe<I, O, P>> allRecipes() {
-        return findRecipes(new RecipeMatcher<M, IRecipe<I,O,P>>() {
+        return findRecipes(new RecipeMatcher<M, IRecipe<I, O, P>>() {
+
             @SuppressWarnings("rawtypes")
-			@Override
+            @Override
             public boolean matches(IMachine machine, IRecipe recipeToMatch) {
                 return true;
             }

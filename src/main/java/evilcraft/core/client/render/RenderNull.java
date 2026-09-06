@@ -13,8 +13,8 @@ import net.minecraft.util.ResourceLocation;
 public class RenderNull extends Render {
 
     @Override
-    public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTickTime) { 	
-    	
+    public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTickTime) {
+
     }
 
     @Override

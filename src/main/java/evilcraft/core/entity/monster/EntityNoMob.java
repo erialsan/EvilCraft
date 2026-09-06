@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 /**
  * A mob without the {@link net.minecraft.entity.monster.IMob} interface.
+ * 
  * @author rubensworks
  */
 public class EntityNoMob extends EntityCreature {
@@ -71,14 +72,12 @@ public class EntityNoMob extends EntityCreature {
     }
 
     @Override
-    protected String getHurtSound()
-    {
+    protected String getHurtSound() {
         return "game.hostile.hurt";
     }
 
     @Override
-    protected String getDeathSound()
-    {
+    protected String getDeathSound() {
         return "game.hostile.die";
     }
 
@@ -89,34 +88,35 @@ public class EntityNoMob extends EntityCreature {
 
     @Override
     public boolean attackEntityAsMob(Entity p_70652_1_) {
-        float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+        float f = (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage)
+            .getAttributeValue();
         int i = 0;
 
         if (p_70652_1_ instanceof EntityLivingBase) {
             f += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase) p_70652_1_);
-            i += EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)p_70652_1_);
+            i += EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase) p_70652_1_);
         }
 
         boolean flag = p_70652_1_.attackEntityFrom(DamageSource.causeMobDamage(this), f);
 
         if (flag) {
-            if (i > 0)
-            {
-                p_70652_1_.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)i * 0.5F));
+            if (i > 0) {
+                p_70652_1_.addVelocity(
+                    (double) (-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * (float) i * 0.5F),
+                    0.1D,
+                    (double) (MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F) * (float) i * 0.5F));
                 this.motionX *= 0.6D;
                 this.motionZ *= 0.6D;
             }
 
             int j = EnchantmentHelper.getFireAspectModifier(this);
 
-            if (j > 0)
-            {
+            if (j > 0) {
                 p_70652_1_.setFire(j * 4);
             }
 
-            if (p_70652_1_ instanceof EntityLivingBase)
-            {
-                EnchantmentHelper.func_151384_a((EntityLivingBase)p_70652_1_, this);
+            if (p_70652_1_ instanceof EntityLivingBase) {
+                EnchantmentHelper.func_151384_a((EntityLivingBase) p_70652_1_, this);
             }
 
             EnchantmentHelper.func_151385_b(this, p_70652_1_);
@@ -127,8 +127,9 @@ public class EntityNoMob extends EntityCreature {
 
     @Override
     protected void attackEntity(Entity p_70785_1_, float p_70785_2_) {
-        if (this.attackTime <= 0 && p_70785_2_ < 2.0F && p_70785_1_.boundingBox.maxY > this.boundingBox.minY && p_70785_1_.boundingBox.minY < this.boundingBox.maxY)
-        {
+        if (this.attackTime <= 0 && p_70785_2_ < 2.0F
+            && p_70785_1_.boundingBox.maxY > this.boundingBox.minY
+            && p_70785_1_.boundingBox.minY < this.boundingBox.maxY) {
             this.attackTime = 20;
             this.attackEntityAsMob(p_70785_1_);
         }
@@ -144,16 +145,12 @@ public class EntityNoMob extends EntityCreature {
         int j = MathHelper.floor_double(this.boundingBox.minY);
         int k = MathHelper.floor_double(this.posZ);
 
-        if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
-        {
+        if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32)) {
             return false;
-        }
-        else
-        {
+        } else {
             int l = this.worldObj.getBlockLightValue(i, j, k);
 
-            if (this.worldObj.isThundering())
-            {
+            if (this.worldObj.isThundering()) {
                 int i1 = this.worldObj.skylightSubtracted;
                 this.worldObj.skylightSubtracted = 10;
                 l = this.worldObj.getBlockLightValue(i, j, k);
@@ -166,13 +163,15 @@ public class EntityNoMob extends EntityCreature {
 
     @Override
     public boolean getCanSpawnHere() {
-        return this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && super.getCanSpawnHere();
+        return this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && this.isValidLightLevel()
+            && super.getCanSpawnHere();
     }
 
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+        this.getAttributeMap()
+            .registerAttribute(SharedMonsterAttributes.attackDamage);
     }
 
     @Override

@@ -9,11 +9,12 @@ import evilcraft.tileentity.TilePurifier;
 
 /**
  * Config for the {@link Purifier}.
+ * 
  * @author rubensworks
  *
  */
 public class PurifierConfig extends BlockContainerConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -23,20 +24,15 @@ public class PurifierConfig extends BlockContainerConfig {
      * Make a new instance.
      */
     public PurifierConfig() {
-        super(
-        	true,
-            "purifier",
-            null,
-            Purifier.class
-        );
+        super(true, "purifier", null, Purifier.class);
     }
-    
+
     @Override
     public void onRegistered() {
-        if(MinecraftHelpers.isClientSide()) {
+        if (MinecraftHelpers.isClientSide()) {
             ClientProxy.BLOCK_RENDERERS.add(new RenderPurifier());
             ClientProxy.TILE_ENTITY_RENDERERS.put(TilePurifier.class, new RenderTileEntityPurifier());
         }
     }
-    
+
 }

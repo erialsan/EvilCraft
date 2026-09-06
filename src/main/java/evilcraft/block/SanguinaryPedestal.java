@@ -1,14 +1,7 @@
 package evilcraft.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.core.IInformationProvider;
-import evilcraft.core.block.IBlockRarityProvider;
-import evilcraft.core.config.configurable.ConfigurableBlockContainer;
-import evilcraft.core.config.extendedconfig.BlockConfig;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.core.helper.L10NHelpers;
-import evilcraft.tileentity.TileSanguinaryPedestal;
+import java.util.List;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,31 +17,41 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.core.IInformationProvider;
+import evilcraft.core.block.IBlockRarityProvider;
+import evilcraft.core.config.configurable.ConfigurableBlockContainer;
+import evilcraft.core.config.extendedconfig.BlockConfig;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.core.helper.L10NHelpers;
+import evilcraft.tileentity.TileSanguinaryPedestal;
 
 /**
  * Pedestal that can obtain blood from blood stained blocks and can optionally extract blood from mobs
  * when a blood extractor is inserted.
+ * 
  * @author rubensworks
  *
  */
-public class SanguinaryPedestal extends ConfigurableBlockContainer implements IInformationProvider, IBlockRarityProvider {
-    
+public class SanguinaryPedestal extends ConfigurableBlockContainer
+    implements IInformationProvider, IBlockRarityProvider {
+
     private static SanguinaryPedestal _instance = null;
-    
+
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<BlockConfig> eConfig) {
-        if(_instance == null)
-            _instance = new SanguinaryPedestal(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new SanguinaryPedestal(eConfig);
+        else eConfig.showDoubleInitError();
     }
-    
+
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static SanguinaryPedestal getInstance() {
@@ -70,24 +73,25 @@ public class SanguinaryPedestal extends ConfigurableBlockContainer implements II
     }
 
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB area, List list, Entity entity) {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB area, List list,
+        Entity entity) {
         setBlockBounds(0, 0, 0, 1, 1, 1);
         super.addCollisionBoxesToList(world, x, y, z, area, list, entity);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-        
+
     }
-    
+
     @Override
     public IIcon getIcon(int side, int meta) {
         // This is ONLY used for the block breaking/broken particles
         // Since the anvil looks very similar, we use that icon.
         return Blocks.anvil.getIcon(0, 0);
     }
-    
+
     @Override
     public boolean isOpaqueCube() {
         return false;
@@ -118,7 +122,7 @@ public class SanguinaryPedestal extends ConfigurableBlockContainer implements II
 
     @Override
     public String getInfo(ItemStack itemStack) {
-        if(itemStack.getItemDamage() == 1) {
+        if (itemStack.getItemDamage() == 1) {
             return EnumChatFormatting.GRAY + L10NHelpers.localize(this.getUnlocalizedName() + ".boost");
         }
         return null;
@@ -126,8 +130,7 @@ public class SanguinaryPedestal extends ConfigurableBlockContainer implements II
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void provideInformation(ItemStack itemStack,
-                                   EntityPlayer entityPlayer, List list, boolean par4) {
+    public void provideInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
 
     }
 

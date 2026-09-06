@@ -4,11 +4,12 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the {@link MaceOfDistortion}.
+ * 
  * @author rubensworks
  *
  */
 public class MaceOfDistortionConfig extends ItemConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -18,12 +19,7 @@ public class MaceOfDistortionConfig extends ItemConfig {
      * Make a new instance.
      */
     public MaceOfDistortionConfig() {
-        super(
-            true,
-            "maceOfDistortion",
-            null,
-            MaceOfDistortion.class
-        );
+        super(true, "maceOfDistortion", null, MaceOfDistortion.class);
     }
-    
+
 }

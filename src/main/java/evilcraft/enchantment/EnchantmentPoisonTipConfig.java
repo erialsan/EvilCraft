@@ -5,11 +5,12 @@ import evilcraft.core.config.extendedconfig.EnchantmentConfig;
 
 /**
  * Config for {@link EnchantmentPoisonTip}.
+ * 
  * @author rubensworks
  *
  */
 public class EnchantmentPoisonTipConfig extends EnchantmentConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -19,12 +20,7 @@ public class EnchantmentPoisonTipConfig extends EnchantmentConfig {
      * Make a new instance.
      */
     public EnchantmentPoisonTipConfig() {
-        super(
-            Reference.ENCHANTMENT_POISON_TIP,
-            "poisonTip",
-            null,
-            EnchantmentPoisonTip.class
-        );
+        super(Reference.ENCHANTMENT_POISON_TIP, "poisonTip", null, EnchantmentPoisonTip.class);
     }
-    
+
 }

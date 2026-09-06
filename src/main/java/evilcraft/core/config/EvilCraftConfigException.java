@@ -2,6 +2,7 @@ package evilcraft.core.config;
 
 /**
  * Exceptions that can occur when configuring this mod.
+ * 
  * @author rubensworks
  *
  */
@@ -14,10 +15,11 @@ public class EvilCraftConfigException extends RuntimeException {
 
     /**
      * Make a new instance.
+     * 
      * @param message The message.
      */
     public EvilCraftConfigException(String message) {
         super(message);
     }
-    
+
 }

@@ -4,11 +4,12 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the {@link LargeDoorItem}.
+ * 
  * @author rubensworks
  *
  */
 public class LargeDoorItemConfig extends ItemConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -18,17 +19,12 @@ public class LargeDoorItemConfig extends ItemConfig {
      * Make a new instance.
      */
     public LargeDoorItemConfig() {
-        super(
-        	true,
-            "largeDoorItem",
-            null,
-            LargeDoorItem.class
-        );
+        super(true, "largeDoorItem", null, LargeDoorItem.class);
     }
-    
+
     @Override
     public boolean isHardDisabled() {
-    	return true;
+        return true;
     }
-    
+
 }

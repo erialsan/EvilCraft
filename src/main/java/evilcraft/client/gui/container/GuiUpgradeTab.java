@@ -1,12 +1,14 @@
 package evilcraft.client.gui.container;
 
+import net.minecraft.util.ResourceLocation;
+
 import evilcraft.Reference;
 import evilcraft.core.client.gui.container.GuiContainerExtended;
 import evilcraft.core.client.gui.container.GuiTab;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * Tab for upgrades in guis.
+ * 
  * @author rubensworks
  */
 public class GuiUpgradeTab extends GuiTab {
@@ -27,13 +29,14 @@ public class GuiUpgradeTab extends GuiTab {
 
     /**
      * Draw the tab.
+     * 
      * @param x Origin X.
      * @param y Origin Y.
      */
     public void drawBackground(int x, int y) {
         super.drawBackground(x, y);
-        for(int i = 0; i < 4; i++) {
-            if(slotEnabledCallback != null && !slotEnabledCallback.isSlotEnabled(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (slotEnabledCallback != null && !slotEnabledCallback.isSlotEnabled(i)) {
                 gui.drawTexturedModalRect(x + posX + 5, y + posY + 5 + 18 * i, 28, 0, 18, 18);
             }
         }

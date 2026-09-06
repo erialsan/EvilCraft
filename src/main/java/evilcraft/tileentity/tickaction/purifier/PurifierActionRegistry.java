@@ -1,12 +1,14 @@
 package evilcraft.tileentity.tickaction.purifier;
 
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
 import com.google.common.collect.Lists;
+
 import evilcraft.api.tileentity.purifier.IPurifierAction;
 import evilcraft.api.tileentity.purifier.IPurifierActionRegistry;
 import evilcraft.tileentity.TilePurifier;
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 /**
  * @author Ruben Taelman
@@ -28,8 +30,8 @@ public class PurifierActionRegistry implements IPurifierActionRegistry {
 
     @Override
     public boolean isItemValidForMainSlot(ItemStack itemStack) {
-        for(IPurifierAction purifyAction : registry) {
-            if(purifyAction.isItemValidForMainSlot(itemStack)) {
+        for (IPurifierAction purifyAction : registry) {
+            if (purifyAction.isItemValidForMainSlot(itemStack)) {
                 return true;
             }
         }
@@ -38,8 +40,8 @@ public class PurifierActionRegistry implements IPurifierActionRegistry {
 
     @Override
     public boolean isItemValidForAdditionalSlot(ItemStack itemStack) {
-        for(IPurifierAction purifyAction : registry) {
-            if(purifyAction.isItemValidForAdditionalSlot(itemStack)) {
+        for (IPurifierAction purifyAction : registry) {
+            if (purifyAction.isItemValidForAdditionalSlot(itemStack)) {
                 return true;
             }
         }
@@ -50,7 +52,7 @@ public class PurifierActionRegistry implements IPurifierActionRegistry {
     public int canWork(TilePurifier tile) {
         for (int i = 0; i < registry.size(); i++) {
             IPurifierAction purifyAction = registry.get(i);
-            if(purifyAction.canWork(tile)) {
+            if (purifyAction.canWork(tile)) {
                 return i;
             }
         }
@@ -59,8 +61,9 @@ public class PurifierActionRegistry implements IPurifierActionRegistry {
 
     @Override
     public boolean work(int actionId, TilePurifier tile) {
-        if(actionId < registry.size()) {
-            return registry.get(actionId).work(tile);
+        if (actionId < registry.size()) {
+            return registry.get(actionId)
+                .work(tile);
         }
         return true;
     }

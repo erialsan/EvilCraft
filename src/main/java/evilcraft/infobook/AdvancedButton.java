@@ -1,12 +1,14 @@
 package evilcraft.infobook;
 
-import evilcraft.client.gui.container.GuiOriginsOfDarkness;
-import evilcraft.core.helper.RenderHelpers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
+import evilcraft.client.gui.container.GuiOriginsOfDarkness;
+import evilcraft.core.helper.RenderHelpers;
+
 /**
  * An advanced button type.
+ * 
  * @author rubensworks
  */
 public class AdvancedButton extends GuiButton {
@@ -24,11 +26,12 @@ public class AdvancedButton extends GuiButton {
 
     /**
      * This is called each render tick to update the button to the latest render state.
-     * @param x The X position.
-     * @param y The Y position.
+     * 
+     * @param x           The X position.
+     * @param y           The Y position.
      * @param displayName The text to display.
-     * @param target The target section.
-     * @param gui The gui.
+     * @param target      The target section.
+     * @param gui         The gui.
      */
     public void update(int x, int y, String displayName, InfoSection target, GuiOriginsOfDarkness gui) {
         this.xPosition = x;
@@ -43,16 +46,16 @@ public class AdvancedButton extends GuiButton {
 
     @Override
     public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
-        if(isVisible() && isHover(mouseX, mouseY)) {
-            minecraft.fontRenderer.drawString(("§n") +
-                            displayString + "§r", xPosition, xPosition,
-                    RenderHelpers.RGBToInt(100, 100, 150));
+        if (isVisible() && isHover(mouseX, mouseY)) {
+            minecraft.fontRenderer
+                .drawString(("§n") + displayString + "§r", xPosition, xPosition, RenderHelpers.RGBToInt(100, 100, 150));
         }
     }
 
     protected boolean isHover(int mouseX, int mouseY) {
-        return mouseX >= this.xPosition && mouseY >= this.yPosition &&
-                mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+        return mouseX >= this.xPosition && mouseY >= this.yPosition
+            && mouseX < this.xPosition + this.width
+            && mouseY < this.yPosition + this.height;
     }
 
     public boolean isVisible() {

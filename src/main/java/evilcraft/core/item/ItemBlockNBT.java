@@ -6,6 +6,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import evilcraft.core.config.configurable.ConfigurableBlockContainer;
 
 /**
@@ -13,22 +14,25 @@ import evilcraft.core.config.configurable.ConfigurableBlockContainer;
  * the item to the placed {@link TileEntity} for the block.
  * Subinstances of {@link ConfigurableBlockContainer} will perform the inverse operation, being
  * that broken blocks will save the NBT data inside the dropped {@link ItemBlock}.
+ * 
  * @author rubensworks
  *
  */
 public class ItemBlockNBT extends ItemBlockExtended {
-    
+
     /**
      * Make a new instance.
+     * 
      * @param block The block instance.
      */
     public ItemBlockNBT(Block block) {
         super(block);
         this.setMaxStackSize(1);
     }
-    
+
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+        float hitX, float hitY, float hitZ, int metadata) {
         if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
             TileEntity tile = world.getTileEntity(x, y, z);
 
@@ -42,14 +46,15 @@ public class ItemBlockNBT extends ItemBlockExtended {
 
         return false;
     }
-    
+
     /**
      * Read additional info about the item into the tile.
-     * @param tile The tile that is being created.
+     * 
+     * @param tile      The tile that is being created.
      * @param itemStack The item that is placed.
      */
     protected void readAdditionalInfo(TileEntity tile, ItemStack itemStack) {
-    	
+
     }
 
 }

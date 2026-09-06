@@ -1,6 +1,26 @@
 package evilcraft.tileentity;
 
+import java.util.*;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
+
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
+
 import com.google.common.collect.Lists;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,29 +46,15 @@ import evilcraft.core.weather.WeatherType;
 import evilcraft.fluid.Blood;
 import evilcraft.tileentity.tickaction.sanguinaryenvironmentalaccumulator.AccumulateItemTickAction;
 import lombok.Getter;
-import net.minecraft.client.particle.EntitySmokeFX;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * A machine that can infuse things with blood.
+ * 
  * @author rubensworks
  *
  */
-public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSanguinaryEnvironmentalAccumulator, MutableInt> implements VirtualTank.ITankProvider {
+public class TileSanguinaryEnvironmentalAccumulator
+    extends TileWorking<TileSanguinaryEnvironmentalAccumulator, MutableInt> implements VirtualTank.ITankProvider {
 
     /**
      * The total amount of slots in this machine.
@@ -70,8 +76,7 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
     private static final int TANK_CHECK_TICK_OFFSET = 60;
 
     private int accumulateTicker;
-    private SingleCache<Triple<ItemStack, FluidStack, WeatherType>,
-            IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> recipeCache;
+    private SingleCache<Triple<ItemStack, FluidStack, WeatherType>, IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>> recipeCache;
     private VirtualTank virtualTank;
     private boolean forceLoadTanks;
     @Getter
@@ -85,33 +90,26 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
     public static final Upgrades.UpgradeEventType UPGRADEEVENT_SPEED = Upgrades.newUpgradeEventType();
     public static final Upgrades.UpgradeEventType UPGRADEEVENT_BLOODUSAGE = Upgrades.newUpgradeEventType();
 
-    private static final ILocation[] tankOffsets = new ILocation[]{
-            new Location(-3, 0, -1),
-            new Location(-3, 0, 1),
-            new Location(3, 0, -1),
-            new Location(3, 0, 1),
-            new Location(-1, 0, -3),
-            new Location(-1, 0, 3),
-            new Location(1, 0, -3),
-            new Location(1, 0, 3),
-    };
+    private static final ILocation[] tankOffsets = new ILocation[] { new Location(-3, 0, -1), new Location(-3, 0, 1),
+        new Location(3, 0, -1), new Location(3, 0, 1), new Location(-1, 0, -3), new Location(-1, 0, 3),
+        new Location(1, 0, -3), new Location(1, 0, 3), };
 
     /**
      * Make a new instance.
      */
     public TileSanguinaryEnvironmentalAccumulator() {
         super(
-                SLOTS,
-                SanguinaryEnvironmentalAccumulator.getInstance().getLocalizedName(),
-                0,
-                "",
-                ACCEPTED_FLUID);
+            SLOTS,
+            SanguinaryEnvironmentalAccumulator.getInstance()
+                .getLocalizedName(),
+            0,
+            "",
+            ACCEPTED_FLUID);
         accumulateTicker = addTicker(
-                new TickComponent<
-                        TileSanguinaryEnvironmentalAccumulator,
-                    ITickAction<TileSanguinaryEnvironmentalAccumulator>
-                >(this, ACCUMULATE_TICK_ACTIONS, SLOT_ACCUMULATE)
-                );
+            new TickComponent<TileSanguinaryEnvironmentalAccumulator, ITickAction<TileSanguinaryEnvironmentalAccumulator>>(
+                this,
+                ACCUMULATE_TICK_ACTIONS,
+                SLOT_ACCUMULATE));
 
         // The slots side mapping
         List<Integer> inSlots = new LinkedList<Integer>();
@@ -126,55 +124,69 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
         addSlotsToSide(ForgeDirection.WEST, outSlots);
 
         // Upgrade behaviour
-        upgradeBehaviour.put(UPGRADE_EFFICIENCY, new UpgradeBehaviour<TileSanguinaryEnvironmentalAccumulator, MutableInt>(2) {
-            @Override
-            public void applyUpgrade(TileSanguinaryEnvironmentalAccumulator upgradable, Upgrades.Upgrade upgrade, int upgradeLevel,
-                                     IUpgradeSensitiveEvent<MutableInt> event) {
-                if(event.getType() == UPGRADEEVENT_BLOODUSAGE) {
-                    int val = event.getObject().getValue();
-                    val /= (1 + upgradeLevel / valueFactor);
-                    event.getObject().setValue(val);
-                }
-            }
-        });
-        upgradeBehaviour.put(UPGRADE_SPEED, new UpgradeBehaviour<TileSanguinaryEnvironmentalAccumulator, MutableInt>(1) {
-            @Override
-            public void applyUpgrade(TileSanguinaryEnvironmentalAccumulator upgradable, Upgrades.Upgrade upgrade, int upgradeLevel,
-                                     IUpgradeSensitiveEvent<MutableInt> event) {
-                if(event.getType() == UPGRADEEVENT_SPEED) {
-                    int val = event.getObject().getValue();
-                    val /= (1 + upgradeLevel / valueFactor);
-                    event.getObject().setValue(val);
-                }
-            }
-        });
+        upgradeBehaviour
+            .put(UPGRADE_EFFICIENCY, new UpgradeBehaviour<TileSanguinaryEnvironmentalAccumulator, MutableInt>(2) {
 
-        // Efficient cache to retrieve the current craftable recipe.
-        recipeCache = new SingleCache<Triple<ItemStack, FluidStack, WeatherType>,
-                IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>>(
-                new SingleCache.ICacheUpdater<Triple<ItemStack, FluidStack, WeatherType>,
-                        IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>>() {
-            @Override
-            public IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> getNewValue(Triple<ItemStack, FluidStack, WeatherType> key) {
-                EnvironmentalAccumulatorRecipeComponent recipeInput = new EnvironmentalAccumulatorRecipeComponent(key.getLeft(),
-                        key.getRight());
-                for(IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe :
-                        EnvironmentalAccumulator.getInstance().getRecipeRegistry().findRecipesByInput(recipeInput)) {
-                    if(recipe.getInput().getWeatherType().isActive(worldObj)) {
-                        return recipe;
+                @Override
+                public void applyUpgrade(TileSanguinaryEnvironmentalAccumulator upgradable, Upgrades.Upgrade upgrade,
+                    int upgradeLevel, IUpgradeSensitiveEvent<MutableInt> event) {
+                    if (event.getType() == UPGRADEEVENT_BLOODUSAGE) {
+                        int val = event.getObject()
+                            .getValue();
+                        val /= (1 + upgradeLevel / valueFactor);
+                        event.getObject()
+                            .setValue(val);
                     }
                 }
-                return null;
-            }
+            });
+        upgradeBehaviour
+            .put(UPGRADE_SPEED, new UpgradeBehaviour<TileSanguinaryEnvironmentalAccumulator, MutableInt>(1) {
 
-            @Override
-            public boolean isKeyEqual(Triple<ItemStack, FluidStack, WeatherType> cacheKey, Triple<ItemStack, FluidStack, WeatherType> newKey) {
-                return cacheKey == null || newKey == null ||
-                        (ItemStack.areItemStacksEqual(cacheKey.getLeft(), newKey.getLeft()) &&
-                        FluidStack.areFluidStackTagsEqual(cacheKey.getMiddle(), newKey.getMiddle()) &&
-                        cacheKey.getRight() == newKey.getRight());
-            }
-        });
+                @Override
+                public void applyUpgrade(TileSanguinaryEnvironmentalAccumulator upgradable, Upgrades.Upgrade upgrade,
+                    int upgradeLevel, IUpgradeSensitiveEvent<MutableInt> event) {
+                    if (event.getType() == UPGRADEEVENT_SPEED) {
+                        int val = event.getObject()
+                            .getValue();
+                        val /= (1 + upgradeLevel / valueFactor);
+                        event.getObject()
+                            .setValue(val);
+                    }
+                }
+            });
+
+        // Efficient cache to retrieve the current craftable recipe.
+        recipeCache = new SingleCache<Triple<ItemStack, FluidStack, WeatherType>, IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>>(
+            new SingleCache.ICacheUpdater<Triple<ItemStack, FluidStack, WeatherType>, IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>>() {
+
+                @Override
+                public IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> getNewValue(
+                    Triple<ItemStack, FluidStack, WeatherType> key) {
+                    EnvironmentalAccumulatorRecipeComponent recipeInput = new EnvironmentalAccumulatorRecipeComponent(
+                        key.getLeft(),
+                        key.getRight());
+                    for (IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe : EnvironmentalAccumulator
+                        .getInstance()
+                        .getRecipeRegistry()
+                        .findRecipesByInput(recipeInput)) {
+                        if (recipe.getInput()
+                            .getWeatherType()
+                            .isActive(worldObj)) {
+                            return recipe;
+                        }
+                    }
+                    return null;
+                }
+
+                @Override
+                public boolean isKeyEqual(Triple<ItemStack, FluidStack, WeatherType> cacheKey,
+                    Triple<ItemStack, FluidStack, WeatherType> newKey) {
+                    return cacheKey == null || newKey == null
+                        || (ItemStack.areItemStacksEqual(cacheKey.getLeft(), newKey.getLeft())
+                            && FluidStack.areFluidStackTagsEqual(cacheKey.getMiddle(), newKey.getMiddle())
+                            && cacheKey.getRight() == newKey.getRight());
+                }
+            });
 
         this.virtualTank = new VirtualTank(this, true);
         this.forceLoadTanks = true;
@@ -186,34 +198,43 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
 
     /**
      * Get the recipe for the maximum current tier available.
+     * 
      * @param itemStack The input item.
      * @return The recipe.
      */
-    public IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties>
-        getRecipe(ItemStack itemStack) {
-        return recipeCache.get(new ImmutableTriple<ItemStack, FluidStack, WeatherType>(
+    public IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> getRecipe(
+        ItemStack itemStack) {
+        return recipeCache.get(
+            new ImmutableTriple<ItemStack, FluidStack, WeatherType>(
                 itemStack == null ? null : itemStack.copy(),
-                getTank().getFluid() == null ? null : getTank().getFluid().copy(),
+                getTank().getFluid() == null ? null
+                    : getTank().getFluid()
+                        .copy(),
                 WeatherType.getActiveWeather(worldObj)));
     }
 
     @Override
     public void updateTileEntity() {
         super.updateTileEntity();
-        if(worldObj.isRemote && isVisuallyWorking()) {
+        if (worldObj.isRemote && isVisuallyWorking()) {
             showTankBeams();
-            if((getRequiredWorkTicks() - getWorkTick()) > TileEnvironmentalAccumulator.MAX_AGE) {
+            if ((getRequiredWorkTicks() - getWorkTick()) > TileEnvironmentalAccumulator.MAX_AGE) {
                 showAccumulatingParticles();
             }
 
-        } else if(worldObj.isRemote && !canWork()) {
+        } else if (worldObj.isRemote && !canWork()) {
             showMissingTanks();
         }
     }
 
     @SideOnly(Side.CLIENT)
     protected void showAccumulatingParticles() {
-        TileEnvironmentalAccumulator.showAccumulatingParticles(worldObj, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, TileEnvironmentalAccumulator.SPREAD);
+        TileEnvironmentalAccumulator.showAccumulatingParticles(
+            worldObj,
+            xCoord + 0.5D,
+            yCoord + 0.5D,
+            zCoord + 0.5D,
+            TileEnvironmentalAccumulator.SPREAD);
     }
 
     @SideOnly(Side.CLIENT)
@@ -237,21 +258,31 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
 
                 double speed = 0.5;
 
-                double particleMotionX = MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI) * MathHelper.cos(rotationYaw / 180.0F * (float)Math.PI) * speed;
+                double particleMotionX = MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI)
+                    * MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI)
+                    * speed;
                 double particleMotionY = MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI) * -speed;
-                double particleMotionZ = MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI) * MathHelper.sin(rotationYaw / 180.0F * (float)Math.PI) * speed;
+                double particleMotionZ = MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI)
+                    * MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI)
+                    * speed;
 
-                FMLClientHandler.instance().getClient().effectRenderer.addEffect(
-                        new EntityBloodBubbleFX(worldObj, particleX, particleY, particleZ,
-                                particleMotionX, particleMotionY, particleMotionZ)
-                );
+                FMLClientHandler.instance()
+                    .getClient().effectRenderer.addEffect(
+                        new EntityBloodBubbleFX(
+                            worldObj,
+                            particleX,
+                            particleY,
+                            particleZ,
+                            particleMotionX,
+                            particleMotionY,
+                            particleMotionZ));
             }
         }
     }
 
     @SideOnly(Side.CLIENT)
     protected void showMissingTanks() {
-        if(worldObj.getTotalWorldTime() % 10 == 0) {
+        if (worldObj.getTotalWorldTime() % 10 == 0) {
             Random random = worldObj.rand;
             for (ILocation location : invalidLocations) {
                 double x = location.getCoordinates()[0] + 0.5;
@@ -263,9 +294,9 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
                     double particleY = y - 0.2 + random.nextDouble() * 0.4;
                     double particleZ = z - 0.2 + random.nextDouble() * 0.4;
 
-                    FMLClientHandler.instance().getClient().effectRenderer.addEffect(
-                            new EntitySmokeFX(worldObj, particleX, particleY, particleZ, 0, 0, 0)
-                    );
+                    FMLClientHandler.instance()
+                        .getClient().effectRenderer
+                            .addEffect(new EntitySmokeFX(worldObj, particleX, particleY, particleZ, 0, 0, 0));
                 }
             }
         }
@@ -274,10 +305,9 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
     @Override
     public boolean canConsume(ItemStack itemStack) {
         // Valid custom recipe
-        IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe =
-                getRecipe(itemStack);
-        if(recipe != null)
-            return true;
+        IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe = getRecipe(
+            itemStack);
+        if (recipe != null) return true;
 
         // In all other cases: false
         return false;
@@ -285,6 +315,7 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
 
     /**
      * Get the id of the accumulate slot.
+     * 
      * @return id of the accumulate slot.
      */
     public int getConsumeSlot() {
@@ -293,6 +324,7 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
 
     /**
      * Get the id of the result slot.
+     * 
      * @return id of the result slot.
      */
     public int getProduceSlot() {
@@ -310,19 +342,20 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // Update light
     }
 
-	@Override
-	public boolean canWork() {
-        if(!forceLoadTanks && invalidLocations != null && !WorldHelpers.efficientTick(worldObj, TANK_CHECK_TICK_OFFSET, xCoord, yCoord, zCoord)) {
+    @Override
+    public boolean canWork() {
+        if (!forceLoadTanks && invalidLocations != null
+            && !WorldHelpers.efficientTick(worldObj, TANK_CHECK_TICK_OFFSET, xCoord, yCoord, zCoord)) {
             return invalidLocations.isEmpty();
         }
         forceLoadTanks = false;
-		return getVirtualTankChildren() != null;
-	}
+        return getVirtualTankChildren() != null;
+    }
 
-	@Override
-	protected int getWorkTicker() {
-		return accumulateTicker;
-	}
+    @Override
+    protected int getWorkTicker() {
+        return accumulateTicker;
+    }
 
     public VirtualTank getVirtualTank() {
         return this.virtualTank;
@@ -348,18 +381,18 @@ public class TileSanguinaryEnvironmentalAccumulator extends TileWorking<TileSang
                 continue;
             }
             boolean oneValid = false;
-            for(FluidTankInfo tank : info) {
+            for (FluidTankInfo tank : info) {
                 if (tank.fluid != null && tank.fluid.getFluid() == ACCEPTED_FLUID) {
                     oneValid = true;
                     break;
                 }
             }
-            if(!oneValid) {
+            if (!oneValid) {
                 invalidLocations.add(location);
             }
             tanks[i] = handler;
         }
-        if(!invalidLocations.isEmpty()) {
+        if (!invalidLocations.isEmpty()) {
             return null;
         }
         return tanks;

@@ -1,19 +1,21 @@
 package evilcraft.client.gui.container;
 
-import evilcraft.core.client.gui.container.GuiContainerExtended;
-import evilcraft.core.helper.InventoryHelpers;
-import evilcraft.inventory.container.ContainerPrimedPendant;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import evilcraft.core.client.gui.container.GuiContainerExtended;
+import evilcraft.core.helper.InventoryHelpers;
+import evilcraft.inventory.container.ContainerPrimedPendant;
+
 /**
  * GUI for the {@link evilcraft.item.PrimedPendant}.
+ * 
  * @author rubensworks
  *
  */
 public class GuiPrimedPendant extends GuiContainerExtended {
 
-	private static final int TEXTUREHEIGHT = 165;
+    private static final int TEXTUREHEIGHT = 165;
 
     private EntityPlayer player;
     private int itemIndex;
@@ -35,5 +37,5 @@ public class GuiPrimedPendant extends GuiContainerExtended {
         ItemStack itemStack = InventoryHelpers.getItemFromIndex(player, itemIndex);
         this.fontRendererObj.drawString(itemStack.getDisplayName(), 28, 6, 4210752);
     }
-    
+
 }

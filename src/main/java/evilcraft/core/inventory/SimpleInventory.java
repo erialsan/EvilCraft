@@ -1,14 +1,16 @@
 package evilcraft.core.inventory;
 
-import evilcraft.core.helper.MinecraftHelpers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import evilcraft.core.helper.MinecraftHelpers;
+
 /**
  * A basic inventory implementation.
+ * 
  * @author rubensworks
  *
  */
@@ -20,8 +22,9 @@ public class SimpleInventory implements IInventory {
 
     /**
      * Make a new instance.
-     * @param size The amount of slots in the inventory.
-     * @param name The name of the inventory, used for NBT storage.
+     * 
+     * @param size       The amount of slots in the inventory.
+     * @param name       The name of the inventory, used for NBT storage.
      * @param stackLimit The stack limit for each slot.
      */
     public SimpleInventory(int size, String name, int stackLimit) {
@@ -89,15 +92,14 @@ public class SimpleInventory implements IInventory {
     }
 
     @Override
-    public void openInventory() {
-    }
+    public void openInventory() {}
 
     @Override
-    public void closeInventory() {
-    }
+    public void closeInventory() {}
 
     /**
      * Read inventory data from the given NBT.
+     * 
      * @param data The NBT data containing inventory data.
      */
     public void readFromNBT(NBTTagCompound data) {
@@ -106,14 +108,14 @@ public class SimpleInventory implements IInventory {
 
     /**
      * Read inventory data from the given NBT.
+     * 
      * @param data The NBT data containing inventory data.
-     * @param tag The NBT tag name where the info is located.
+     * @param tag  The NBT tag name where the info is located.
      */
     public void readFromNBT(NBTTagCompound data, String tag) {
         NBTTagList nbttaglist = data.getTagList(tag, MinecraftHelpers.NBTTag_Types.NBTTagCompound.ordinal());
-        
-        for (int j = 0; j < _contents.length; ++j)
-            _contents[j] = null;
+
+        for (int j = 0; j < _contents.length; ++j) _contents[j] = null;
 
         for (int j = 0; j < nbttaglist.tagCount(); ++j) {
             NBTTagCompound slot = (NBTTagCompound) nbttaglist.getCompoundTagAt(j);
@@ -131,6 +133,7 @@ public class SimpleInventory implements IInventory {
 
     /**
      * Write inventory data to the given NBT.
+     * 
      * @param data The NBT tag that will receive inventory data.
      */
     public void writeToNBT(NBTTagCompound data) {
@@ -139,8 +142,9 @@ public class SimpleInventory implements IInventory {
 
     /**
      * Write inventory data to the given NBT.
+     * 
      * @param data The NBT tag that will receive inventory data.
-     * @param tag The NBT tag name where the info must be located.
+     * @param tag  The NBT tag name where the info must be located.
      */
     public void writeToNBT(NBTTagCompound data, String tag) {
         NBTTagList slots = new NBTTagList();
@@ -168,6 +172,7 @@ public class SimpleInventory implements IInventory {
 
     /**
      * Get the array of {@link ItemStack} inside this inventory.
+     * 
      * @return The items in this inventory.
      */
     public ItemStack[] getItemStacks() {
@@ -184,8 +189,8 @@ public class SimpleInventory implements IInventory {
         return true;
     }
 
-	@Override
-	public void markDirty() {
-		
-	}
+    @Override
+    public void markDirty() {
+
+    }
 }

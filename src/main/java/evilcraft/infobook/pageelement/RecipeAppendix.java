@@ -1,7 +1,23 @@
 package evilcraft.infobook.pageelement;
 
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.oredict.OreDictionary;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import evilcraft.Configs;
 import evilcraft.client.gui.container.GuiOriginsOfDarkness;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
@@ -11,22 +27,10 @@ import evilcraft.infobook.AdvancedButton;
 import evilcraft.infobook.InfoBookParser;
 import evilcraft.infobook.InfoSection;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.oredict.OreDictionary;
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Recipes that can be added to sections.
+ * 
  * @author rubensworks
  */
 public abstract class RecipeAppendix<T> extends SectionAppendix {
@@ -52,26 +56,32 @@ public abstract class RecipeAppendix<T> extends SectionAppendix {
     }
 
     protected ItemStack prepareItemStacks(List<ItemStack> itemStacks, int tick) {
-        if(itemStacks.size() == 0) return null;
-        return prepareItemStack(itemStacks.get(tick % itemStacks.size()).copy(), tick);
+        if (itemStacks.size() == 0) return null;
+        return prepareItemStack(
+            itemStacks.get(tick % itemStacks.size())
+                .copy(),
+            tick);
     }
 
     protected ItemStack prepareItemStack(ItemStack itemStack, int tick) {
-        if(itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+        if (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
             List<ItemStack> itemStacks = Lists.newLinkedList();
-            itemStack.getItem().getSubItems(itemStack.getItem(), null, itemStacks);
-            if(itemStacks.isEmpty()) return itemStack;
+            itemStack.getItem()
+                .getSubItems(itemStack.getItem(), null, itemStacks);
+            if (itemStacks.isEmpty()) return itemStack;
             return itemStacks.get(tick % itemStacks.size());
         }
         return itemStack;
     }
 
-    protected void renderItem(GuiOriginsOfDarkness gui, int x, int y, ItemStack itemStack, int mx, int my, AdvancedButton.Enum buttonEnum) {
+    protected void renderItem(GuiOriginsOfDarkness gui, int x, int y, ItemStack itemStack, int mx, int my,
+        AdvancedButton.Enum buttonEnum) {
         renderItem(gui, x, y, itemStack, mx, my, true, buttonEnum);
     }
 
-    protected void renderItem(GuiOriginsOfDarkness gui, int x, int y, ItemStack itemStack, int mx, int my, boolean renderOverlays, AdvancedButton.Enum buttonEnum) {
-        if(renderOverlays) gui.drawOuterBorder(x, y, SLOT_SIZE, SLOT_SIZE, 1, 1, 1, 0.2f);
+    protected void renderItem(GuiOriginsOfDarkness gui, int x, int y, ItemStack itemStack, int mx, int my,
+        boolean renderOverlays, AdvancedButton.Enum buttonEnum) {
+        if (renderOverlays) gui.drawOuterBorder(x, y, SLOT_SIZE, SLOT_SIZE, 1, 1, 1, 0.2f);
 
         RenderItem renderItem = RenderItem.getInstance();
         GL11.glPushMatrix();
@@ -80,17 +90,32 @@ public abstract class RecipeAppendix<T> extends SectionAppendix {
         RenderHelper.enableGUIStandardItemLighting();
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
-        renderItem.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), itemStack, x, y);
-        if(renderOverlays) renderItem.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), itemStack, x, y);
+        renderItem.renderItemAndEffectIntoGUI(
+            Minecraft.getMinecraft().fontRenderer,
+            Minecraft.getMinecraft()
+                .getTextureManager(),
+            itemStack,
+            x,
+            y);
+        if (renderOverlays) renderItem.renderItemOverlayIntoGUI(
+            Minecraft.getMinecraft().fontRenderer,
+            Minecraft.getMinecraft()
+                .getTextureManager(),
+            itemStack,
+            x,
+            y);
         RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        if(buttonEnum != null && renderOverlays) renderItemHolders.get(buttonEnum).update(x, y, itemStack, gui);
+        if (buttonEnum != null && renderOverlays) renderItemHolders.get(buttonEnum)
+            .update(x, y, itemStack, gui);
     }
 
     protected void renderIcon(GuiOriginsOfDarkness gui, int x, int y, IIcon icon) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationItemsTexture);
+        Minecraft.getMinecraft()
+            .getTextureManager()
+            .bindTexture(TextureMap.locationItemsTexture);
         GL11.glColor3f(1, 1, 1);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -98,14 +123,15 @@ public abstract class RecipeAppendix<T> extends SectionAppendix {
         RenderHelper.enableGUIStandardItemLighting();
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
-        RenderItem.getInstance().renderIcon(x, y, icon, SLOT_SIZE, SLOT_SIZE);
+        RenderItem.getInstance()
+            .renderIcon(x, y, icon, SLOT_SIZE, SLOT_SIZE);
         RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
     }
 
     protected void renderItemTooltip(GuiOriginsOfDarkness gui, int x, int y, ItemStack itemStack, int mx, int my) {
         GL11.glPushMatrix();
-        if(mx >= x && my >= y && mx <= x + SLOT_SIZE && my <= y + SLOT_SIZE && itemStack != null ) {
+        if (mx >= x && my >= y && mx <= x + SLOT_SIZE && my <= y + SLOT_SIZE && itemStack != null) {
             gui.renderToolTip(itemStack, mx, my);
         }
         GL11.glPopMatrix();
@@ -135,24 +161,40 @@ public abstract class RecipeAppendix<T> extends SectionAppendix {
     protected abstract String getUnlocalizedTitle();
 
     @Override
-    public final void drawElement(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx, int my) {
+    public final void drawElement(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx,
+        int my) {
         int yOffset = getAdditionalHeight();
         gui.drawOuterBorder(x - 1, y - 1 - yOffset, getWidth() + 2, getHeight() + 2, 0.5F, 0.5F, 0.5F, 0.4f);
         gui.drawTextBanner(x + width / 2, y - 2 - yOffset);
-        gui.drawScaledCenteredString(L10NHelpers.localize(getUnlocalizedTitle()), x, y - 2 - yOffset, width, 0.9f, GuiOriginsOfDarkness.BANNER_WIDTH - 6, RenderHelpers.RGBToInt(120, 20, 30));
+        gui.drawScaledCenteredString(
+            L10NHelpers.localize(getUnlocalizedTitle()),
+            x,
+            y - 2 - yOffset,
+            width,
+            0.9f,
+            GuiOriginsOfDarkness.BANNER_WIDTH - 6,
+            RenderHelpers.RGBToInt(120, 20, 30));
 
         drawElementInner(gui, x, y, width, height, page, mx, my);
     }
 
-    protected void postDrawElement(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx, int my) {
+    protected void postDrawElement(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx,
+        int my) {
         renderToolTips(gui, mx, my);
     }
 
-    protected abstract void drawElementInner(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx, int my);
+    protected abstract void drawElementInner(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page,
+        int mx, int my);
 
     protected void renderToolTips(GuiOriginsOfDarkness gui, int mx, int my) {
-        for(ItemButton renderItemHolder : renderItemHolders.values()) {
-            renderItemTooltip(gui, renderItemHolder.xPosition, renderItemHolder.yPosition, renderItemHolder.getItemStack(), mx, my);
+        for (ItemButton renderItemHolder : renderItemHolders.values()) {
+            renderItemTooltip(
+                gui,
+                renderItemHolder.xPosition,
+                renderItemHolder.yPosition,
+                renderItemHolder.getItemStack(),
+                mx,
+                my);
         }
     }
 
@@ -168,7 +210,8 @@ public abstract class RecipeAppendix<T> extends SectionAppendix {
 
     protected static class ItemButton extends AdvancedButton {
 
-        @Getter private ItemStack itemStack;
+        @Getter
+        private ItemStack itemStack;
 
         public ItemButton() {
 
@@ -176,19 +219,20 @@ public abstract class RecipeAppendix<T> extends SectionAppendix {
 
         /**
          * This is called each render tick to update the button to the latest render state.
-         * @param x The X position.
-         * @param y The Y position.
+         * 
+         * @param x         The X position.
+         * @param y         The Y position.
          * @param itemStack The itemStack to display.
-         * @param gui The gui.
+         * @param gui       The gui.
          */
         public void update(int x, int y, ItemStack itemStack, GuiOriginsOfDarkness gui) {
             this.itemStack = itemStack;
             InfoSection target = null;
-            if(this.itemStack != null) {
+            if (this.itemStack != null) {
                 ExtendedConfig<?> config = Configs.getConfigFromItem(itemStack.getItem());
                 if (config != null) {
                     Pair<InfoSection, Integer> pair = InfoBookParser.configLinks.get(config.getFullUnlocalizedName());
-                    if(pair != null) {
+                    if (pair != null) {
                         target = pair.getLeft();
                     }
                 }
@@ -198,7 +242,7 @@ public abstract class RecipeAppendix<T> extends SectionAppendix {
 
         @Override
         public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
-            if(isVisible() && isHover(mouseX, mouseY)) {
+            if (isVisible() && isHover(mouseX, mouseY)) {
                 gui.drawOuterBorder(xPosition, yPosition, 16, 16, 0.392f, 0.392f, 0.6f, 0.9f);
             }
         }

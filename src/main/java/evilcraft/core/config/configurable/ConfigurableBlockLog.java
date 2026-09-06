@@ -1,9 +1,8 @@
 package evilcraft.core.config.configurable;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.Reference;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.BlockLog;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -12,15 +11,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.Reference;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
 
 /**
  * Block that extends from a log that can hold ExtendedConfigs
+ * 
  * @author rubensworks
  *
  */
-public class ConfigurableBlockLog extends BlockLog implements IConfigurable{
+public class ConfigurableBlockLog extends BlockLog implements IConfigurable {
 
     @SuppressWarnings("rawtypes")
     protected ExtendedConfig eConfig = null;
@@ -30,6 +32,7 @@ public class ConfigurableBlockLog extends BlockLog implements IConfigurable{
 
     /**
      * Make a new block instance.
+     * 
      * @param eConfig Config for this block.
      */
     @SuppressWarnings({ "rawtypes" })
@@ -50,7 +53,7 @@ public class ConfigurableBlockLog extends BlockLog implements IConfigurable{
 
     @Override
     public String getTextureName() {
-        return Reference.MOD_ID+":"+eConfig.getNamedId();
+        return Reference.MOD_ID + ":" + eConfig.getNamedId();
     }
 
     @Override

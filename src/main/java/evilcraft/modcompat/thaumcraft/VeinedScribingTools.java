@@ -1,17 +1,19 @@
 package evilcraft.modcompat.thaumcraft;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import evilcraft.core.config.configurable.ConfigurableDamageIndicatedItemFluidContainer;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import evilcraft.core.config.extendedconfig.ItemConfig;
 import evilcraft.fluid.Blood;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import thaumcraft.api.IScribeTools;
 
 /**
  * Scribing tools that run on Blood.
  * Texture is based on the one from Thaumcraft.
+ * 
  * @author rubensworks
  *
  */
@@ -24,17 +26,17 @@ public class VeinedScribingTools extends ConfigurableDamageIndicatedItemFluidCon
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<ItemConfig> eConfig) {
-        if(_instance == null)
-            _instance = new VeinedScribingTools(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new VeinedScribingTools(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static VeinedScribingTools getInstance() {
@@ -50,14 +52,14 @@ public class VeinedScribingTools extends ConfigurableDamageIndicatedItemFluidCon
     @Override
     public int getDamage(ItemStack itemStack) {
         FluidStack fluidStack = getFluid(itemStack);
-        if(fluidStack == null) return 0;
+        if (fluidStack == null) return 0;
         return (CAPACITY - fluidStack.amount) / USAGE;
     }
 
     @Override
     public void setDamage(ItemStack itemStack, int damage) {
         FluidStack fluidStack = getFluid(itemStack);
-        if(fluidStack != null) {
+        if (fluidStack != null) {
             drain(itemStack, (damage - getDamage(itemStack)) * USAGE, true);
         }
     }

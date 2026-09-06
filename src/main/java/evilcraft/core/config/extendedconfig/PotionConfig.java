@@ -1,10 +1,12 @@
 package evilcraft.core.config.extendedconfig;
 
-import evilcraft.core.config.ConfigurableType;
 import net.minecraft.potion.Potion;
+
+import evilcraft.core.config.ConfigurableType;
 
 /**
  * Config for potions.
+ * 
  * @author rubensworks
  * @see evilcraft.core.config.extendedconfig.ExtendedConfig
  */
@@ -17,13 +19,13 @@ public abstract class PotionConfig extends ExtendedConfig<PotionConfig> {
 
     /**
      * Make a new instance.
+     * 
      * @param defaultId The default ID for the configurable.
-     * @param namedId The unique name ID for the configurable.
-     * @param comment The comment to add in the config file for this configurable.
-     * @param element The class of this configurable.
+     * @param namedId   The unique name ID for the configurable.
+     * @param comment   The comment to add in the config file for this configurable.
+     * @param element   The class of this configurable.
      */
-    public PotionConfig(int defaultId, String namedId,
-                             String comment, Class<? extends Potion> element) {
+    public PotionConfig(int defaultId, String namedId, String comment, Class<? extends Potion> element) {
         super(defaultId != 0, namedId, comment, element);
         this.ID = defaultId;
     }

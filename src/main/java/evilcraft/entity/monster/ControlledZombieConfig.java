@@ -1,15 +1,17 @@
 package evilcraft.entity.monster;
 
+import net.minecraft.client.renderer.entity.Render;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.Configs;
 import evilcraft.client.render.entity.RenderControlledZombie;
 import evilcraft.core.config.extendedconfig.MobConfig;
 import evilcraft.item.NecromancerStaffConfig;
-import net.minecraft.client.renderer.entity.Render;
 
 /**
  * Config for the {@link ControlledZombie}.
+ * 
  * @author rubensworks
  *
  */
@@ -24,14 +26,9 @@ public class ControlledZombieConfig extends MobConfig {
      * Make a new instance.
      */
     public ControlledZombieConfig() {
-        super(
-        	true,
-            "controlledZombie",
-            null,
-            ControlledZombie.class
-        );
+        super(true, "controlledZombie", null, ControlledZombie.class);
     }
-    
+
     @Override
     public boolean isEnabled() {
         return Configs.isEnabled(NecromancerStaffConfig.class);
@@ -57,5 +54,5 @@ public class ControlledZombieConfig extends MobConfig {
     public Render getRender() {
         return new RenderControlledZombie(this);
     }
-    
+
 }

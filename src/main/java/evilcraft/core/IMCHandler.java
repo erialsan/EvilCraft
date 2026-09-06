@@ -1,14 +1,17 @@
 package evilcraft.core;
 
-import com.google.common.collect.Maps;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import evilcraft.EvilCraft;
+import java.util.Map;
+
 import org.apache.logging.log4j.Level;
 
-import java.util.Map;
+import com.google.common.collect.Maps;
+
+import cpw.mods.fml.common.event.FMLInterModComms;
+import evilcraft.EvilCraft;
 
 /**
  * Handler for {@link cpw.mods.fml.common.event.FMLInterModComms.IMCEvent}s.
+ * 
  * @author rubensworks
  */
 public class IMCHandler {
@@ -17,7 +20,8 @@ public class IMCHandler {
 
     /**
      * Register a new action for messages.
-     * @param key The action key which will be used to distinguish messages.
+     * 
+     * @param key    The action key which will be used to distinguish messages.
      * @param action The action to execute when messages for that type are received.
      */
     public void registerAction(String key, IIMCAction action) {
@@ -25,7 +29,7 @@ public class IMCHandler {
     }
 
     public void handle(FMLInterModComms.IMCEvent event) {
-        for(FMLInterModComms.IMCMessage message : event.getMessages()) {
+        for (FMLInterModComms.IMCMessage message : event.getMessages()) {
             handle(message);
         }
     }
@@ -33,10 +37,14 @@ public class IMCHandler {
     public void handle(FMLInterModComms.IMCMessage message) {
         EvilCraft.log(String.format("Handling IMC message from %s.", message.getSender()), Level.INFO);
         IIMCAction action = actions.get(message.key);
-        if(action != null) {
-            if(!action.handle(message)) {
-                EvilCraft.log(String.format("The IMC message for key %s was rejected. " +
-                        "It may have been incorrectly formatted or has resulted in an error.", message.key), Level.ERROR);
+        if (action != null) {
+            if (!action.handle(message)) {
+                EvilCraft.log(
+                    String.format(
+                        "The IMC message for key %s was rejected. "
+                            + "It may have been incorrectly formatted or has resulted in an error.",
+                        message.key),
+                    Level.ERROR);
             }
         } else {
             EvilCraft.log(String.format("An IMC message with invalid key %s was received.", message.key), Level.ERROR);
@@ -47,6 +55,7 @@ public class IMCHandler {
 
         /**
          * Handle the given message, corresponds to the given key used with registration.
+         * 
          * @param message The message.
          * @return If the handling occured without any problems.
          */

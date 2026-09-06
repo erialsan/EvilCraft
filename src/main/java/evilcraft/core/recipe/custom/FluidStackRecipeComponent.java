@@ -1,10 +1,11 @@
 package evilcraft.core.recipe.custom;
 
+import net.minecraftforge.fluids.FluidStack;
+
 import evilcraft.api.recipes.custom.IRecipeInput;
 import evilcraft.api.recipes.custom.IRecipeOutput;
 import evilcraft.api.recipes.custom.IRecipeProperties;
 import lombok.Data;
-import net.minecraftforge.fluids.FluidStack;
 
 /**
  * A {@link evilcraft.api.recipes.custom.IRecipe} component (input, output or properties) that holds an
@@ -13,16 +14,20 @@ import net.minecraftforge.fluids.FluidStack;
  * @author immortaleeb
  */
 @Data
-public class FluidStackRecipeComponent implements IRecipeInput, IRecipeOutput, IRecipeProperties, IFluidStackRecipeComponent {
+public class FluidStackRecipeComponent
+    implements IRecipeInput, IRecipeOutput, IRecipeProperties, IFluidStackRecipeComponent {
+
     private final FluidStack fluidStack;
 
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof FluidStackRecipeComponent)) return false;
-        FluidStackRecipeComponent that = (FluidStackRecipeComponent)object;
+        FluidStackRecipeComponent that = (FluidStackRecipeComponent) object;
 
         if (this.fluidStack != null) {
-            return this.fluidStack.getFluid() != null && that.fluidStack != null && this.fluidStack.getFluid().equals(that.fluidStack.getFluid());
+            return this.fluidStack.getFluid() != null && that.fluidStack != null
+                && this.fluidStack.getFluid()
+                    .equals(that.fluidStack.getFluid());
         }
 
         return that.fluidStack == null;
@@ -30,6 +35,7 @@ public class FluidStackRecipeComponent implements IRecipeInput, IRecipeOutput, I
 
     @Override
     public int hashCode() {
-        return fluidStack.getFluid().hashCode() + 90;
+        return fluidStack.getFluid()
+            .hashCode() + 90;
     }
 }

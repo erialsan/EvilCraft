@@ -5,6 +5,7 @@ import net.minecraft.world.storage.WorldInfo;
 
 /**
  * Lightning weather type.
+ * 
  * @author rubensworks
  *
  */
@@ -22,7 +23,8 @@ public class WeatherTypeLightning extends WeatherType {
 
     @Override
     public void deactivate(World world) {
-        world.getWorldInfo().setThundering(false);
+        world.getWorldInfo()
+            .setThundering(false);
     }
 
     public static void activateThunder(World world) {

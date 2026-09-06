@@ -1,21 +1,24 @@
 package evilcraft.core.config.configurable;
 
+import net.minecraft.block.BlockTorch;
+
 import evilcraft.Reference;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import net.minecraft.block.BlockTorch;
 
 /**
  * Torch block that can hold ExtendedConfigs
+ * 
  * @author rubensworks
  *
  */
-public class ConfigurableBlockTorch extends BlockTorch implements IConfigurable{
+public class ConfigurableBlockTorch extends BlockTorch implements IConfigurable {
 
     @SuppressWarnings("rawtypes")
     protected ExtendedConfig eConfig = null;
 
     /**
      * Make a new block instance.
+     * 
      * @param eConfig Config for this block.
      */
     @SuppressWarnings({ "rawtypes" })
@@ -36,10 +39,10 @@ public class ConfigurableBlockTorch extends BlockTorch implements IConfigurable{
     public ExtendedConfig<?> getConfig() {
         return eConfig;
     }
-    
+
     @Override
     public String getTextureName() {
-        return Reference.MOD_ID+":"+eConfig.getNamedId();
+        return Reference.MOD_ID + ":" + eConfig.getNamedId();
     }
 
 }

@@ -4,11 +4,12 @@ import evilcraft.core.config.extendedconfig.FluidConfig;
 
 /**
  * Config for {@link Poison}.
+ * 
  * @author rubensworks
  *
  */
 public class PoisonConfig extends FluidConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -18,12 +19,7 @@ public class PoisonConfig extends FluidConfig {
      * Make a new instance.
      */
     public PoisonConfig() {
-        super(
-            true,
-            "evilcraftpoison",
-            null,
-            Poison.class
-        );
+        super(true, "evilcraftpoison", null, Poison.class);
     }
-    
+
 }

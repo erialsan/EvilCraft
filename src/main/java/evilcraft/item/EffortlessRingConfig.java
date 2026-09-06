@@ -4,6 +4,7 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the Effortless Ring.
+ * 
  * @author rubensworks
  *
  */
@@ -18,12 +19,7 @@ public class EffortlessRingConfig extends ItemConfig {
      * Make a new instance.
      */
     public EffortlessRingConfig() {
-        super(
-        	true,
-            "effortlessRing",
-            null,
-            EffortlessRing.class
-        );
+        super(true, "effortlessRing", null, EffortlessRing.class);
     }
-    
+
 }

@@ -9,14 +9,15 @@ import net.minecraft.world.IBlockAccess;
 /**
  * An extension of the {@link RenderBlocks} that has some rendering corrections used
  * for rendering connected textures. It is also able to store the current world object.
+ * 
  * @author rubensworks
  *
  */
 public class CustomRenderBlocks extends RenderBlocks {
-    
+
     // Three renderfaces are overwritten because for some reason Minecraft randomly
     // flips the icon in some rotations, "it's a motherflippin' joke!"
-    
+
     @Override
     public void renderFaceZNeg(Block par1Block, double par2, double par4, double par6, IIcon par8Icon) {
         Tessellator tessellator = Tessellator.instance;
@@ -98,7 +99,8 @@ public class CustomRenderBlocks extends RenderBlocks {
             tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
             tessellator.setBrightness(this.brightnessBottomLeft);
             tessellator.addVertexWithUV(d12, d14, d15, d3, d5);
-            tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
+            tessellator
+                .setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
             tessellator.setBrightness(this.brightnessBottomRight);
             tessellator.addVertexWithUV(d12, d13, d15, d8, d10);
             tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
@@ -193,7 +195,8 @@ public class CustomRenderBlocks extends RenderBlocks {
             tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
             tessellator.setBrightness(this.brightnessBottomLeft);
             tessellator.addVertexWithUV(d11, d12, d14, d4, d6);
-            tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
+            tessellator
+                .setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
             tessellator.setBrightness(this.brightnessBottomRight);
             tessellator.addVertexWithUV(d11, d13, d14, d7, d9);
             tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
@@ -209,18 +212,20 @@ public class CustomRenderBlocks extends RenderBlocks {
 
     /**
      * Set the IBlockAccess world.
+     * 
      * @param world Set the world to apply to.
      */
     public void setWorld(IBlockAccess world) {
         this.blockAccess = world;
     }
-    
+
     /**
      * Gets the IBlockAccess world.
+     * 
      * @return the IBlockAccess world.
      */
     public IBlockAccess getWorld() {
         return this.blockAccess;
     }
-    
+
 }

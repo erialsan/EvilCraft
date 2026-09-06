@@ -4,6 +4,7 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the Corrupted Tear.
+ * 
  * @author rubensworks
  *
  */
@@ -18,12 +19,7 @@ public class CorruptedTearConfig extends ItemConfig {
      * Make a new instance.
      */
     public CorruptedTearConfig() {
-        super(
-            true,
-            "corruptedTear",
-            null,
-            null
-        );
+        super(true, "corruptedTear", null, null);
     }
-    
+
 }

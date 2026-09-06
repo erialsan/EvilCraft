@@ -1,8 +1,15 @@
 package evilcraft.modcompat.ee3;
 
+import java.util.Arrays;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import com.google.common.collect.Lists;
 import com.pahimar.ee3.api.exchange.EnergyValueRegistryProxy;
 import com.pahimar.ee3.api.exchange.RecipeRegistryProxy;
+
 import evilcraft.Configs;
 import evilcraft.api.recipes.custom.IRecipe;
 import evilcraft.block.*;
@@ -12,11 +19,6 @@ import evilcraft.core.recipe.custom.*;
 import evilcraft.fluid.Blood;
 import evilcraft.fluid.Poison;
 import evilcraft.item.*;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author rubensworks
@@ -56,21 +58,36 @@ public class EE3 {
 
     public static void registerCrafting() {
         // Blood Infuser recipes
-        if(Configs.isEnabled(BloodInfuserConfig.class)) {
-            for (IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> recipe :
-                    BloodInfuser.getInstance().getRecipeRegistry().allRecipes()) {
-                List l = Lists.newArrayList(recipe.getInput().getItemStacks());
-                l.add(recipe.getInput().getFluidStack());
-                RecipeRegistryProxy.addRecipe(recipe.getOutput().getItemStack(), l);
+        if (Configs.isEnabled(BloodInfuserConfig.class)) {
+            for (IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> recipe : BloodInfuser
+                .getInstance()
+                .getRecipeRegistry()
+                .allRecipes()) {
+                List l = Lists.newArrayList(
+                    recipe.getInput()
+                        .getItemStacks());
+                l.add(
+                    recipe.getInput()
+                        .getFluidStack());
+                RecipeRegistryProxy.addRecipe(
+                    recipe.getOutput()
+                        .getItemStack(),
+                    l);
             }
         }
 
         // Environmental Accumulator recipes
-        if(Configs.isEnabled(EnvironmentalAccumulatorConfig.class)) {
-            for (IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent,
-                    EnvironmentalAccumulatorRecipeProperties> recipe : EnvironmentalAccumulator.getInstance().
-                    getRecipeRegistry().allRecipes()) {
-                RecipeRegistryProxy.addRecipe(recipe.getOutput().getItemStack(), Arrays.asList((recipe.getInput().getItemStack())));
+        if (Configs.isEnabled(EnvironmentalAccumulatorConfig.class)) {
+            for (IRecipe<EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> recipe : EnvironmentalAccumulator
+                .getInstance()
+                .getRecipeRegistry()
+                .allRecipes()) {
+                RecipeRegistryProxy.addRecipe(
+                    recipe.getOutput()
+                        .getItemStack(),
+                    Arrays.asList(
+                        (recipe.getInput()
+                            .getItemStack())));
             }
         }
     }
@@ -84,14 +101,16 @@ public class EE3 {
     }
 
     private static void registerObjectSafe(ItemConfig itemConfig, int meta, float energyValue) {
-        if(itemConfig != null) {
-            EnergyValueRegistryProxy.addPreAssignedEnergyValue(new ItemStack(itemConfig.getItemInstance(), 1, meta), energyValue);
+        if (itemConfig != null) {
+            EnergyValueRegistryProxy
+                .addPreAssignedEnergyValue(new ItemStack(itemConfig.getItemInstance(), 1, meta), energyValue);
         }
     }
 
     private static void registerObjectSafe(BlockConfig itemConfig, int meta, float energyValue) {
-        if(itemConfig != null) {
-            EnergyValueRegistryProxy.addPreAssignedEnergyValue(new ItemStack(itemConfig.getBlockInstance(), 1, meta), energyValue);
+        if (itemConfig != null) {
+            EnergyValueRegistryProxy
+                .addPreAssignedEnergyValue(new ItemStack(itemConfig.getBlockInstance(), 1, meta), energyValue);
         }
     }
 

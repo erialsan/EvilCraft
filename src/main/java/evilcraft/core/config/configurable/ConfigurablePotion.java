@@ -1,11 +1,5 @@
 package evilcraft.core.config.configurable;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.Reference;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.core.config.extendedconfig.PotionConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
@@ -13,22 +7,33 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.Reference;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.core.config.extendedconfig.PotionConfig;
+
 /**
  * A configurable potion effect.
+ * 
  * @author rubensworks
  */
 public abstract class ConfigurablePotion extends Potion implements IConfigurable {
 
-    private static final ResourceLocation resource = new ResourceLocation(Reference.MOD_ID, Reference.TEXTURE_PATH_GUI + "potions.png");
+    private static final ResourceLocation resource = new ResourceLocation(
+        Reference.MOD_ID,
+        Reference.TEXTURE_PATH_GUI + "potions.png");
 
     @SuppressWarnings("rawtypes")
     protected ExtendedConfig eConfig = null;
 
     /**
      * Make a new Enchantment instance
-     * @param eConfig Config for this enchantment.
+     * 
+     * @param eConfig   Config for this enchantment.
      * @param badEffect If the potion effect is bad.
-     * @param color The color of the potion.
+     * @param color     The color of the potion.
      * @param iconIndex The sprite index of the icon.
      */
     protected ConfigurablePotion(ExtendedConfig<PotionConfig> eConfig, boolean badEffect, int color, int iconIndex) {
@@ -65,7 +70,8 @@ public abstract class ConfigurablePotion extends Potion implements IConfigurable
     }
 
     public int getAmplifier(EntityLivingBase entity, Potion potion) {
-        return entity.getActivePotionEffect(potion).getAmplifier();
+        return entity.getActivePotionEffect(potion)
+            .getAmplifier();
     }
 
     public int getAmplifier(EntityLivingBase entity) {
@@ -77,7 +83,7 @@ public abstract class ConfigurablePotion extends Potion implements IConfigurable
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         EntityLivingBase entity = event.entityLiving;
-        if(isActiveOn(entity)) {
+        if (isActiveOn(entity)) {
             onUpdate(entity);
         }
     }

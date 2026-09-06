@@ -1,7 +1,5 @@
 package evilcraft.entity.monster;
 
-import evilcraft.core.config.configurable.IConfigurable;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -12,8 +10,12 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
+import evilcraft.core.config.configurable.IConfigurable;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+
 /**
  * A zombie that is controlled by the player that spawned them with the {@link evilcraft.item.NecromancerStaff}.
+ * 
  * @author rubensworks
  *
  */
@@ -23,13 +25,16 @@ public class ControlledZombie extends EntityMob implements IConfigurable {
 
     /**
      * Make a new instance.
+     * 
      * @param world The world.
      */
     public ControlledZombie(World world) {
         super(world);
         addPotionEffect(new PotionEffect(Potion.confusion.id, 2000, 0));
-        this.getNavigator().setAvoidsWater(false);
-        this.getNavigator().setBreakDoors(true);
+        this.getNavigator()
+            .setAvoidsWater(false);
+        this.getNavigator()
+            .setBreakDoors(true);
 
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLiving.class, 1.0D, true));
@@ -50,17 +55,23 @@ public class ControlledZombie extends EntityMob implements IConfigurable {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D);
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.followRange)
+            .setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed)
+            .setBaseValue(0.2D);
+        this.getEntityAttribute(SharedMonsterAttributes.attackDamage)
+            .setBaseValue(3.0D);
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.getDataWatcher().addObject(12, Byte.valueOf((byte) 0));
-        this.getDataWatcher().addObject(13, Byte.valueOf((byte) 0));
-        this.getDataWatcher().addObject(14, Byte.valueOf((byte) 0));
+        this.getDataWatcher()
+            .addObject(12, Byte.valueOf((byte) 0));
+        this.getDataWatcher()
+            .addObject(13, Byte.valueOf((byte) 0));
+        this.getDataWatcher()
+            .addObject(14, Byte.valueOf((byte) 0));
         this.dataWatcher.addObject(WATCHERID_TTL, 0);
     }
 
@@ -120,7 +131,7 @@ public class ControlledZombie extends EntityMob implements IConfigurable {
     @Override
     public void onEntityUpdate() {
         super.onEntityUpdate();
-        if(!worldObj.isRemote) {
+        if (!worldObj.isRemote) {
             int ttl = getTtl();
             setTtl(--ttl);
             if (ttl == 0) {

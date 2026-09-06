@@ -4,6 +4,7 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the Darkened Apple.
+ * 
  * @author rubensworks
  *
  */
@@ -18,12 +19,7 @@ public class DarkenedAppleConfig extends ItemConfig {
      * Make a new instance.
      */
     public DarkenedAppleConfig() {
-        super(
-        	true,
-            "darkenedApple",
-            null,
-            DarkenedApple.class
-        );
+        super(true, "darkenedApple", null, DarkenedApple.class);
     }
-    
+
 }

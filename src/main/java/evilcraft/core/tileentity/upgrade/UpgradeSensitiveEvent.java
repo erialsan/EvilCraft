@@ -2,6 +2,7 @@ package evilcraft.core.tileentity.upgrade;
 
 /**
  * Default event implementation.
+ * 
  * @author rubensworks
  */
 public class UpgradeSensitiveEvent<O> implements IUpgradeSensitiveEvent<O> {

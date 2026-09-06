@@ -1,10 +1,8 @@
 package evilcraft.core.config.configurable;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.Reference;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.world.gen.WorldGeneratorUndeadTree;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,15 +12,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Random;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.Reference;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.world.gen.WorldGeneratorUndeadTree;
 
 /**
  * Block extending from a sapling that can hold ExtendedConfigs
+ * 
  * @author rubensworks
  *
  */
-public class ConfigurableBlockSapling extends BlockSapling implements IConfigurable{
+public class ConfigurableBlockSapling extends BlockSapling implements IConfigurable {
 
     @SuppressWarnings("rawtypes")
     protected ExtendedConfig eConfig = null;
@@ -31,7 +33,8 @@ public class ConfigurableBlockSapling extends BlockSapling implements IConfigura
 
     /**
      * Make a new block instance.
-     * @param eConfig Config for this block.
+     * 
+     * @param eConfig  Config for this block.
      * @param material Material of this block.
      */
     @SuppressWarnings({ "rawtypes" })
@@ -53,7 +56,7 @@ public class ConfigurableBlockSapling extends BlockSapling implements IConfigura
 
     @Override
     public String getTextureName() {
-        return Reference.MOD_ID+":"+eConfig.getNamedId();
+        return Reference.MOD_ID + ":" + eConfig.getNamedId();
     }
 
     @Override
@@ -78,13 +81,13 @@ public class ConfigurableBlockSapling extends BlockSapling implements IConfigura
         return meta;
     }
 
-    //isSameSapling
+    // isSameSapling
     @Override
     public boolean func_149880_a(World world, int x, int y, int z, int meta) {
         return world.getBlock(x, y, z) == this && (world.getBlockMetadata(x, y, z)) == meta;
     }
 
-    //growTree
+    // growTree
     @Override
     public void func_149878_d(World world, int x, int y, int z, Random random) {
         if (world.isRemote) {
@@ -93,7 +96,7 @@ public class ConfigurableBlockSapling extends BlockSapling implements IConfigura
 
         world.setBlockToAir(x, y, z);
 
-        if(!treeGenerator.growTree(world, random, x, y, z)) {
+        if (!treeGenerator.growTree(world, random, x, y, z)) {
             world.setBlock(x, y, z, this, 0, 4);
         }
     }

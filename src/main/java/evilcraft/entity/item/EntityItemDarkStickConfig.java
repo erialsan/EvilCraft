@@ -1,15 +1,17 @@
 package evilcraft.entity.item;
 
-import evilcraft.core.config.extendedconfig.EntityConfig;
 import net.minecraft.client.renderer.entity.Render;
+
+import evilcraft.core.config.extendedconfig.EntityConfig;
 
 /**
  * Config for the {@link EntityItemDarkStick}.
+ * 
  * @author rubensworks
  *
  */
 public class EntityItemDarkStickConfig extends EntityConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -19,12 +21,7 @@ public class EntityItemDarkStickConfig extends EntityConfig {
      * Make a new instance.
      */
     public EntityItemDarkStickConfig() {
-        super(
-        	true,
-            "entityItemDarkStick",
-            null,
-            EntityItemDarkStick.class
-        );
+        super(true, "entityItemDarkStick", null, EntityItemDarkStick.class);
     }
 
     @Override

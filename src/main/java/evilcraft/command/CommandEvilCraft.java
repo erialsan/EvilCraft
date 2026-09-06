@@ -1,26 +1,27 @@
 package evilcraft.command;
 
-import evilcraft.core.helper.L10NHelpers;
-import evilcraft.core.helper.ServerHelpers;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+
+import evilcraft.core.helper.L10NHelpers;
+
 /**
  * The EvilCraft command.
+ * 
  * @author rubensworks
  *
  */
 public class CommandEvilCraft implements ICommand {
-    
+
     private static final String NAME = "evilcraft";
-    
+
     protected List<String> getAliases() {
         List<String> list = new LinkedList<String>();
         list.add(NAME);
@@ -29,7 +30,7 @@ public class CommandEvilCraft implements ICommand {
         list.add("ec");
         return list;
     }
-    
+
     protected Map<String, ICommand> getSubcommands() {
         Map<String, ICommand> map = new HashMap<String, ICommand>();
         map.put("config", new CommandConfig());
@@ -38,11 +39,11 @@ public class CommandEvilCraft implements ICommand {
         map.put("ignite", new CommandIgnite());
         return map;
     }
-    
+
     private List<String> getSubCommands(String cmd) {
         List<String> completions = new LinkedList<String>();
-        for(String full : getSubcommands().keySet()) {
-            if(full.startsWith(cmd)) {
+        for (String full : getSubcommands().keySet()) {
+            if (full.startsWith(cmd)) {
                 completions.add(full);
             }
         }
@@ -62,7 +63,7 @@ public class CommandEvilCraft implements ICommand {
     @Override
     public String getCommandUsage(ICommandSender icommandsender) {
         String possibilities = "";
-        for(String full : getSubcommands().keySet()) {
+        for (String full : getSubcommands().keySet()) {
             possibilities += full + " ";
         }
         return NAME + " " + possibilities;
@@ -73,10 +74,10 @@ public class CommandEvilCraft implements ICommand {
     public List getCommandAliases() {
         return this.getAliases();
     }
-    
+
     protected String[] shortenArgumentList(String[] astring) {
         String[] asubstring = new String[astring.length - 1];
-        for(int i = 1; i < astring.length; i++) {
+        for (int i = 1; i < astring.length; i++) {
             asubstring[i - 1] = astring[i];
         }
         return asubstring;
@@ -84,31 +85,34 @@ public class CommandEvilCraft implements ICommand {
 
     @Override
     public void processCommand(ICommandSender icommandsender, String[] astring) {
-        if(astring.length == 0) {
+        if (astring.length == 0) {
             icommandsender.addChatMessage(new ChatComponentText(L10NHelpers.localize("chat.command.invalidArguments")));
         } else {
             ICommand subcommand = getSubcommands().get(astring[0]);
-            if(subcommand != null) {
+            if (subcommand != null) {
                 String[] asubstring = shortenArgumentList(astring);
                 subcommand.processCommand(icommandsender, asubstring);
             } else {
-                icommandsender.addChatMessage(new ChatComponentText(L10NHelpers.localize("chat.command.invalidSubcommand")));
+                icommandsender
+                    .addChatMessage(new ChatComponentText(L10NHelpers.localize("chat.command.invalidSubcommand")));
             }
         }
     }
 
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
-        return icommandsender.canCommandSenderUseCommand(MinecraftServer.getServer().getOpPermissionLevel(), this.getCommandName());
+        return icommandsender.canCommandSenderUseCommand(
+            MinecraftServer.getServer()
+                .getOpPermissionLevel(),
+            this.getCommandName());
     }
 
     @SuppressWarnings("rawtypes")
     @Override
-    public List addTabCompletionOptions(ICommandSender icommandsender,
-            String[] astring) {
-        if(astring.length != 0) {
+    public List addTabCompletionOptions(ICommandSender icommandsender, String[] astring) {
+        if (astring.length != 0) {
             ICommand subcommand = getSubcommands().get(astring[0]);
-            if(subcommand != null) {
+            if (subcommand != null) {
                 String[] asubstring = shortenArgumentList(astring);
                 return subcommand.addTabCompletionOptions(icommandsender, asubstring);
             } else {
@@ -123,5 +127,5 @@ public class CommandEvilCraft implements ICommand {
     public boolean isUsernameIndex(String[] astring, int i) {
         return false;
     }
-    
+
 }

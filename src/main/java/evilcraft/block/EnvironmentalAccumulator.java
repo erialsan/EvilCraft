@@ -1,5 +1,14 @@
 package evilcraft.block;
 
+import java.util.Random;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.api.ILocation;
@@ -17,45 +26,37 @@ import evilcraft.core.recipe.custom.EnvironmentalAccumulatorRecipeProperties;
 import evilcraft.item.EnvironmentalAccumulationCoreConfig;
 import evilcraft.tileentity.TileEnvironmentalAccumulator;
 import evilcraft.world.gen.DarkTempleGenerator;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Random;
 
 /**
  * Block that can collect the weather and stuff.
+ * 
  * @author immortaleeb
  *
  */
-public class EnvironmentalAccumulator
-        extends ConfigurableBlockContainer
-        implements IMachine<EnvironmentalAccumulator, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> {
-	
-	private static EnvironmentalAccumulator _instance = null;
-	
-	/**
+public class EnvironmentalAccumulator extends ConfigurableBlockContainer implements
+    IMachine<EnvironmentalAccumulator, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> {
+
+    private static EnvironmentalAccumulator _instance = null;
+
+    /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
-	public static void initInstance(ExtendedConfig<BlockConfig> eConfig) {
-        if(_instance == null)
-            _instance = new EnvironmentalAccumulator(eConfig);
-        else
-            eConfig.showDoubleInitError();
+    public static void initInstance(ExtendedConfig<BlockConfig> eConfig) {
+        if (_instance == null) _instance = new EnvironmentalAccumulator(eConfig);
+        else eConfig.showDoubleInitError();
     }
-    
-	/**
+
+    /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static EnvironmentalAccumulator getInstance() {
         return _instance;
     }
-    
+
     /**
      * State indicating the environmental accumulator is idle.
      */
@@ -79,72 +80,74 @@ public class EnvironmentalAccumulator
      * processing.
      */
     public static final int STATE_FINISHED_PROCESSING_ITEM = 3;
-    
+
     private IIcon sideIcon;
     private IIcon bottomIcon;
     private IIcon topIcon;
 
-	private EnvironmentalAccumulator(ExtendedConfig<BlockConfig> eConfig) {
-		super(eConfig, Material.iron, TileEnvironmentalAccumulator.class);
-		this.setRotatable(true);
-		this.setStepSound(soundTypeMetal);
-		this.setHardness(50.0F);
-		this.setResistance(6000000.0F);   // Can not be destroyed by explosions
-	}
-	
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-	
-	@Override
+    private EnvironmentalAccumulator(ExtendedConfig<BlockConfig> eConfig) {
+        super(eConfig, Material.iron, TileEnvironmentalAccumulator.class);
+        this.setRotatable(true);
+        this.setStepSound(soundTypeMetal);
+        this.setHardness(50.0F);
+        this.setResistance(6000000.0F); // Can not be destroyed by explosions
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
     public int getRenderType() {
         return RenderEnvironmentalAccumulator.ID;
     }
-	
-	@Override
-	public boolean renderAsNormalBlock() {
-	    return false;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int meta) {
-	    if (side == ForgeDirection.UP.ordinal())
-	        return topIcon;
-	    
-	    if (side == ForgeDirection.DOWN.ordinal())
-	        return bottomIcon;
-	    
-	    return sideIcon;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
-	    sideIcon = iconRegister.registerIcon(getTextureName() + "_side");
-	    bottomIcon = iconRegister.registerIcon(getTextureName() + "_bottom");
-	    topIcon = iconRegister.registerIcon(getTextureName() + "_top");
-	}
-	
-	@Override
-	public Item getItemDropped(int meta, Random random, int zero) {
-		return EnvironmentalAccumulationCoreConfig._instance.getItemInstance();
-	}
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIcon(int side, int meta) {
+        if (side == ForgeDirection.UP.ordinal()) return topIcon;
+
+        if (side == ForgeDirection.DOWN.ordinal()) return bottomIcon;
+
+        return sideIcon;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister) {
+        sideIcon = iconRegister.registerIcon(getTextureName() + "_side");
+        bottomIcon = iconRegister.registerIcon(getTextureName() + "_bottom");
+        topIcon = iconRegister.registerIcon(getTextureName() + "_top");
+    }
+
+    @Override
+    public Item getItemDropped(int meta, Random random, int zero) {
+        return EnvironmentalAccumulationCoreConfig._instance.getItemInstance();
+    }
 
     @Override
     public IRecipeRegistry<EnvironmentalAccumulator, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeComponent, EnvironmentalAccumulatorRecipeProperties> getRecipeRegistry() {
-        return RegistryManager.getRegistry(ISuperRecipeRegistry.class).getRecipeRegistry(this);
+        return RegistryManager.getRegistry(ISuperRecipeRegistry.class)
+            .getRecipeRegistry(this);
     }
 
-	@Override
-	protected void onPreBlockDestroyed(World world, int x, int y, int z) {
-		if(!world.isRemote) {
-			ILocation closest = DarkTempleGenerator.getClosestForCoords(world, x, z);
-			if(closest != null) {
-				DarkTempleGenerator.getCachedData(world).addFailedLocation(closest.getCoordinates()[0] / WorldHelpers.CHUNK_SIZE, closest.getCoordinates()[2] / WorldHelpers.CHUNK_SIZE);
-			}
-		}
-		super.onPreBlockDestroyed(world, x, y, z);
-	}
+    @Override
+    protected void onPreBlockDestroyed(World world, int x, int y, int z) {
+        if (!world.isRemote) {
+            ILocation closest = DarkTempleGenerator.getClosestForCoords(world, x, z);
+            if (closest != null) {
+                DarkTempleGenerator.getCachedData(world)
+                    .addFailedLocation(
+                        closest.getCoordinates()[0] / WorldHelpers.CHUNK_SIZE,
+                        closest.getCoordinates()[2] / WorldHelpers.CHUNK_SIZE);
+            }
+        }
+        super.onPreBlockDestroyed(world, x, y, z);
+    }
 }

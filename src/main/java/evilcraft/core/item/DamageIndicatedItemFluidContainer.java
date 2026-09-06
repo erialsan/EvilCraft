@@ -1,8 +1,7 @@
 package evilcraft.core.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.core.IInformationProvider;
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -12,7 +11,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ItemFluidContainer;
 
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.core.IInformationProvider;
 
 /**
  * This extension on {@link ItemFluidContainer} will show a damage indicator depending on how full
@@ -28,31 +29,32 @@ public abstract class DamageIndicatedItemFluidContainer extends ItemFluidContain
 
     protected DamageIndicatedItemComponent component;
     protected Fluid fluid;
-    
+
     /**
      * Create a new DamageIndicatedItemFluidContainer.
      * 
      * @param capacity
-     *          The capacity this container will have.
+     *                 The capacity this container will have.
      * @param fluid
-     *          The Fluid instance this container must hold.
+     *                 The Fluid instance this container must hold.
      */
     public DamageIndicatedItemFluidContainer(int capacity, Fluid fluid) {
         super(0, capacity);
         this.fluid = fluid;
         init();
     }
-    
+
     private void init() {
         component = new DamageIndicatedItemComponent(this);
     }
-    
+
     @Override
     public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain) {
-        if(container != null && container.stackTagCompound != null && container.stackTagCompound.getCompoundTag("Fluid") != null) {
+        if (container != null && container.stackTagCompound != null
+            && container.stackTagCompound.getCompoundTag("Fluid") != null) {
             // Fix for Thermal Expansion
             FluidStack stack = FluidStack.loadFluidStackFromNBT(container.stackTagCompound.getCompoundTag("Fluid"));
-            if(stack != null && stack.amount <= 0) {
+            if (stack != null && stack.amount <= 0) {
                 stack.amount = 0;
                 NBTTagCompound fluidTag = container.stackTagCompound.getCompoundTag("Fluid");
                 fluidTag.setInteger("Amount", 0);
@@ -60,13 +62,13 @@ public abstract class DamageIndicatedItemFluidContainer extends ItemFluidContain
             }
         }
         FluidStack fluidStack = super.drain(container, maxDrain, doDrain);
-        if(container != null &&
-                (container.stackTagCompound == null || container.stackTagCompound.getCompoundTag("Fluid") == null)) {
+        if (container != null
+            && (container.stackTagCompound == null || container.stackTagCompound.getCompoundTag("Fluid") == null)) {
             fill(container, new FluidStack(fluid, 0), true);
         }
         return fluidStack;
     }
-    
+
     @Override
     public int fill(ItemStack container, FluidStack resource, boolean doFill) {
         int capacityOld = capacity;
@@ -75,25 +77,25 @@ public abstract class DamageIndicatedItemFluidContainer extends ItemFluidContain
         capacity = capacityOld;
         return filled;
     }
-    
-    @SuppressWarnings({ "rawtypes"})
+
+    @SuppressWarnings({ "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs tab, List itemList) {
         component.getSubItems(item, tab, itemList, fluid, 0);
     }
-    
+
     @Override
     public String getInfo(ItemStack itemStack) {
         return component.getInfo(itemStack);
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Override
     public void provideInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
-        
+
     }
-    
+
     @SuppressWarnings("rawtypes")
     @SideOnly(Side.CLIENT)
     @Override
@@ -101,34 +103,36 @@ public abstract class DamageIndicatedItemFluidContainer extends ItemFluidContain
         component.addInformation(itemStack, entityPlayer, list, par4);
         super.addInformation(itemStack, entityPlayer, list, par4);
     }
-    
+
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
-    	return true;
+        return true;
     }
-    
+
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
-    	return component.getDurability(itemStack);
+        return component.getDurability(itemStack);
     }
-    
+
     /**
      * Get the fluid.
+     * 
      * @return The fluid.
      */
     public Fluid getFluid() {
         return this.fluid;
     }
-    
+
     /**
      * If the given amount can be drained. (Will drain in simulation mode)
-     * @param amount The amount to try to drain.
+     * 
+     * @param amount    The amount to try to drain.
      * @param itemStack The item stack to drain from.
      * @return If it could be drained.
      */
     public boolean canDrain(int amount, ItemStack itemStack) {
-    	FluidStack simulatedDrain = drain(itemStack, amount, false);
-    	return simulatedDrain != null && simulatedDrain.amount == amount;
+        FluidStack simulatedDrain = drain(itemStack, amount, false);
+        return simulatedDrain != null && simulatedDrain.amount == amount;
     }
 
 }

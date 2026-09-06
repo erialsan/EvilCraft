@@ -1,5 +1,13 @@
 package evilcraft.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.api.ILocation;
@@ -14,16 +22,10 @@ import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import evilcraft.core.helper.LocationHelpers;
 import evilcraft.core.helper.RenderHelpers;
 import evilcraft.tileentity.TileColossalBloodChest;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 /**
  * Part of the Colossal Blood Chest multiblock structure.
+ * 
  * @author rubensworks
  *
  */
@@ -33,17 +35,17 @@ public class ReinforcedUndeadPlank extends ConfigurableBlock implements IDetecti
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<BlockConfig> eConfig) {
-        if(_instance == null)
-            _instance = new ReinforcedUndeadPlank(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new ReinforcedUndeadPlank(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static ReinforcedUndeadPlank getInstance() {
@@ -72,57 +74,58 @@ public class ReinforcedUndeadPlank extends ConfigurableBlock implements IDetecti
     public boolean renderAsNormalBlock() {
         return false;
     }
-    
+
     @Override
     public boolean canCreatureSpawn(EnumCreatureType creatureType, IBlockAccess world, int x, int y, int z) {
-    	return false;
+        return false;
     }
-    
+
     private void triggerDetector(World world, int x, int y, int z, boolean valid) {
-    	TileColossalBloodChest.detector.detect(world, new Location(x, y, z), valid, true);
+        TileColossalBloodChest.detector.detect(world, new Location(x, y, z), valid, true);
     }
-    
+
     @Override
     public void onBlockAdded(World world, int x, int y, int z) {
-    	triggerDetector(world, x, y, z, true);
+        triggerDetector(world, x, y, z, true);
         world.func_147453_f(x, y, z, this);
     }
-    
+
     @Override
     public void onBlockPreDestroy(World world, int x, int y, int z, int meta) {
-    	if(meta == 1) triggerDetector(world, x, y, z, false);
-    	super.onBlockPreDestroy(world, x, y, z, meta);
+        if (meta == 1) triggerDetector(world, x, y, z, false);
+        super.onBlockPreDestroy(world, x, y, z, meta);
     }
-    
+
     @Override
-	public void onDetect(World world, ILocation location, Size size, boolean valid, ILocation originCorner) {
-		Block block = LocationHelpers.getBlock(world, location);
-		if(block == this) {
+    public void onDetect(World world, ILocation location, Size size, boolean valid, ILocation originCorner) {
+        Block block = LocationHelpers.getBlock(world, location);
+        if (block == this) {
             TileColossalBloodChest.detectStructure(world, location, size, valid);
-		}
-	}
+        }
+    }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side,
-                                    float posX, float posY, float posZ) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float posX,
+        float posY, float posZ) {
         int meta = world.getBlockMetadata(x, y, z);
-        if(meta == 1) {
+        if (meta == 1) {
             final Wrapper<ILocation> tileLocationWrapper = new Wrapper<ILocation>();
-            TileColossalBloodChest.detector.detect(world, new Location(x, y, z), true, new CubeDetector.IValidationAction() {
+            TileColossalBloodChest.detector
+                .detect(world, new Location(x, y, z), true, new CubeDetector.IValidationAction() {
 
-                @Override
-                public void onValidate(ILocation location, Block block) {
-                    if(block == ColossalBloodChest.getInstance()) {
-                        tileLocationWrapper.set(location);
+                    @Override
+                    public void onValidate(ILocation location, Block block) {
+                        if (block == ColossalBloodChest.getInstance()) {
+                            tileLocationWrapper.set(location);
+                        }
                     }
-                }
 
-            }, false);
+                }, false);
             ILocation tileLocation = tileLocationWrapper.get();
-            if(tileLocation != null) {
+            if (tileLocation != null) {
                 int[] c = tileLocation.getCoordinates();
-                LocationHelpers.getBlock(world,
-                        tileLocation).onBlockActivated(world, c[0], c[1], c[2], player, side, posX, posY, posZ);
+                LocationHelpers.getBlock(world, tileLocation)
+                    .onBlockActivated(world, c[0], c[1], c[2], player, side, posX, posY, posZ);
                 return true;
             }
         }

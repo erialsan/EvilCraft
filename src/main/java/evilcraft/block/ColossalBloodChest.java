@@ -1,5 +1,15 @@
 package evilcraft.block;
 
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.api.ILocation;
@@ -16,15 +26,6 @@ import evilcraft.core.helper.RenderHelpers;
 import evilcraft.inventory.container.ContainerColossalBloodChest;
 import evilcraft.tileentity.TileColossalBloodChest;
 import evilcraft.tileentity.TileSpiritFurnace;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
-import java.util.Random;
 
 /**
  * A machine that can infuse stuff with blood.
@@ -41,10 +42,8 @@ public class ColossalBloodChest extends ConfigurableBlockContainerGuiTankInfo im
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<BlockConfig> eConfig) {
-        if (_instance == null)
-            _instance = new ColossalBloodChest(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new ColossalBloodChest(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
@@ -63,8 +62,7 @@ public class ColossalBloodChest extends ConfigurableBlockContainerGuiTankInfo im
         this.setHarvestLevel("axe", 2); // Iron tier
         this.setRotatable(false);
 
-        if (MinecraftHelpers.isClientSide())
-            setGUI(GuiColossalBloodChest.class);
+        if (MinecraftHelpers.isClientSide()) setGUI(GuiColossalBloodChest.class);
         setContainer(ContainerColossalBloodChest.class);
     }
 
@@ -75,9 +73,10 @@ public class ColossalBloodChest extends ConfigurableBlockContainerGuiTankInfo im
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
-        return !TileColossalBloodChest.canWork(world, new Location(x, y, z)) ||
-                super.onBlockActivated(world, x, y, z, entityplayer, par6, par7, par8, par9);
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7,
+        float par8, float par9) {
+        return !TileColossalBloodChest.canWork(world, new Location(x, y, z))
+            || super.onBlockActivated(world, x, y, z, entityplayer, par6, par7, par8, par9);
     }
 
     @Override
@@ -118,7 +117,9 @@ public class ColossalBloodChest extends ConfigurableBlockContainerGuiTankInfo im
             TileEntity tile = LocationHelpers.getTile(world, location);
             if (tile != null) {
                 ((TileColossalBloodChest) tile).setSize(valid ? size : Size.NULL_SIZE);
-                ((TileColossalBloodChest) tile).setCenter(originCorner.copy().subtract(new Location(-1, -1, -1)));
+                ((TileColossalBloodChest) tile).setCenter(
+                    originCorner.copy()
+                        .subtract(new Location(-1, -1, -1)));
             }
         }
     }

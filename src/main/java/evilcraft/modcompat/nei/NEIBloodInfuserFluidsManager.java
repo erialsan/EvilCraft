@@ -1,5 +1,12 @@
 package evilcraft.modcompat.nei;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import evilcraft.api.recipes.custom.IRecipe;
@@ -8,20 +15,16 @@ import evilcraft.core.helper.L10NHelpers;
 import evilcraft.core.recipe.custom.DurationXpRecipeProperties;
 import evilcraft.core.recipe.custom.ItemFluidStackAndTierRecipeComponent;
 import evilcraft.core.recipe.custom.ItemStackRecipeComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Manager for fluid usages in the {@link evilcraft.block.BloodInfuser}.
+ * 
  * @author rubensworks
  */
 public class NEIBloodInfuserFluidsManager extends NEIBloodInfuserManager {
 
     public class CachedFluidRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public NEIBloodInfuserManager.FluidPair fuel;
 
         public CachedFluidRecipe(NEIBloodInfuserManager.FluidPair fuel) {
@@ -58,29 +61,30 @@ public class NEIBloodInfuserFluidsManager extends NEIBloodInfuserManager {
 
     @Override
     public String getRecipeName() {
-        return BloodInfuser.getInstance().getLocalizedName() + " " + L10NHelpers.localize("gui.nei.fluids");
+        return BloodInfuser.getInstance()
+            .getLocalizedName() + " "
+            + L10NHelpers.localize("gui.nei.fluids");
     }
 
     private void loadAllBloodInfuserRecipes() {
         List<CachedBloodInfuserRecipe> recipes = new LinkedList<CachedBloodInfuserRecipe>();
 
-        for (IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> recipe :
-                BloodInfuser.getInstance().getRecipeRegistry().allRecipes())
-            mbloodinfuser.add(new CachedBloodInfuserRecipe(recipe));
+        for (IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> recipe : BloodInfuser
+            .getInstance()
+            .getRecipeRegistry()
+            .allRecipes()) mbloodinfuser.add(new CachedBloodInfuserRecipe(recipe));
     }
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if(outputId.equals(getOverlayIdentifier()) && getClass() == NEIBloodInfuserFluidsManager.class
-                && results[0] instanceof FluidStack && ((FluidStack) results[0]).getFluid() != null)
-            for(FluidPair fuel : afluids)
-                arecipes.add(new CachedFluidRecipe(fuel));
+        if (outputId.equals(getOverlayIdentifier()) && getClass() == NEIBloodInfuserFluidsManager.class
+            && results[0] instanceof FluidStack
+            && ((FluidStack) results[0]).getFluid() != null)
+            for (FluidPair fuel : afluids) arecipes.add(new CachedFluidRecipe(fuel));
     }
 
     public void loadUsageRecipes(ItemStack ingredient) {
-        for(FluidPair fuel : afluids)
-            if(fuel.stack.contains(ingredient))
-                arecipes.add(new CachedFluidRecipe(fuel));
+        for (FluidPair fuel : afluids) if (fuel.stack.contains(ingredient)) arecipes.add(new CachedFluidRecipe(fuel));
     }
 
     public String getOverlayIdentifier() {

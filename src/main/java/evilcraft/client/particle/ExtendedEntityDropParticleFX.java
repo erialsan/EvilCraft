@@ -5,13 +5,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-
 /**
  * Particle that appears underneath blocks for simulating drops.
- * Courtesy of BuildCraft: https://github.com/BuildCraft/BuildCraft/blob/master/common/buildcraft/energy/render/EntityDropParticleFX.java
+ * Courtesy of BuildCraft:
+ * https://github.com/BuildCraft/BuildCraft/blob/master/common/buildcraft/energy/render/EntityDropParticleFX.java
  *
  */
 @SideOnly(Side.CLIENT)
@@ -24,15 +25,17 @@ public class ExtendedEntityDropParticleFX extends EntityFX {
 
     /**
      * Make a new instance.
-     * @param world The world.
-     * @param x X coordinate.
-     * @param y Y coordinate.
-     * @param z Z coordinate.
-     * @param particleRed Red color.
+     * 
+     * @param world         The world.
+     * @param x             X coordinate.
+     * @param y             Y coordinate.
+     * @param z             Z coordinate.
+     * @param particleRed   Red color.
      * @param particleGreen Green color.
-     * @param particleBlue Blue color.
+     * @param particleBlue  Blue color.
      */
-    public ExtendedEntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
+    public ExtendedEntityDropParticleFX(World world, double x, double y, double z, float particleRed,
+        float particleGreen, float particleBlue) {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX = this.motionY = this.motionZ = 0.0D;
 
@@ -81,10 +84,19 @@ public class ExtendedEntityDropParticleFX extends EntityFX {
             this.motionZ *= 0.699999988079071D;
         }
 
-        Material material = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)).getMaterial();
+        Material material = this.worldObj
+            .getBlock(
+                MathHelper.floor_double(this.posX),
+                MathHelper.floor_double(this.posY),
+                MathHelper.floor_double(this.posZ))
+            .getMaterial();
 
         if (material.isLiquid() || material.isSolid()) {
-            double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(this.worldObj.getBlockMetadata(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))));
+            double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(
+                this.worldObj.getBlockMetadata(
+                    MathHelper.floor_double(this.posX),
+                    MathHelper.floor_double(this.posY),
+                    MathHelper.floor_double(this.posZ))));
 
             if (this.posY < d0) {
                 this.setDead();

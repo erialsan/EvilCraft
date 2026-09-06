@@ -2,6 +2,7 @@ package evilcraft.infobook;
 
 /**
  * Registry for the Origins of Darkness info.
+ * 
  * @author rubensworks
  */
 public class InfoBookRegistry {
@@ -14,7 +15,7 @@ public class InfoBookRegistry {
     }
 
     public static InfoBookRegistry getInstance() {
-        if(_instance == null) {
+        if (_instance == null) {
             _instance = new InfoBookRegistry();
         }
         return _instance;

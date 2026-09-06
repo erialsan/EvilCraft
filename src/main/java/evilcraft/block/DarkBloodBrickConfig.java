@@ -4,11 +4,12 @@ import evilcraft.core.config.extendedconfig.BlockConfig;
 
 /**
  * Config for the {@link DarkBloodBrick}.
+ * 
  * @author rubensworks
  *
  */
 public class DarkBloodBrickConfig extends BlockConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -18,17 +19,12 @@ public class DarkBloodBrickConfig extends BlockConfig {
      * Make a new instance.
      */
     public DarkBloodBrickConfig() {
-        super(
-        	true,
-            "darkBloodBrick",
-            null,
-            DarkBloodBrick.class
-        );
+        super(true, "darkBloodBrick", null, DarkBloodBrick.class);
     }
-    
+
     @Override
     public boolean isMultipartEnabled() {
         return true;
     }
-    
+
 }

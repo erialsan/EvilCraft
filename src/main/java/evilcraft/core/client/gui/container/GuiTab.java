@@ -1,10 +1,12 @@
 package evilcraft.core.client.gui.container;
 
-import evilcraft.core.helper.RenderHelpers;
 import net.minecraft.util.ResourceLocation;
+
+import evilcraft.core.helper.RenderHelpers;
 
 /**
  * Simple tab gui element.
+ * 
  * @author rubensworks
  */
 public abstract class GuiTab {
@@ -31,6 +33,7 @@ public abstract class GuiTab {
 
     /**
      * Draw the tab.
+     * 
      * @param x Origin X.
      * @param y Origin Y.
      */

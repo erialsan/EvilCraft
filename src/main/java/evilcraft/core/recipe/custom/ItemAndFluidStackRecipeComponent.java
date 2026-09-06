@@ -1,19 +1,23 @@
 package evilcraft.core.recipe.custom;
 
-import evilcraft.api.recipes.custom.IRecipeInput;
-import evilcraft.api.recipes.custom.IRecipeOutput;
-import evilcraft.api.recipes.custom.IRecipeProperties;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.List;
+import evilcraft.api.recipes.custom.IRecipeInput;
+import evilcraft.api.recipes.custom.IRecipeOutput;
+import evilcraft.api.recipes.custom.IRecipeProperties;
 
 /**
  * A {@link evilcraft.api.recipes.custom.IRecipe} component that holds an {@link net.minecraft.item.ItemStack}
  * and a {@link net.minecraftforge.fluids.FluidStack}.
+ * 
  * @author immortaleeb
  */
-public class ItemAndFluidStackRecipeComponent implements IRecipeInput, IRecipeOutput, IRecipeProperties, IItemStackRecipeComponent, IFluidStackRecipeComponent {
+public class ItemAndFluidStackRecipeComponent
+    implements IRecipeInput, IRecipeOutput, IRecipeProperties, IItemStackRecipeComponent, IFluidStackRecipeComponent {
+
     private final ItemStackRecipeComponent itemStack;
     private final FluidStackRecipeComponent fluidStack;
 

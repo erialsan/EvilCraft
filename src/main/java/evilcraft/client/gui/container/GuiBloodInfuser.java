@@ -1,6 +1,7 @@
 package evilcraft.client.gui.container;
 
 import net.minecraft.entity.player.InventoryPlayer;
+
 import evilcraft.block.BloodInfuser;
 import evilcraft.core.client.gui.container.GuiWorking;
 import evilcraft.inventory.container.ContainerBloodInfuser;
@@ -8,11 +9,12 @@ import evilcraft.tileentity.TileBloodInfuser;
 
 /**
  * GUI for the {@link BloodInfuser}.
+ * 
  * @author rubensworks
  *
  */
 public class GuiBloodInfuser extends GuiWorking<TileBloodInfuser> {
-    
+
     /**
      * Texture width.
      */
@@ -71,16 +73,17 @@ public class GuiBloodInfuser extends GuiWorking<TileBloodInfuser> {
      * Progress target Y.
      */
     public static final int PROGRESSTARGETY = 36;
-    
+
     /**
      * Make a new instance.
+     * 
      * @param inventory The inventory of the player.
-     * @param tile The tile entity that calls the GUI.
+     * @param tile      The tile entity that calls the GUI.
      */
     public GuiBloodInfuser(InventoryPlayer inventory, TileBloodInfuser tile) {
         super(new ContainerBloodInfuser(inventory, tile), tile);
         this.setTank(TANKWIDTH, TANKHEIGHT, TANKX, TANKY, TANKTARGETX, TANKTARGETY);
         this.setProgress(PROGRESSWIDTH, PROGRESSHEIGHT, PROGRESSX, PROGRESSY, PROGRESSTARGETX, PROGRESSTARGETY);
     }
-    
+
 }

@@ -1,7 +1,8 @@
 package evilcraft.tileentity.tickaction.purifier;
 
-import evilcraft.api.tileentity.purifier.IPurifierAction;
-import evilcraft.tileentity.TilePurifier;
+import java.util.Collection;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -12,11 +13,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-import java.util.Collection;
-import java.util.List;
+import evilcraft.api.tileentity.purifier.IPurifierAction;
+import evilcraft.tileentity.TilePurifier;
 
 /**
  * Purifier action to collect entity potion effects in an empty bottle.
+ * 
  * @author Ruben Taelman
  */
 public class CollectPotionPurifyAction implements IPurifierAction {
@@ -41,18 +43,21 @@ public class CollectPotionPurifyAction implements IPurifierAction {
     @SuppressWarnings("unchecked")
     @Override
     public boolean canWork(TilePurifier tile) {
-        if(tile.getPurifyItem() == null && tile.getAdditionalItem() != null &&
-                tile.getAdditionalItem().getItem() == ALLOWED_ITEM && tile.getBucketsFloored() == tile.getMaxBuckets()) {
+        if (tile.getPurifyItem() == null && tile.getAdditionalItem() != null
+            && tile.getAdditionalItem()
+                .getItem() == ALLOWED_ITEM
+            && tile.getBucketsFloored() == tile.getMaxBuckets()) {
             int x = tile.xCoord;
             int y = tile.yCoord;
             int z = tile.zCoord;
-            @SuppressWarnings({"rawtypes", "unchecked"})
-            List<EntityLivingBase> entities = tile.getWorldObj().getEntitiesWithinAABB(EntityLivingBase.class,
-                    AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1)
-            );
-            for(EntityLivingBase entity : entities) {
-                for(PotionEffect potionEffect : (Collection<PotionEffect>) entity.getActivePotionEffects()) {
-                    if(!potionEffect.getIsAmbient()) {
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            List<EntityLivingBase> entities = tile.getWorldObj()
+                .getEntitiesWithinAABB(
+                    EntityLivingBase.class,
+                    AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1));
+            for (EntityLivingBase entity : entities) {
+                for (PotionEffect potionEffect : (Collection<PotionEffect>) entity.getActivePotionEffects()) {
+                    if (!potionEffect.getIsAmbient()) {
                         return true;
                     }
                 }
@@ -68,21 +73,26 @@ public class CollectPotionPurifyAction implements IPurifierAction {
         int tick = tile.getTick();
 
         // Try removing bad enchants.
-        if(tile.getPurifyItem() == null && tile.getAdditionalItem() != null
-                && tile.getAdditionalItem().getItem() == ALLOWED_ITEM && tile.getBucketsFloored() == tile.getMaxBuckets()) {
+        if (tile.getPurifyItem() == null && tile.getAdditionalItem() != null
+            && tile.getAdditionalItem()
+                .getItem() == ALLOWED_ITEM
+            && tile.getBucketsFloored() == tile.getMaxBuckets()) {
             int x = tile.xCoord;
             int y = tile.yCoord;
             int z = tile.zCoord;
-            @SuppressWarnings({"rawtypes", "unchecked"})
-            List<EntityLivingBase> entities = tile.getWorldObj().getEntitiesWithinAABB(EntityLivingBase.class,
-                    AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1)
-            );
-            for(EntityLivingBase entity : entities) {
-                if(!entity.getActivePotionEffects().isEmpty()) {
-                    if(tick >= PURIFY_DURATION) {
-                        if(!world.isRemote) {
-                            for(PotionEffect potionEffect : (Collection<PotionEffect>) entity.getActivePotionEffects()) {
-                                if(!potionEffect.getIsAmbient()) {
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            List<EntityLivingBase> entities = tile.getWorldObj()
+                .getEntitiesWithinAABB(
+                    EntityLivingBase.class,
+                    AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1));
+            for (EntityLivingBase entity : entities) {
+                if (!entity.getActivePotionEffects()
+                    .isEmpty()) {
+                    if (tick >= PURIFY_DURATION) {
+                        if (!world.isRemote) {
+                            for (PotionEffect potionEffect : (Collection<PotionEffect>) entity
+                                .getActivePotionEffects()) {
+                                if (!potionEffect.getIsAmbient()) {
                                     // Remove effect from entity
                                     entity.removePotionEffect(potionEffect.getPotionID());
 
@@ -110,7 +120,7 @@ public class CollectPotionPurifyAction implements IPurifierAction {
                         }
 
                     }
-                    if(world.isRemote) {
+                    if (world.isRemote) {
                         tile.showEffect();
                     }
                 }

@@ -2,25 +2,31 @@ package evilcraft.core.config.configurabletypeaction;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
 import evilcraft.core.config.extendedconfig.EnchantmentConfig;
 
 /**
  * The action used for {@link EnchantmentConfig}.
+ * 
  * @author rubensworks
  * @see ConfigurableTypeAction
  */
-public class EnchantmentAction extends ConfigurableTypeAction<EnchantmentConfig>{
+public class EnchantmentAction extends ConfigurableTypeAction<EnchantmentConfig> {
 
     @Override
     public void preRun(EnchantmentConfig eConfig, Configuration config, boolean startup) {
         // Get property in config file and set comment
-        Property property = config.get(eConfig.getHolderType().getCategory(), eConfig.getNamedId(), eConfig.ID);
+        Property property = config.get(
+            eConfig.getHolderType()
+                .getCategory(),
+            eConfig.getNamedId(),
+            eConfig.ID);
         property.setRequiresMcRestart(true);
         property.comment = eConfig.getComment();
-        
-        if(startup) {
-	        // Update the ID, it could've changed
-	        eConfig.ID = property.getInt();
+
+        if (startup) {
+            // Update the ID, it could've changed
+            eConfig.ID = property.getInt();
         }
     }
 

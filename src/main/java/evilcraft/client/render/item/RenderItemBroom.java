@@ -1,5 +1,12 @@
 package evilcraft.client.render.item;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import evilcraft.Reference;
 import evilcraft.client.render.model.ModelBroom;
@@ -7,14 +14,10 @@ import evilcraft.core.client.render.model.RenderModel;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import evilcraft.core.config.extendedconfig.ItemConfig;
 import evilcraft.item.Broom;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Item renderer for the {@link Broom}.
+ * 
  * @author rubensworks
  *
  */
@@ -22,6 +25,7 @@ public class RenderItemBroom extends RenderModel<ModelBroom> implements IItemRen
 
     /**
      * Make a new instance.
+     * 
      * @param config The config instance.
      */
     public RenderItemBroom(ExtendedConfig<ItemConfig> config) {
@@ -29,7 +33,9 @@ public class RenderItemBroom extends RenderModel<ModelBroom> implements IItemRen
     }
 
     protected ResourceLocation createResourceLocation(ExtendedConfig config) {
-        return new ResourceLocation(Reference.MOD_ID, Reference.TEXTURE_PATH_MODELS + config.getNamedId() + "Entity.png");
+        return new ResourceLocation(
+            Reference.MOD_ID,
+            Reference.TEXTURE_PATH_MODELS + config.getNamedId() + "Entity.png");
     }
 
     @Override
@@ -38,11 +44,10 @@ public class RenderItemBroom extends RenderModel<ModelBroom> implements IItemRen
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-            ItemRendererHelper helper) {
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
         return true;
     }
-    
+
     @Override
     protected ModelBroom constructModel() {
         return new ModelBroom();
@@ -71,10 +76,12 @@ public class RenderItemBroom extends RenderModel<ModelBroom> implements IItemRen
                 break;
         }
     }
-    
-    private void renderBroom(float x, float y, float z, float scale, float rotationX, float rotationY, float rotationZ) {
-        FMLClientHandler.instance().getClient().renderEngine.bindTexture(getEntityTexture(null));
-        
+
+    private void renderBroom(float x, float y, float z, float scale, float rotationX, float rotationY,
+        float rotationZ) {
+        FMLClientHandler.instance()
+            .getClient().renderEngine.bindTexture(getEntityTexture(null));
+
         GL11.glPushMatrix();
         GL11.glScalef(scale, scale, scale);
         GL11.glTranslatef(x, y, z);
@@ -86,8 +93,7 @@ public class RenderItemBroom extends RenderModel<ModelBroom> implements IItemRen
     }
 
     @Override
-    public void doRender(Entity entity, double d0, double d1, double d2,
-            float f, float f1) {
+    public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1) {
         // Not required here.
     }
 

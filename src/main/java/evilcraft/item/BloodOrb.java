@@ -1,20 +1,22 @@
 package evilcraft.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.core.config.configurable.ConfigurableItem;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.core.config.extendedconfig.ItemConfig;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.core.config.configurable.ConfigurableItem;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * A simple orb that can be filled with blood.
+ * 
  * @author rubensworks
  *
  */
@@ -26,17 +28,17 @@ public class BloodOrb extends ConfigurableItem {
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<ItemConfig> eConfig) {
-        if(_instance == null)
-            _instance = new BloodOrb(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new BloodOrb(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static BloodOrb getInstance() {
@@ -58,7 +60,7 @@ public class BloodOrb extends ConfigurableItem {
 
     @Override
     public IIcon getIconFromDamage(int meta) {
-        if(meta == 1) return filled;
+        if (meta == 1) return filled;
         return super.getIconFromDamage(meta);
     }
 
@@ -66,7 +68,7 @@ public class BloodOrb extends ConfigurableItem {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
-        for(int i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }
@@ -74,7 +76,7 @@ public class BloodOrb extends ConfigurableItem {
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
         String suffix = "empty";
-        if(itemStack.getItemDamage() == 1) suffix = "filled";
+        if (itemStack.getItemDamage() == 1) suffix = "filled";
         return super.getUnlocalizedName(itemStack) + "." + suffix;
     }
 

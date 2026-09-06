@@ -5,6 +5,7 @@ import evilcraft.core.config.extendedconfig.PotionConfig;
 
 /**
  * Config for {@link evilcraft.potion.PotionPaling}.
+ * 
  * @author rubensworks
  *
  */
@@ -19,12 +20,7 @@ public class PotionPalingConfig extends PotionConfig {
      * Make a new instance.
      */
     public PotionPalingConfig() {
-        super(
-            Reference.POTION_PALING,
-            "paling",
-            null,
-            PotionPaling.class
-        );
+        super(Reference.POTION_PALING, "paling", null, PotionPaling.class);
     }
-    
+
 }

@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.FluidTank;
 /**
  * A simple fluid tank.
  * Based on the Buildcraft Tank
+ * 
  * @author rubensworks
  *
  */
@@ -17,18 +18,20 @@ public class Tank extends FluidTank {
 
     /**
      * Make a new fluid tank.
-     * @param name The name for the tank, used for NBT storage.
+     * 
+     * @param name     The name for the tank, used for NBT storage.
      * @param capacity The capacity (mB) for the tank.
-     * @param tile The {@link TileEntity} that uses this tank.
+     * @param tile     The {@link TileEntity} that uses this tank.
      */
     public Tank(String name, int capacity, TileEntity tile) {
         super(capacity);
         this.name = name;
         this.tile = tile;
     }
-    
+
     /**
      * Check if this tank is empty.
+     * 
      * @return If the tank is empty; no fluid is inside of it.
      */
     public boolean isEmpty() {
@@ -37,6 +40,7 @@ public class Tank extends FluidTank {
 
     /**
      * Check if this tank is full; the capacity is reached.
+     * 
      * @return If this tank is full.
      */
     public boolean isFull() {
@@ -45,6 +49,7 @@ public class Tank extends FluidTank {
 
     /**
      * Get the fluid that currently occupies this tank, will return null if there is no fluid.
+     * 
      * @return The inner fluid.
      */
     public Fluid getFluidType() {
@@ -58,7 +63,7 @@ public class Tank extends FluidTank {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         NBTTagCompound tankData = new NBTTagCompound();
-        if(replaceInnerFluid()) {
+        if (replaceInnerFluid()) {
             super.writeToNBT(tankData);
         }
         writeTankToNBT(tankData);
@@ -70,7 +75,7 @@ public class Tank extends FluidTank {
     public FluidTank readFromNBT(NBTTagCompound nbt) {
         if (nbt.hasKey(name)) {
             NBTTagCompound tankData = nbt.getCompoundTag(name);
-            if(replaceInnerFluid()) {
+            if (replaceInnerFluid()) {
                 if (tankData.hasKey("Empty")) {
                     setFluid(null);
                 }
@@ -83,27 +88,29 @@ public class Tank extends FluidTank {
 
     /**
      * Write the tank contents to NBT.
+     * 
      * @param nbt The NBT tag to write to.
      */
     public void writeTankToNBT(NBTTagCompound nbt) {
-    	nbt.setInteger("capacity", getCapacity());
+        nbt.setInteger("capacity", getCapacity());
     }
 
     /**
      * Read the tank contents from NBT.
+     * 
      * @param nbt The NBT tag to write from.
      */
     public void readTankFromNBT(NBTTagCompound nbt) {
-    	if(nbt.hasKey("capacity")) { // Backwards compatibility.
-    		setCapacity(nbt.getInteger("capacity"));
-    	}
+        if (nbt.hasKey("capacity")) { // Backwards compatibility.
+            setCapacity(nbt.getInteger("capacity"));
+        }
     }
-    
+
     /**
      * @return The tank name.
      */
     public String getName() {
-    	return this.name;
+        return this.name;
     }
 
 }

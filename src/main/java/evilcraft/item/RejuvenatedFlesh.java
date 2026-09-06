@@ -1,9 +1,5 @@
 package evilcraft.item;
 
-import evilcraft.core.config.configurable.ConfigurableDamageIndicatedItemFluidContainer;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.core.config.extendedconfig.ItemConfig;
-import evilcraft.fluid.Blood;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
@@ -11,8 +7,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import evilcraft.core.config.configurable.ConfigurableDamageIndicatedItemFluidContainer;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.core.config.extendedconfig.ItemConfig;
+import evilcraft.fluid.Blood;
+
 /**
  * Flesh which can be infinitely eaten, consuming Blood per bite.
+ * 
  * @author rubensworks
  *
  */
@@ -22,17 +24,17 @@ public class RejuvenatedFlesh extends ConfigurableDamageIndicatedItemFluidContai
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<ItemConfig> eConfig) {
-        if(_instance == null)
-            _instance = new RejuvenatedFlesh(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new RejuvenatedFlesh(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static RejuvenatedFlesh getInstance() {
@@ -66,7 +68,7 @@ public class RejuvenatedFlesh extends ConfigurableDamageIndicatedItemFluidContai
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-        if(canEat(itemStack) && player.canEat(false)) {
+        if (canEat(itemStack) && player.canEat(false)) {
             player.setItemInUse(itemStack, this.getMaxItemUseDuration(itemStack));
         }
         return itemStack;
@@ -75,7 +77,8 @@ public class RejuvenatedFlesh extends ConfigurableDamageIndicatedItemFluidContai
     @Override
     public ItemStack onEaten(ItemStack itemStack, World world, EntityPlayer player) {
         drain(itemStack, RejuvenatedFleshConfig.biteUsage, true);
-        player.getFoodStats().addStats(3, 0.5F);
+        player.getFoodStats()
+            .addStats(3, 0.5F);
         world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
         return itemStack;
     }

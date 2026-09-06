@@ -9,11 +9,12 @@ import evilcraft.proxy.ClientProxy;
 
 /**
  * Config for the {@link DarkStick}.
+ * 
  * @author rubensworks
  *
  */
 public class DarkStickConfig extends ItemConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -23,12 +24,7 @@ public class DarkStickConfig extends ItemConfig {
      * Make a new instance.
      */
     public DarkStickConfig() {
-        super(
-        	true,
-            "darkStick",
-            null,
-            DarkStick.class
-        );
+        super(true, "darkStick", null, DarkStick.class);
     }
 
     @Override

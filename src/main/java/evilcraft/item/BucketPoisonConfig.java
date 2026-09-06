@@ -10,11 +10,12 @@ import evilcraft.fluid.Poison;
 
 /**
  * Config for the Poison Bucket.
+ * 
  * @author rubensworks
  *
  */
 public class BucketPoisonConfig extends ItemBucketConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -24,12 +25,7 @@ public class BucketPoisonConfig extends ItemBucketConfig {
      * Make a new instance.
      */
     public BucketPoisonConfig() {
-        super(
-        	true,
-            "bucketPoison",
-            null,
-            null
-        );
+        super(true, "bucketPoison", null, null);
     }
 
     @Override
@@ -46,10 +42,10 @@ public class BucketPoisonConfig extends ItemBucketConfig {
     public ConfigurableBlockFluidClassic getFluidBlockInstance() {
         return FluidBlockPoison.getInstance();
     }
-    
+
     @Override
     public boolean isDisableable() {
         return false;
     }
-    
+
 }

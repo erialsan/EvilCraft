@@ -1,6 +1,22 @@
 package evilcraft.client.gui.container;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import com.google.common.collect.Lists;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.Reference;
@@ -15,27 +31,18 @@ import evilcraft.infobook.InfoBookRegistry;
 import evilcraft.infobook.InfoSection;
 import evilcraft.item.OriginsOfDarkness;
 import lombok.Getter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-
-import java.util.List;
 
 /**
  * Gui for the Origins of Darkness book.
+ * 
  * @author rubensworks
  */
 public class GuiOriginsOfDarkness extends GuiScreen {
 
-    protected static ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, OriginsOfDarkness.getInstance().getGuiTexture());
+    protected static ResourceLocation texture = new ResourceLocation(
+        Reference.MOD_ID,
+        OriginsOfDarkness.getInstance()
+            .getGuiTexture());
     private static final int BUTTON_NEXT = 1;
     private static final int BUTTON_PREVIOUS = 2;
     private static final int BUTTON_PARENT = 3;
@@ -80,8 +87,9 @@ public class GuiOriginsOfDarkness extends GuiScreen {
 
     public GuiOriginsOfDarkness(EntityPlayer player, int itemIndex) {
         itemStack = InventoryHelpers.getItemFromIndex(player, itemIndex);
-        if(currentSection == null) {
-            currentSection = InfoBookRegistry.getInstance().getRoot();
+        if (currentSection == null) {
+            currentSection = InfoBookRegistry.getInstance()
+                .getRoot();
             page = 0;
         }
     }
@@ -94,10 +102,13 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         left = (width - guiWidth) / 2;
         top = (height - guiHeight) / 2;
 
-        this.buttonList.add(this.buttonNextPage = new NextPageButton(BUTTON_NEXT, left + pageWidth + 100, top + 156, 0, 180, 18, 13));
-        this.buttonList.add(this.buttonPreviousPage = new NextPageButton(BUTTON_PREVIOUS, left + 23, top + 156, 0, 193, 18, 13));
+        this.buttonList.add(
+            this.buttonNextPage = new NextPageButton(BUTTON_NEXT, left + pageWidth + 100, top + 156, 0, 180, 18, 13));
+        this.buttonList
+            .add(this.buttonPreviousPage = new NextPageButton(BUTTON_PREVIOUS, left + 23, top + 156, 0, 193, 18, 13));
         this.buttonList.add(this.buttonParent = new NextPageButton(BUTTON_PARENT, left + 2, top + 2, 36, 180, 8, 8));
-        this.buttonList.add(this.buttonBack = new NextPageButton(BUTTON_BACK, left + pageWidth + 127, top + 2, 0, 223, 13, 18));
+        this.buttonList
+            .add(this.buttonBack = new NextPageButton(BUTTON_BACK, left + pageWidth + 127, top + 2, 0, 223, 13, 18));
         this.updateGui();
 
         if (goToLastPage) {
@@ -106,10 +117,15 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         }
 
         int nextId = BUTTON_HYPERLINKS_START;
-        for(int innerPage = page; innerPage <= page + 1; innerPage++) {
+        for (int innerPage = page; innerPage <= page + 1; innerPage++) {
             for (HyperLink link : currentSection.getLinks(innerPage)) {
                 int xOffset = innerPage % 2 == 1 ? X_OFFSET_INNER + pageWidth : X_OFFSET_OUTER;
-                this.buttonList.add(new TextOverlayButton(nextId++, link, left + xOffset + link.getX(), top + InfoSection.Y_OFFSET / 2 + link.getY(),
+                this.buttonList.add(
+                    new TextOverlayButton(
+                        nextId++,
+                        link,
+                        left + xOffset + link.getX(),
+                        top + InfoSection.Y_OFFSET / 2 + link.getY(),
                         InfoSection.getFontHeight(getFontRenderer())));
             }
             this.buttonList.addAll(currentSection.getAdvancedButtons(innerPage));
@@ -138,10 +154,30 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double) (x + 0), (double) (y + height), (double) this.zLevel, (double) ((float) (u + width) * f), (double) ((float) (v + height) * f1));
-        tessellator.addVertexWithUV((double) (x + width), (double) (y + height), (double) this.zLevel, (double) ((float) (u + 0) * f), (double) ((float) (v + height) * f1));
-        tessellator.addVertexWithUV((double) (x + width), (double) (y + 0), (double) this.zLevel, (double) ((float) (u + 0) * f), (double) ((float) (v + 0) * f1));
-        tessellator.addVertexWithUV((double) (x + 0), (double) (y + 0), (double) this.zLevel, (double) ((float) (u + width) * f), (double) ((float) (v + 0) * f1));
+        tessellator.addVertexWithUV(
+            (double) (x + 0),
+            (double) (y + height),
+            (double) this.zLevel,
+            (double) ((float) (u + width) * f),
+            (double) ((float) (v + height) * f1));
+        tessellator.addVertexWithUV(
+            (double) (x + width),
+            (double) (y + height),
+            (double) this.zLevel,
+            (double) ((float) (u + 0) * f),
+            (double) ((float) (v + height) * f1));
+        tessellator.addVertexWithUV(
+            (double) (x + width),
+            (double) (y + 0),
+            (double) this.zLevel,
+            (double) ((float) (u + 0) * f),
+            (double) ((float) (v + 0) * f1));
+        tessellator.addVertexWithUV(
+            (double) (x + 0),
+            (double) (y + 0),
+            (double) this.zLevel,
+            (double) ((float) (u + width) * f),
+            (double) ((float) (v + 0) * f1));
         tessellator.draw();
     }
 
@@ -166,8 +202,8 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         infoSectionsToBake.add(currentSection);
         getPreviousSections(infoSectionsToBake);
         getNextSections(infoSectionsToBake);
-        for(InfoSection infoSection : infoSectionsToBake) {
-            if(infoSection != null) infoSection.bakeSection(getFontRenderer(), width, maxLines, lineHeight);
+        for (InfoSection infoSection : infoSectionsToBake) {
+            if (infoSection != null) infoSection.bakeSection(getFontRenderer(), width, maxLines, lineHeight);
         }
 
         updateButtons();
@@ -176,14 +212,14 @@ public class GuiOriginsOfDarkness extends GuiScreen {
 
     protected void getPreviousSections(List<InfoSection> sections) {
         InfoSection.Location location = currentSection.getPrevious(page, false);
-        if(location != null) {
+        if (location != null) {
             sections.add(location.getInfoSection());
         }
     }
 
     protected void getNextSections(List<InfoSection> sections) {
         InfoSection.Location location = currentSection.getNext(page + 1, false);
-        if(location != null) {
+        if (location != null) {
             sections.add(location.getInfoSection());
         }
     }
@@ -202,22 +238,23 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         goToLastPage = false;
         nextSection = currentSection;
         nextPage = page;
-        if(button.id == BUTTON_NEXT && button.visible) {
+        if (button.id == BUTTON_NEXT && button.visible) {
             InfoSection.Location location = currentSection.getNext(page + 1, MinecraftHelpers.isShifted());
             nextSection = location.getInfoSection();
             nextPage = location.getPage();
             history.push(new InfoSection.Location(page, currentSection));
-        } else if(button.id == BUTTON_PREVIOUS && button.visible) {
+        } else if (button.id == BUTTON_PREVIOUS && button.visible) {
             InfoSection.Location location = currentSection.getPrevious(page, MinecraftHelpers.isShifted());
             nextSection = location.getInfoSection();
             nextPage = location.getPage();
-            // We can not set the new 'page', because the currentSection hasn't been baked yet and we do not know the last page yet.
+            // We can not set the new 'page', because the currentSection hasn't been baked yet and we do not know the
+            // last page yet.
             goToLastPage = nextSection != currentSection && !MinecraftHelpers.isShifted();
             history.push(new InfoSection.Location(page, currentSection));
-        } else if(button.id == BUTTON_PARENT && button.visible) {
-            if(MinecraftHelpers.isShifted()) {
+        } else if (button.id == BUTTON_PARENT && button.visible) {
+            if (MinecraftHelpers.isShifted()) {
                 nextSection = currentSection.getParent();
-                while(nextSection.getParent() != null) {
+                while (nextSection.getParent() != null) {
                     nextSection = nextSection.getParent();
                 }
             } else {
@@ -225,18 +262,19 @@ public class GuiOriginsOfDarkness extends GuiScreen {
             }
             nextPage = 0;
             history.push(new InfoSection.Location(page, currentSection));
-        } else if(button.id == BUTTON_BACK && button.visible && history.currentSize() > 0) {
+        } else if (button.id == BUTTON_BACK && button.visible && history.currentSize() > 0) {
             InfoSection.Location location = history.pop();
             nextSection = location.getInfoSection();
             nextPage = location.getPage();
-        } else if(button instanceof TextOverlayButton) {
-            nextSection = ((TextOverlayButton) button).getLink().getTarget();
+        } else if (button instanceof TextOverlayButton) {
+            nextSection = ((TextOverlayButton) button).getLink()
+                .getTarget();
             nextPage = 0;
-            if(nextSection != currentSection) history.push(new InfoSection.Location(page, currentSection));
-        } else if(button instanceof AdvancedButton && ((AdvancedButton) button).isVisible()) {
+            if (nextSection != currentSection) history.push(new InfoSection.Location(page, currentSection));
+        } else if (button instanceof AdvancedButton && ((AdvancedButton) button).isVisible()) {
             nextSection = ((AdvancedButton) button).getTarget();
             nextPage = 0;
-            if(nextSection != currentSection) history.push(new InfoSection.Location(page, currentSection));
+            if (nextSection != currentSection) history.push(new InfoSection.Location(page, currentSection));
         } else {
             super.actionPerformed(button);
         }
@@ -244,7 +282,7 @@ public class GuiOriginsOfDarkness extends GuiScreen {
 
     protected void mouseClicked(int x, int y, int p_73864_3_) {
         super.mouseClicked(x, y, p_73864_3_);
-        if(p_73864_3_ == 0 && (nextSection != null && (nextSection != currentSection || page != nextPage))) {
+        if (p_73864_3_ == 0 && (nextSection != null && (nextSection != currentSection || page != nextPage))) {
             currentSection = nextSection;
             nextSection = null;
             page = nextPage;
@@ -252,7 +290,8 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         }
     }
 
-    public void drawScaledCenteredString(String string, int x, int y, int width, float originalScale, int maxWidth, int color) {
+    public void drawScaledCenteredString(String string, int x, int y, int width, float originalScale, int maxWidth,
+        int color) {
         float originalWidth = getFontRenderer().getStringWidth(string) * originalScale;
         float scale = Math.min(originalScale, maxWidth / originalWidth * originalScale);
         drawScaledCenteredString(string, x, y, width, scale, color);
@@ -263,7 +302,11 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         GL11.glScalef(scale, scale, 1.0f);
         int titleLength = fontRendererObj.getStringWidth(string);
         int titleHeight = fontRendererObj.FONT_HEIGHT;
-        fontRendererObj.drawString(string, Math.round((x + width / 2) / scale - titleLength / 2), Math.round(y / scale - titleHeight / 2), color);
+        fontRendererObj.drawString(
+            string,
+            Math.round((x + width / 2) / scale - titleLength / 2),
+            Math.round(y / scale - titleHeight / 2),
+            color);
         GL11.glPopMatrix();
     }
 
@@ -271,7 +314,8 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(texture);
+        mc.getTextureManager()
+            .bindTexture(texture);
         this.drawTexturedModalRect(x - HR_WIDTH / 2, y - HR_HEIGHT / 2, 52, 180, HR_WIDTH, HR_HEIGHT);
         GL11.glDisable(GL11.GL_BLEND);
     }
@@ -280,7 +324,8 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(texture);
+        mc.getTextureManager()
+            .bindTexture(texture);
         this.drawTexturedModalRect(x - BANNER_WIDTH / 2, y - BANNER_HEIGHT / 2, 52, 191, BANNER_WIDTH, BANNER_HEIGHT);
         GL11.glDisable(GL11.GL_BLEND);
     }
@@ -289,7 +334,8 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(texture);
+        mc.getTextureManager()
+            .bindTexture(texture);
         this.drawTexturedModalRect(x, y, 0, 210, ARROW_WIDTH, ARROW_HEIGHT);
         GL11.glDisable(GL11.GL_BLEND);
     }
@@ -302,31 +348,80 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(r, g, b, alpha);
-        mc.getTextureManager().bindTexture(texture);
+        mc.getTextureManager()
+            .bindTexture(texture);
 
         // Corners
-        this.drawTexturedModalRect(x - BORDER_WIDTH, y - BORDER_WIDTH, BORDER_X, BORDER_Y, BORDER_CORNER, BORDER_CORNER);
-        this.drawTexturedModalRect(x + width - BORDER_WIDTH, y - BORDER_WIDTH, BORDER_X + BORDER_CORNER, BORDER_Y, BORDER_CORNER, BORDER_CORNER);
-        this.drawTexturedModalRect(x - BORDER_WIDTH, y + height - BORDER_WIDTH, BORDER_X + 3 * BORDER_CORNER, BORDER_Y, BORDER_CORNER, BORDER_CORNER);
-        this.drawTexturedModalRect(x + width - BORDER_WIDTH, y + height - BORDER_WIDTH, BORDER_X + 2 * BORDER_CORNER, BORDER_Y, BORDER_CORNER, BORDER_CORNER);
+        this.drawTexturedModalRect(
+            x - BORDER_WIDTH,
+            y - BORDER_WIDTH,
+            BORDER_X,
+            BORDER_Y,
+            BORDER_CORNER,
+            BORDER_CORNER);
+        this.drawTexturedModalRect(
+            x + width - BORDER_WIDTH,
+            y - BORDER_WIDTH,
+            BORDER_X + BORDER_CORNER,
+            BORDER_Y,
+            BORDER_CORNER,
+            BORDER_CORNER);
+        this.drawTexturedModalRect(
+            x - BORDER_WIDTH,
+            y + height - BORDER_WIDTH,
+            BORDER_X + 3 * BORDER_CORNER,
+            BORDER_Y,
+            BORDER_CORNER,
+            BORDER_CORNER);
+        this.drawTexturedModalRect(
+            x + width - BORDER_WIDTH,
+            y + height - BORDER_WIDTH,
+            BORDER_X + 2 * BORDER_CORNER,
+            BORDER_Y,
+            BORDER_CORNER,
+            BORDER_CORNER);
 
         // Sides
-        for(int i = BORDER_WIDTH; i < width - BORDER_WIDTH; i+=BORDER_WIDTH) {
+        for (int i = BORDER_WIDTH; i < width - BORDER_WIDTH; i += BORDER_WIDTH) {
             int drawWidth = BORDER_WIDTH;
-            if(i + BORDER_WIDTH >= width - BORDER_CORNER) {
+            if (i + BORDER_WIDTH >= width - BORDER_CORNER) {
                 drawWidth -= i - (width - BORDER_CORNER);
             }
-            this.drawTexturedModalRect(x + i, y - BORDER_WIDTH, BORDER_X + 4 * BORDER_CORNER, BORDER_Y, drawWidth, BORDER_WIDTH);
-            this.drawTexturedModalRect(x + i, y + height, BORDER_X + 4 * BORDER_CORNER, BORDER_Y, drawWidth, BORDER_WIDTH);
+            this.drawTexturedModalRect(
+                x + i,
+                y - BORDER_WIDTH,
+                BORDER_X + 4 * BORDER_CORNER,
+                BORDER_Y,
+                drawWidth,
+                BORDER_WIDTH);
+            this.drawTexturedModalRect(
+                x + i,
+                y + height,
+                BORDER_X + 4 * BORDER_CORNER,
+                BORDER_Y,
+                drawWidth,
+                BORDER_WIDTH);
         }
-        for(int i = BORDER_WIDTH; i < height - BORDER_WIDTH; i+=BORDER_WIDTH) {
+        for (int i = BORDER_WIDTH; i < height - BORDER_WIDTH; i += BORDER_WIDTH) {
             int drawHeight = BORDER_WIDTH;
-            if(i + BORDER_WIDTH >= height - BORDER_CORNER) {
+            if (i + BORDER_WIDTH >= height - BORDER_CORNER) {
                 drawHeight -= i - (height - BORDER_CORNER);
             }
-            if(drawHeight > 0) {
-                this.drawTexturedModalRect(x - BORDER_WIDTH, y + i, BORDER_X + 4 * BORDER_CORNER, BORDER_Y, BORDER_WIDTH, drawHeight);
-                this.drawTexturedModalRect(x + width, y + i, BORDER_X + 4 * BORDER_CORNER, BORDER_Y, BORDER_WIDTH, drawHeight);
+            if (drawHeight > 0) {
+                this.drawTexturedModalRect(
+                    x - BORDER_WIDTH,
+                    y + i,
+                    BORDER_X + 4 * BORDER_CORNER,
+                    BORDER_Y,
+                    BORDER_WIDTH,
+                    drawHeight);
+                this.drawTexturedModalRect(
+                    x + width,
+                    y + i,
+                    BORDER_X + 4 * BORDER_CORNER,
+                    BORDER_Y,
+                    BORDER_WIDTH,
+                    drawHeight);
             }
         }
 
@@ -345,7 +440,7 @@ public class GuiOriginsOfDarkness extends GuiScreen {
     public void updateScreen() {
         super.updateScreen();
 
-        if(!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead) {
+        if (!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead) {
             this.mc.thePlayer.closeScreen();
         }
     }
@@ -366,10 +461,12 @@ public class GuiOriginsOfDarkness extends GuiScreen {
          */
         public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
             if (this.visible) {
-                boolean isHover = mouseX >= this.xPosition && mouseY >= this.yPosition &&
-                               mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+                boolean isHover = mouseX >= this.xPosition && mouseY >= this.yPosition
+                    && mouseX < this.xPosition + this.width
+                    && mouseY < this.yPosition + this.height;
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                minecraft.getTextureManager().bindTexture(texture);
+                minecraft.getTextureManager()
+                    .bindTexture(texture);
                 int k = x;
                 int l = y;
 
@@ -386,7 +483,8 @@ public class GuiOriginsOfDarkness extends GuiScreen {
 
         @Override
         public void func_146113_a(SoundHandler soundHandler) {
-            soundHandler.playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation(Reference.MOD_ID, "pageFlip"), 1.0F));
+            soundHandler.playSound(
+                PositionedSoundRecord.func_147674_a(new ResourceLocation(Reference.MOD_ID, "pageFlip"), 1.0F));
         }
 
     }
@@ -394,7 +492,8 @@ public class GuiOriginsOfDarkness extends GuiScreen {
     @SideOnly(Side.CLIENT)
     static class TextOverlayButton extends GuiButton {
 
-        @Getter private HyperLink link;
+        @Getter
+        private HyperLink link;
 
         public TextOverlayButton(int id, HyperLink link, int x, int y, int height) {
             super(id, x, y, 0, height, InfoSection.formatString(L10NHelpers.localize(link.getUnlocalizedName())));
@@ -409,21 +508,25 @@ public class GuiOriginsOfDarkness extends GuiScreen {
         @Override
         public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
             if (this.visible) {
-                boolean isHover = mouseX >= this.xPosition && mouseY >= this.yPosition &&
-                        mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+                boolean isHover = mouseX >= this.xPosition && mouseY >= this.yPosition
+                    && mouseX < this.xPosition + this.width
+                    && mouseY < this.yPosition + this.height;
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 boolean oldUnicode = minecraft.fontRenderer.getUnicodeFlag();
                 minecraft.fontRenderer.setUnicodeFlag(true);
-                minecraft.fontRenderer.drawString((isHover ? "§n" : "") +
-                                displayString + "§r", xPosition, yPosition,
-                        RenderHelpers.RGBToInt(isHover ? 100 : 0, isHover ? 100 : 0, isHover ? 150 : 125));
+                minecraft.fontRenderer.drawString(
+                    (isHover ? "§n" : "") + displayString + "§r",
+                    xPosition,
+                    yPosition,
+                    RenderHelpers.RGBToInt(isHover ? 100 : 0, isHover ? 100 : 0, isHover ? 150 : 125));
                 minecraft.fontRenderer.setUnicodeFlag(oldUnicode);
             }
         }
 
         @Override
         public void func_146113_a(SoundHandler soundHandler) {
-            soundHandler.playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation(Reference.MOD_ID, "pageFlip"), 1.0F));
+            soundHandler.playSound(
+                PositionedSoundRecord.func_147674_a(new ResourceLocation(Reference.MOD_ID, "pageFlip"), 1.0F));
         }
 
     }

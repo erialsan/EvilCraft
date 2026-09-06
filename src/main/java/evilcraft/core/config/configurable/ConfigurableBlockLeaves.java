@@ -1,9 +1,9 @@
 package evilcraft.core.config.configurable;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.Reference;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,25 +13,28 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.Reference;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
 
 /**
  * Block that extends from BlockLeaves that can hold ExtendedConfigs
+ * 
  * @author rubensworks
  *
  */
-public abstract class ConfigurableBlockLeaves extends BlockLeaves implements IConfigurable{
+public abstract class ConfigurableBlockLeaves extends BlockLeaves implements IConfigurable {
 
     @SuppressWarnings("rawtypes")
     protected ExtendedConfig eConfig = null;
 
     private IIcon iconOpaque;
     private IIcon iconTransparent;
-    
+
     /**
      * Make a new block instance.
+     * 
      * @param eConfig Config for this block.
      */
     @SuppressWarnings({ "rawtypes" })
@@ -51,7 +54,7 @@ public abstract class ConfigurableBlockLeaves extends BlockLeaves implements ICo
 
     @Override
     public String getTextureName() {
-        return Reference.MOD_ID+":"+eConfig.getNamedId();
+        return Reference.MOD_ID + ":" + eConfig.getNamedId();
     }
 
     @Override
@@ -64,12 +67,12 @@ public abstract class ConfigurableBlockLeaves extends BlockLeaves implements ICo
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        return !field_150121_P? iconTransparent : iconOpaque;
+        return !field_150121_P ? iconTransparent : iconOpaque;
     }
 
     @Override
     public IIcon getIcon(int side, int meta) {
-        return !field_150121_P? iconTransparent : iconOpaque;
+        return !field_150121_P ? iconTransparent : iconOpaque;
     }
 
     @Override
@@ -77,7 +80,7 @@ public abstract class ConfigurableBlockLeaves extends BlockLeaves implements ICo
 
     @Override
     public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             ArrayList<ItemStack> items = getDrops(world, x, y, z, meta, fortune);
 
             for (ItemStack item : items) {
@@ -87,12 +90,12 @@ public abstract class ConfigurableBlockLeaves extends BlockLeaves implements ICo
             }
         }
     }
-    
+
     @Override
     public boolean isOpaqueCube() {
         return false;
     }
-    
+
     @Override
     public boolean renderAsNormalBlock() {
         return false;
@@ -109,9 +112,9 @@ public abstract class ConfigurableBlockLeaves extends BlockLeaves implements ICo
     public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list) {
         list.add(new ItemStack(item, 1, 0));
     }
-    
+
     @Override
-    public boolean isLeaves (IBlockAccess world, int x, int y, int z) {
+    public boolean isLeaves(IBlockAccess world, int x, int y, int z) {
         return true;
     }
 

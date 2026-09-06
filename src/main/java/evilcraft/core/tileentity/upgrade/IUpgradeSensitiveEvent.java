@@ -2,6 +2,7 @@ package evilcraft.core.tileentity.upgrade;
 
 /**
  * Upgrade events that should be used for sending into the Upgrades event-bus.
+ * 
  * @author rubensworks
  */
 public interface IUpgradeSensitiveEvent<O> {

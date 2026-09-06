@@ -1,12 +1,13 @@
 package evilcraft.core.algorithm;
 
-import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
+
+import com.google.common.collect.Lists;
 
 /**
  * A stack with limited size that automatically removes elements at the bottom of the stack if required.
  * takeLast
+ * 
  * @author rubensworks
  */
 public class EvictingStack<T> {
@@ -23,14 +24,14 @@ public class EvictingStack<T> {
     }
 
     public void push(T element) {
-        if(top == maxSize()) top = 0;
+        if (top == maxSize()) top = 0;
         stack.add(top, element);
         top++;
-        if(popBalance < size - 1) popBalance++;
+        if (popBalance < size - 1) popBalance++;
     }
 
     public T pop() {
-        if(top - 1 < 0) top = size;
+        if (top - 1 < 0) top = size;
         T element = stack.get(--top);
         popBalance--;
         return element;

@@ -4,11 +4,12 @@ import evilcraft.core.config.extendedconfig.DegradationEffectConfig;
 
 /**
  * Config for {@link NauseateDegradation}.
+ * 
  * @author rubensworks
  *
  */
 public class NauseateDegradationConfig extends DegradationEffectConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -18,13 +19,7 @@ public class NauseateDegradationConfig extends DegradationEffectConfig {
      * Make a new instance.
      */
     public NauseateDegradationConfig() {
-        super(
-            true,
-            "nauseate",
-            null,
-            NauseateDegradation.class,
-            3
-        );
+        super(true, "nauseate", null, NauseateDegradation.class, 3);
     }
-    
+
 }

@@ -1,5 +1,9 @@
 package evilcraft.infobook.pageelement;
 
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import evilcraft.api.recipes.custom.IRecipe;
 import evilcraft.block.BloodInfuser;
 import evilcraft.client.gui.container.GuiOriginsOfDarkness;
@@ -10,15 +14,14 @@ import evilcraft.infobook.AdvancedButton;
 import evilcraft.infobook.InfoSection;
 import evilcraft.item.BucketBloodConfig;
 import evilcraft.item.Promise;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Blood Infuser recipes.
+ * 
  * @author rubensworks
  */
-public class BloodInfuserRecipeAppendix extends RecipeAppendix<IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties>> {
+public class BloodInfuserRecipeAppendix extends
+    RecipeAppendix<IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties>> {
 
     private static final int SLOT_OFFSET_X = 16;
     private static final int SLOT_OFFSET_Y = 23;
@@ -28,7 +31,8 @@ public class BloodInfuserRecipeAppendix extends RecipeAppendix<IRecipe<ItemFluid
     private static final AdvancedButton.Enum RESULT = AdvancedButton.Enum.create();
     private static final AdvancedButton.Enum PROMISE = AdvancedButton.Enum.create();
 
-    public BloodInfuserRecipeAppendix(IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> recipe) {
+    public BloodInfuserRecipeAppendix(
+        IRecipe<ItemFluidStackAndTierRecipeComponent, ItemStackRecipeComponent, DurationXpRecipeProperties> recipe) {
         super(recipe);
     }
 
@@ -56,17 +60,29 @@ public class BloodInfuserRecipeAppendix extends RecipeAppendix<IRecipe<ItemFluid
     }
 
     @Override
-    public void drawElementInner(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx, int my) {
+    public void drawElementInner(GuiOriginsOfDarkness gui, int x, int y, int width, int height, int page, int mx,
+        int my) {
         int middle = (width - SLOT_SIZE) / 2;
         gui.drawArrowRight(x + middle - 3, y + SLOT_OFFSET_Y + 2);
 
         // Prepare items
         int tick = getTick(gui);
-        ItemStack input = prepareItemStacks(recipe.getInput().getItemStacks(), tick);
-        ItemStack result = prepareItemStacks(recipe.getOutput().getItemStacks(), tick);
+        ItemStack input = prepareItemStacks(
+            recipe.getInput()
+                .getItemStacks(),
+            tick);
+        ItemStack result = prepareItemStacks(
+            recipe.getOutput()
+                .getItemStacks(),
+            tick);
         ItemStack promise = null;
-        if(recipe.getInput().getTier() > 0) {
-            promise = new ItemStack(Promise.getInstance(), 1, recipe.getInput().getTier() - 1);
+        if (recipe.getInput()
+            .getTier() > 0) {
+            promise = new ItemStack(
+                Promise.getInstance(),
+                1,
+                recipe.getInput()
+                    .getTier() - 1);
         }
 
         // Items
@@ -74,11 +90,16 @@ public class BloodInfuserRecipeAppendix extends RecipeAppendix<IRecipe<ItemFluid
         renderItem(gui, x + START_X_RESULT, y + SLOT_OFFSET_Y, result, mx, my, RESULT);
 
         // Tier
-        if(promise != null) {
+        if (promise != null) {
             renderItem(gui, x + SLOT_OFFSET_X, y + 2, promise, mx, my, PROMISE);
         }
 
-        renderIcon(gui, x + middle, y + 2, BucketBloodConfig._instance.getItemInstance().getIconFromDamage(0));
+        renderIcon(
+            gui,
+            x + middle,
+            y + 2,
+            BucketBloodConfig._instance.getItemInstance()
+                .getIconFromDamage(0));
         renderItem(gui, x + middle, y + SLOT_OFFSET_Y, new ItemStack(BloodInfuser.getInstance()), mx, my, false, null);
 
         // Blood amount text
@@ -86,7 +107,8 @@ public class BloodInfuserRecipeAppendix extends RecipeAppendix<IRecipe<ItemFluid
         boolean oldUnicode = fontRenderer.getUnicodeFlag();
         fontRenderer.setUnicodeFlag(true);
         fontRenderer.setBidiFlag(false);
-        FluidStack fluidStack = recipe.getInput().getFluidStack();
+        FluidStack fluidStack = recipe.getInput()
+            .getFluidStack();
         String line = fluidStack.amount + " mB";
         fontRenderer.drawSplitString(line, x + middle + SLOT_SIZE + 1, y + 6, 200, 0);
         fontRenderer.setUnicodeFlag(oldUnicode);

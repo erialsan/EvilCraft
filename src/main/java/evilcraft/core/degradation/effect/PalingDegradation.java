@@ -1,18 +1,20 @@
 package evilcraft.core.degradation.effect;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.PotionEffect;
+
 import evilcraft.api.degradation.IDegradable;
 import evilcraft.core.config.configurable.ConfigurableDegradationEffect;
 import evilcraft.core.config.extendedconfig.DegradationEffectConfig;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import evilcraft.potion.PotionPalingConfig;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.PotionEffect;
-
-import java.util.List;
 
 /**
  * Degradation effect that will apply paling to entities in the degradation area.
+ * 
  * @author rubensworks
  *
  */
@@ -22,17 +24,17 @@ public class PalingDegradation extends ConfigurableDegradationEffect {
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<DegradationEffectConfig> eConfig) {
-        if(_instance == null)
-            _instance = new PalingDegradation(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new PalingDegradation(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static PalingDegradation getInstance() {
@@ -53,19 +55,19 @@ public class PalingDegradation extends ConfigurableDegradationEffect {
 
     @Override
     public void runClientSide(IDegradable degradable) {
-        
+
     }
 
     @Override
     public void runServerSide(IDegradable degradable) {
         List<Entity> entities = degradable.getAreaEntities();
-        for(Entity entity : entities) {
-            if(entity instanceof EntityLivingBase) {
+        for (Entity entity : entities) {
+            if (entity instanceof EntityLivingBase) {
                 ((EntityLivingBase) entity).addPotionEffect(
-                        new PotionEffect(
-                                PotionPalingConfig._instance.ID,
-                                (int) degradable.getDegradation() * PALING_DURATION_MULTIPLIER, Math.min(10, (int) degradable.getDegradation() / 10))
-                        );
+                    new PotionEffect(
+                        PotionPalingConfig._instance.ID,
+                        (int) degradable.getDegradation() * PALING_DURATION_MULTIPLIER,
+                        Math.min(10, (int) degradable.getDegradation() / 10)));
             }
         }
     }

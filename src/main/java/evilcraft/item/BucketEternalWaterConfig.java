@@ -1,8 +1,5 @@
 package evilcraft.item;
 
-import evilcraft.core.config.configurable.ConfigurableItemBucket;
-import evilcraft.core.config.configurable.IConfigurable;
-import evilcraft.core.config.extendedconfig.ItemBucketConfig;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -14,8 +11,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
+import evilcraft.core.config.configurable.ConfigurableItemBucket;
+import evilcraft.core.config.configurable.IConfigurable;
+import evilcraft.core.config.extendedconfig.ItemBucketConfig;
+
 /**
  * Config for the Eternal Water Bucket.
+ * 
  * @author rubensworks
  *
  */
@@ -30,12 +32,7 @@ public class BucketEternalWaterConfig extends ItemBucketConfig {
      * Make a new instance.
      */
     public BucketEternalWaterConfig() {
-        super(
-        	true,
-            "bucketEternalWater",
-            null,
-            null
-        );
+        super(true, "bucketEternalWater", null, null);
     }
 
     @Override
@@ -45,28 +42,30 @@ public class BucketEternalWaterConfig extends ItemBucketConfig {
             @Override
             public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
                 MovingObjectPosition position = this.getMovingObjectPositionFromPlayer(world, player, true);
-                if(position != null && position.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                if (position != null && position.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                     Block block = world.getBlock(position.blockX, position.blockY, position.blockZ);
-                    if(block == Blocks.water) {
+                    if (block == Blocks.water) {
                         world.setBlockToAir(position.blockX, position.blockY, position.blockZ);
                         return itemStack;
                     }
                 }
 
                 ItemStack result = super.onItemRightClick(itemStack, world, player);
-                if(result != null && result.getItem() == Items.bucket) return new ItemStack(getContainerItem());
+                if (result != null && result.getItem() == Items.bucket) return new ItemStack(getContainerItem());
 
                 return result;
             }
 
             @Override
-            public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
-                                     float hitX, float hitY, float hitZ) {
+            public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z,
+                int side, float hitX, float hitY, float hitZ) {
                 TileEntity tile = world.getTileEntity(x, y, z);
-                if(tile instanceof IFluidHandler) {
-                    if(!world.isRemote) {
-                        ((IFluidHandler) tile).fill(ForgeDirection.getOrientation(side),
-                                new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME), true);
+                if (tile instanceof IFluidHandler) {
+                    if (!world.isRemote) {
+                        ((IFluidHandler) tile).fill(
+                            ForgeDirection.getOrientation(side),
+                            new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME),
+                            true);
                         return true;
                     }
                 }
@@ -88,5 +87,5 @@ public class BucketEternalWaterConfig extends ItemBucketConfig {
     public Block getFluidBlockInstance() {
         return Blocks.water;
     }
-    
+
 }

@@ -1,16 +1,18 @@
 package evilcraft.item;
 
-import evilcraft.core.config.extendedconfig.ItemConfig;
-import evilcraft.core.helper.MinecraftHelpers;
-import evilcraft.fluid.Blood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import evilcraft.core.config.extendedconfig.ItemConfig;
+import evilcraft.core.helper.MinecraftHelpers;
+import evilcraft.fluid.Blood;
+
 /**
  * Config for the Dull Dust.
+ * 
  * @author rubensworks
  *
  */
@@ -25,12 +27,7 @@ public class CondensedBloodConfig extends ItemConfig {
      * Make a new instance.
      */
     public CondensedBloodConfig() {
-        super(
-        	true,
-            "condensedBlood",
-            null,
-            null
-        );
+        super(true, "condensedBlood", null, null);
     }
 
     @Override
@@ -43,10 +40,10 @@ public class CondensedBloodConfig extends ItemConfig {
         FluidContainerRegistry.registerFluidContainer(fluidStack, filledContainer, emptyContainer);
 
         // Register in loot chests
-        for(String chestCategory : MinecraftHelpers.CHESTGENCATEGORIES) {
-            ChestGenHooks.getInfo(chestCategory).addItem(new WeightedRandomChestContent(
-                    getItemInstance(), 0, 5, 32, 10));
+        for (String chestCategory : MinecraftHelpers.CHESTGENCATEGORIES) {
+            ChestGenHooks.getInfo(chestCategory)
+                .addItem(new WeightedRandomChestContent(getItemInstance(), 0, 5, 32, 10));
         }
     }
-    
+
 }

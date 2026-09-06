@@ -1,37 +1,39 @@
 package evilcraft.world.biome;
 
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.ColorizerFoliage;
+import net.minecraft.world.ColorizerGrass;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import evilcraft.core.config.configurable.ConfigurableBiome;
 import evilcraft.core.config.extendedconfig.BiomeConfig;
 import evilcraft.core.config.extendedconfig.ExtendedConfig;
 import evilcraft.core.helper.RenderHelpers;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraft.world.ColorizerGrass;
 
 /**
  * Enchantment for letting tools break tools faster.
+ * 
  * @author rubensworks
  *
  */
 public class BiomeDegraded extends ConfigurableBiome {
-    
+
     private static BiomeDegraded _instance = null;
-    
+
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<BiomeConfig> eConfig) {
-        if(_instance == null)
-            _instance = new BiomeDegraded(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new BiomeDegraded(eConfig);
+        else eConfig.showDoubleInitError();
     }
-    
+
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static BiomeDegraded getInstance() {
@@ -46,7 +48,7 @@ public class BiomeDegraded extends ConfigurableBiome {
         this.func_76733_a(RenderHelpers.RGBToInt(20, 50, 30));
         this.waterColorMultiplier = RenderHelpers.RGBToInt(60, 50, 20);
     }
-    
+
     @SideOnly(Side.CLIENT)
     @Override
     public int getBiomeGrassColor(int x, int y, int z) {
@@ -64,8 +66,7 @@ public class BiomeDegraded extends ConfigurableBiome {
     }
 
     @Override
-    public float getSpawningChance()
-    {
+    public float getSpawningChance() {
         return 0.5F;
     }
 

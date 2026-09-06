@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Implement this interface at blocks to make them show rarity colors in item mode.
+ * 
  * @author rubensworks
  */
 public interface IBlockRarityProvider {

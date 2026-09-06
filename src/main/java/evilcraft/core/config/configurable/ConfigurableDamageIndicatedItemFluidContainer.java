@@ -1,12 +1,7 @@
 package evilcraft.core.config.configurable;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import evilcraft.Reference;
-import evilcraft.core.PlayerExtendedInventoryIterator;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.core.helper.L10NHelpers;
-import evilcraft.core.item.DamageIndicatedItemFluidContainer;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -20,14 +15,22 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import evilcraft.Reference;
+import evilcraft.core.PlayerExtendedInventoryIterator;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.core.helper.L10NHelpers;
+import evilcraft.core.item.DamageIndicatedItemFluidContainer;
 
 /**
  * Item food that can hold ExtendedConfigs
+ * 
  * @author rubensworks
  *
  */
-public abstract class ConfigurableDamageIndicatedItemFluidContainer extends DamageIndicatedItemFluidContainer implements IConfigurable{
+public abstract class ConfigurableDamageIndicatedItemFluidContainer extends DamageIndicatedItemFluidContainer
+    implements IConfigurable {
 
     @SuppressWarnings("rawtypes")
     protected ExtendedConfig eConfig = null;
@@ -37,9 +40,10 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
 
     /**
      * Make a new block instance.
-     * @param eConfig Config for this item.
+     * 
+     * @param eConfig  Config for this item.
      * @param capacity The capacity for the fluid container this item should have.
-     * @param fluid The fluid this container should be able to hold.
+     * @param fluid    The fluid this container should be able to hold.
      */
     @SuppressWarnings({ "rawtypes" })
     protected ConfigurableDamageIndicatedItemFluidContainer(ExtendedConfig eConfig, int capacity, Fluid fluid) {
@@ -60,7 +64,7 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
 
     @Override
     public String getIconString() {
-        return Reference.MOD_ID+":"+eConfig.getNamedId();
+        return Reference.MOD_ID + ":" + eConfig.getNamedId();
     }
 
     @Override
@@ -75,10 +79,9 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
         FluidStack drained = this.drain(itemStack, FluidContainerRegistry.BUCKET_VOLUME, false);
         Block block = getFluid().getBlock();
 
-        boolean hasBucket = drained != null
-                && (drained.amount == FluidContainerRegistry.BUCKET_VOLUME);
+        boolean hasBucket = drained != null && (drained.amount == FluidContainerRegistry.BUCKET_VOLUME);
         boolean hasSpace = fluidStack == null
-                || (fluidStack.amount + FluidContainerRegistry.BUCKET_VOLUME <= getCapacity(itemStack));
+            || (fluidStack.amount + FluidContainerRegistry.BUCKET_VOLUME <= getCapacity(itemStack));
         MovingObjectPosition movingobjectpositionDrain = this.getMovingObjectPositionFromPlayer(world, player, false);
         MovingObjectPosition movingobjectpositionFill = this.getMovingObjectPositionFromPlayer(world, player, true);
 
@@ -96,7 +99,7 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
                     return itemStack;
                 }
                 if (world.getBlock(x, y, z) == block && world.getBlockMetadata(x, y, z) == 0) {
-                    if(hasSpace) {
+                    if (hasSpace) {
                         world.setBlockToAir(x, y, z);
                         this.fill(itemStack, new FluidStack(getFluid(), FluidContainerRegistry.BUCKET_VOLUME), true);
                     }
@@ -105,7 +108,8 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
             }
 
             // Drain container and place fluid block
-            if (hasBucket && isPlaceFluids() && movingobjectpositionDrain.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            if (hasBucket && isPlaceFluids()
+                && movingobjectpositionDrain.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 int x = movingobjectpositionDrain.blockX;
                 int y = movingobjectpositionDrain.blockY;
                 int z = movingobjectpositionDrain.blockZ;
@@ -135,13 +139,14 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
         if (!hasBucket) {
             return false;
         } else {
-            Material material = world.getBlock(x, y, z).getMaterial();
+            Material material = world.getBlock(x, y, z)
+                .getMaterial();
 
             if (!world.isAirBlock(x, y, z) && material.isSolid()) {
                 return false;
             } else {
                 if (!world.isRemote && !material.isSolid() && !material.isLiquid()) {
-                	// MCP destroyBlock
+                    // MCP destroyBlock
                     world.func_147480_a(x, y, z, true);
                 }
 
@@ -161,6 +166,7 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
      * If this item can place fluids when right-clicking (non-sneaking).
      * The fluid will only be placed if the container has at least 1000 mB inside of it
      * and will drain that accordingly.
+     * 
      * @return If it can place fluids.
      */
     public boolean isPlaceFluids() {
@@ -169,6 +175,7 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
 
     /**
      * If this item can pick up fluids when right-clicking (non-sneaking).
+     * 
      * @return If it can pick up fluids.
      */
     public boolean isPickupFluids() {
@@ -180,14 +187,16 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
      * when right-clicking (non-sneaking).
      * The fluid will only be placed if the container has at least 1000 mB inside of it
      * and will drain that accordingly.
+     * 
      * @param placeFluids If it can place fluids.
      */
     public void setPlaceFluids(boolean placeFluids) {
         this.placeFluids = placeFluids;
     }
-    
+
     @Override
-    public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side,
+        float hitX, float hitY, float hitZ) {
         return false;
     }
 
@@ -195,24 +204,25 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
     public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
         return true;
     }
-    
+
     @SuppressWarnings("rawtypes")
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean par4) {
-    	L10NHelpers.addOptionalInfo(list, getUnlocalizedName());
+        L10NHelpers.addOptionalInfo(list, getUnlocalizedName());
         super.addInformation(itemStack, entityPlayer, list, par4);
     }
 
-    protected FluidStack drainFromOthers(int amount, ItemStack itemStack, Fluid fluid, EntityPlayer player, boolean doDrain) {
+    protected FluidStack drainFromOthers(int amount, ItemStack itemStack, Fluid fluid, EntityPlayer player,
+        boolean doDrain) {
         PlayerExtendedInventoryIterator it = new PlayerExtendedInventoryIterator(player);
         FluidStack drained = null;
-        while(it.hasNext() && amount > 0) {
+        while (it.hasNext() && amount > 0) {
             ItemStack current = it.next();
-            if(current != null && current != itemStack && current.getItem() instanceof IFluidContainerItem) {
+            if (current != null && current != itemStack && current.getItem() instanceof IFluidContainerItem) {
                 IFluidContainerItem containerItem = (IFluidContainerItem) current.getItem();
                 FluidStack totalFluid = containerItem.getFluid(current);
-                if(totalFluid != null && totalFluid.getFluid() == fluid) {
+                if (totalFluid != null && totalFluid.getFluid() == fluid) {
                     FluidStack thisDrained = containerItem.drain(current, amount, doDrain);
                     if (thisDrained != null && thisDrained.getFluid() == fluid) {
                         if (drained == null) {
@@ -231,15 +241,16 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
     /**
      * If this container can consume a given fluid amount.
      * Will also check other containers inside the player inventory.
-     * @param amount The amount to drain.
+     * 
+     * @param amount    The amount to drain.
      * @param itemStack The fluid container.
-     * @param player The player.
+     * @param player    The player.
      * @return If the given amount can be drained.
      */
     public boolean canConsume(int amount, ItemStack itemStack, EntityPlayer player) {
-        if(canDrain(amount, itemStack)) return true;
+        if (canDrain(amount, itemStack)) return true;
         int availableAmount = 0;
-        if(getFluid(itemStack) != null) {
+        if (getFluid(itemStack) != null) {
             availableAmount = getFluid(itemStack).amount;
         }
         return drainFromOthers(amount - availableAmount, itemStack, getFluid(), player, false) != null;
@@ -248,9 +259,10 @@ public abstract class ConfigurableDamageIndicatedItemFluidContainer extends Dama
     /**
      * Consume a given fluid amount.
      * Will also check other containers inside the player inventory.
-     * @param amount The amount to drain.
+     * 
+     * @param amount    The amount to drain.
      * @param itemStack The fluid container.
-     * @param player The player.
+     * @param player    The player.
      * @return The fluid that was drained.
      */
     public FluidStack consume(int amount, ItemStack itemStack, EntityPlayer player) {

@@ -4,6 +4,7 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the {@link MaceOfDestruction}.
+ * 
  * @author rubensworks
  *
  */
@@ -18,12 +19,7 @@ public class MaceOfDestructionConfig extends ItemConfig {
      * Make a new instance.
      */
     public MaceOfDestructionConfig() {
-        super(
-            true,
-            "maceOfDestruction",
-            null,
-            MaceOfDestruction.class
-        );
+        super(true, "maceOfDestruction", null, MaceOfDestruction.class);
     }
-    
+
 }

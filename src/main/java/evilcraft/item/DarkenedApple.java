@@ -1,9 +1,5 @@
 package evilcraft.item;
 
-import evilcraft.core.config.configurable.ConfigurableItemFood;
-import evilcraft.core.config.extendedconfig.ExtendedConfig;
-import evilcraft.core.config.extendedconfig.ItemConfig;
-import evilcraft.potion.PotionPalingConfig;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.IAnimals;
@@ -11,9 +7,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 
+import evilcraft.core.config.configurable.ConfigurableItemFood;
+import evilcraft.core.config.extendedconfig.ExtendedConfig;
+import evilcraft.core.config.extendedconfig.ItemConfig;
+import evilcraft.potion.PotionPalingConfig;
+
 /**
  * A dark apple that will apply a killing potion effect to the entity eating the apple.
  * After the potion effect is over, a portal will be spawned.
+ * 
  * @author rubensworks
  *
  */
@@ -27,17 +29,17 @@ public class DarkenedApple extends ConfigurableItemFood {
 
     /**
      * Initialise the configurable.
+     * 
      * @param eConfig The config.
      */
     public static void initInstance(ExtendedConfig<ItemConfig> eConfig) {
-        if(_instance == null)
-            _instance = new DarkenedApple(eConfig);
-        else
-            eConfig.showDoubleInitError();
+        if (_instance == null) _instance = new DarkenedApple(eConfig);
+        else eConfig.showDoubleInitError();
     }
 
     /**
      * Get the unique instance.
+     * 
      * @return The instance.
      */
     public static DarkenedApple getInstance() {
@@ -55,9 +57,9 @@ public class DarkenedApple extends ConfigurableItemFood {
     }
 
     public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase entity) {
-        if(entity instanceof IAnimals && entity.getMaxHealth() <= 10) {
+        if (entity instanceof IAnimals && entity.getMaxHealth() <= 10) {
             entity.addPotionEffect(new PotionEffect(POTION_ID, POTION_DURATION * 20, POTION_AMPLIFIER));
-            if(entity instanceof EntityLiving) ((EntityLiving) entity).func_110163_bv();
+            if (entity instanceof EntityLiving) ((EntityLiving) entity).func_110163_bv();
             --itemStack.stackSize;
             return true;
         }

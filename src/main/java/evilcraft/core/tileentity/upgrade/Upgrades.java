@@ -1,17 +1,19 @@
 package evilcraft.core.tileentity.upgrade;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import evilcraft.core.config.extendedconfig.BlockConfig;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
+import evilcraft.core.config.extendedconfig.BlockConfig;
+
 /**
  * Factory class for creating new upgrade types.
  * These instances act as enums.
+ * 
  * @author rubensworks
  */
 public class Upgrades {
@@ -20,13 +22,14 @@ public class Upgrades {
 
     /**
      * Get or create the unique upgrade instance
+     * 
      * @param upgradeId The unique id of the upgrade.
-     * @param tier the upgrade tier.
+     * @param tier      the upgrade tier.
      * @return The upgrade instance.
      */
     public static Upgrade getUpgrade(String upgradeId, int tier) {
         Upgrade upgrade = upgradeMap.get(upgradeId + tier);
-        if(upgrade == null) {
+        if (upgrade == null) {
             upgrade = new Upgrade(upgradeId, tier);
             upgradeMap.put(upgradeId + tier, upgrade);
         }
@@ -35,6 +38,7 @@ public class Upgrades {
 
     /**
      * Get or create the unique upgrade instance
+     * 
      * @param upgradeId The unique id of the upgrade.
      * @return The upgrade instance.
      */
@@ -51,52 +55,64 @@ public class Upgrades {
 
     /**
      * Send an upgrade sensitive event over the event bus for all upgrades the upgradable has.
+     * 
      * @param upgradable The upgradable instance.
-     * @param event The event.
-     * @param <T> The type of upgradable.
-     * @param <O> The type of event variable type.
+     * @param event      The event.
+     * @param <T>        The type of upgradable.
+     * @param <O>        The type of event variable type.
      */
     public static <T extends IUpgradable<T, O>, O> void sendEvent(T upgradable, IUpgradeSensitiveEvent<O> event) {
-        sendEvent(upgradable, event, upgradable.getUpgradeBehaviour().keySet());
+        sendEvent(
+            upgradable,
+            event,
+            upgradable.getUpgradeBehaviour()
+                .keySet());
     }
 
     /**
      * Send an upgrade sensitive event over the event bus.
+     * 
      * @param upgradable The upgradable instance.
-     * @param event The event.
-     * @param upgrade The types of upgrade this event should be sent to.
-     * @param <T> The type of upgradable.
-     * @param <O> The type of event variable type.
+     * @param event      The event.
+     * @param upgrade    The types of upgrade this event should be sent to.
+     * @param <T>        The type of upgradable.
+     * @param <O>        The type of event variable type.
      */
-    public static <T extends IUpgradable<T, O>, O> void sendEvent(T upgradable, IUpgradeSensitiveEvent<O> event, Upgrade upgrade) {
+    public static <T extends IUpgradable<T, O>, O> void sendEvent(T upgradable, IUpgradeSensitiveEvent<O> event,
+        Upgrade upgrade) {
         sendEvent(upgradable, event, Lists.newArrayList(upgrade));
     }
 
     /**
      * Send an upgrade sensitive event over the event bus.
+     * 
      * @param upgradable The upgradable instance.
-     * @param event The event.
-     * @param upgrades The types of upgrades this event should be sent to.
-     * @param <T> The type of upgradable.
-     * @param <O> The type of event variable type.
+     * @param event      The event.
+     * @param upgrades   The types of upgrades this event should be sent to.
+     * @param <T>        The type of upgradable.
+     * @param <O>        The type of event variable type.
      */
-    public static <T extends IUpgradable<T, O>, O> void sendEvent(T upgradable, IUpgradeSensitiveEvent<O> event, Upgrade... upgrades) {
+    public static <T extends IUpgradable<T, O>, O> void sendEvent(T upgradable, IUpgradeSensitiveEvent<O> event,
+        Upgrade... upgrades) {
         sendEvent(upgradable, event, Lists.newArrayList(upgrades));
     }
 
     /**
      * Send an upgrade sensitive event over the event bus.
+     * 
      * @param upgradable The upgradable instance.
-     * @param event The event.
-     * @param upgrades The types of upgrades this event should be sent to.
-     * @param <T> The type of upgradable.
-     * @param <O> The type of event variable type.
+     * @param event      The event.
+     * @param upgrades   The types of upgrades this event should be sent to.
+     * @param <T>        The type of upgradable.
+     * @param <O>        The type of event variable type.
      */
-    public static <T extends IUpgradable<T, O>, O> void sendEvent(T upgradable, IUpgradeSensitiveEvent<O> event, Collection<Upgrade> upgrades) {
-        for(Upgrades.Upgrade upgrade : upgrades) {
-            IUpgradeBehaviour<T, O> behaviour = upgradable.getUpgradeBehaviour().get(upgrade);
+    public static <T extends IUpgradable<T, O>, O> void sendEvent(T upgradable, IUpgradeSensitiveEvent<O> event,
+        Collection<Upgrade> upgrades) {
+        for (Upgrades.Upgrade upgrade : upgrades) {
+            IUpgradeBehaviour<T, O> behaviour = upgradable.getUpgradeBehaviour()
+                .get(upgrade);
             int upgradeLevel = behaviour.getUpgradeLevel(upgradable, upgrade);
-            if(upgradeLevel > 0) {
+            if (upgradeLevel > 0) {
                 behaviour.applyUpgrade(upgradable, upgrade, upgradeLevel, event);
             }
         }

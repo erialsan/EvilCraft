@@ -4,6 +4,7 @@ import evilcraft.core.config.extendedconfig.BlockConfig;
 
 /**
  * Config for the {@link ReinforcedUndeadPlank}.
+ * 
  * @author rubensworks
  *
  */
@@ -18,17 +19,12 @@ public class ReinforcedUndeadPlankConfig extends BlockConfig {
      * Make a new instance.
      */
     public ReinforcedUndeadPlankConfig() {
-        super(
-        	true,
-            "reinforcedUndeadPlank",
-            null,
-            ReinforcedUndeadPlank.class
-        );
+        super(true, "reinforcedUndeadPlank", null, ReinforcedUndeadPlank.class);
     }
-    
+
     @Override
     public boolean isMultipartEnabled() {
         return true;
     }
-    
+
 }

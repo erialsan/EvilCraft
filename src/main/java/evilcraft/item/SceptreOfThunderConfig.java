@@ -4,6 +4,7 @@ import evilcraft.core.config.extendedconfig.ItemConfig;
 
 /**
  * Config for the {@link SceptreOfThunder}.
+ * 
  * @author rubensworks
  *
  */
@@ -18,12 +19,7 @@ public class SceptreOfThunderConfig extends ItemConfig {
      * Make a new instance.
      */
     public SceptreOfThunderConfig() {
-        super(
-        	true,
-            "sceptreOfThunder",
-            null,
-            SceptreOfThunder.class
-        );
+        super(true, "sceptreOfThunder", null, SceptreOfThunder.class);
     }
-    
+
 }

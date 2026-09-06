@@ -4,11 +4,12 @@ import evilcraft.core.config.extendedconfig.BlockConfig;
 
 /**
  * Config for {@link FluidBlockBlood}.
+ * 
  * @author rubensworks
  *
  */
 public class FluidBlockBloodConfig extends BlockConfig {
-    
+
     /**
      * The unique instance.
      */
@@ -18,17 +19,12 @@ public class FluidBlockBloodConfig extends BlockConfig {
      * Make a new instance.
      */
     public FluidBlockBloodConfig() {
-        super(
-        	true,
-            "blockBlood",
-            null,
-            FluidBlockBlood.class
-        );
+        super(true, "blockBlood", null, FluidBlockBlood.class);
     }
-    
+
     @Override
     public boolean isDisableable() {
         return false;
     }
-    
+
 }
